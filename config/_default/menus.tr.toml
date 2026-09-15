@@ -1,5 +1,8 @@
 # -- Main Menu --
-# Add your own navigation items here.
+
+[[main]]
+  name = "Kütüphane"
+  pageRef = "library"
+  weight = 10
 
 # -- Footer Menu --
-# Add your own footer navigation items here.

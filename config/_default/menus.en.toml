@@ -1,5 +1,10 @@
 # -- Main Menu --
 # Add your own navigation items here.
 
+[[main]]
+  name = "Library"
+  pageRef = "library"
+  weight = 10
+
 # -- Footer Menu --
 # Add your own footer navigation items here.

@@ -1,0 +1,46 @@
+{{ define "main" }}
+
+<article class="max-w-7xl mx-auto">
+  <header class="mb-8">
+    <h1 class="text-4xl font-extrabold">
+      {{ .Title }}
+    </h1>
+  </header>
+
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-[700px] text-left text-sm">
+      <thead>
+        <tr class="border-b border-neutral-300 dark:border-neutral-700">
+          <th class="px-4 py-3 font-semibold">Title</th>
+          <th class="px-4 py-3 font-semibold">Author</th>
+          <th class="px-4 py-3 font-semibold whitespace-nowrap">Year</th>
+          <th class="px-4 py-3 font-semibold">Publisher</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {{ range hugo.Data.library }}
+          <tr class="border-b-2 border-neutral-300 dark:border-neutral-700">
+            <td class="px-4 py-3 font-medium">
+              <em>{{ .title }}</em>
+            </td>
+
+            <td class="px-4 py-4">
+              {{ delimit .authors " & " }}
+            </td>
+
+            <td class="px-4 py-3 whitespace-nowrap">
+              {{ .year }}
+            </td>
+
+            <td class="px-4 py-3 whitespace-nowrap">
+              {{ .publisher }}
+            </td>
+          </tr>
+        {{ end }}
+      </tbody>
+    </table>
+  </div>
+</article>
+
+{{ end }}

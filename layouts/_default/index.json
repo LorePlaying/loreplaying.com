@@ -1,0 +1,56 @@
+{{- $index := slice -}}
+{{ $pages := .Site.Pages }}
+{{ range .Site.Home.Translations }}
+  {{ $pages = $pages | lang.Merge .Site.Pages }}
+{{ end }}
+
+{{- range $pages -}}
+  {{- if not .Params.excludeFromSearch -}}
+
+    {{- $section := .Site.GetPage "section" .Section -}}
+
+    {{- $content := .Plain -}}
+    {{- if eq .Type "library" -}}
+      {{- $content = "" -}}
+      {{- range hugo.Data.library -}}
+        {{- $authors := delimit .authors " & " -}}
+        {{- $content = printf "%s %s %s %v %s. " $content .title $authors .year .publisher -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- $summary := .Summary | plainify | htmlUnescape -}}
+    {{- if eq .Type "library" -}}
+      {{- if eq .Lang "tr" -}}
+        {{- $summary = "Lore Playing kütüphanesindeki İngilizce dili ve edebiyatı kitaplarının koleksiyonu." -}}
+      {{- else -}}
+        {{- $summary = "A collection of English Language and Literary books." -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- if .Date -}}
+      {{- $index = $index | append (dict
+        "date" (.Date | time.Format (.Site.Language.Params.dateFormat | default ":date_long"))
+        "title" (.Title | emojify | safeJS)
+        "section" (cond (eq .Type "library") "Bookshelf" ($section.Title | emojify) | safeJS)
+        "summary" ($summary | safeJS)
+        "content" ($content | safeJS)
+        "permalink" .RelPermalink
+        "externalUrl" .Params.externalUrl
+        "type" .Type
+      ) -}}
+    {{- else -}}
+      {{- $index = $index | append (dict
+        "title" (.Title | emojify | safeJS)
+        "section" (cond (eq .Type "library") "Bookshelf" ($section.Title | emojify) | safeJS)
+        "summary" ($summary | safeJS)
+        "content" ($content | safeJS)
+        "permalink" .RelPermalink
+        "externalUrl" .Params.externalUrl
+        "type" .Type
+      ) -}}
+    {{- end -}}
+
+  {{- end -}}
+{{- end -}}
+
+{{- $index | jsonify -}}

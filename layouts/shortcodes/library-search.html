@@ -1,0 +1,8 @@
+<div class="sr-only">
+  {{ range hugo.Data.library }}
+    {{ .title }}.
+    {{ delimit .authors " & " }}.
+    {{ .year }}.
+    {{ .publisher }}.
+  {{ end }}
+</div>
