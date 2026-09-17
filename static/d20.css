@@ -1,0 +1,629 @@
+.d20-page {
+  width: 100%;
+  text-align: center;
+
+  --d20-color: #8a0f23;
+  --d20-outline: #5e0918;
+  --d20-number-color: #f8eee8;
+  --d20-font: Georgia, "Times New Roman", serif;
+}
+
+/* --------------------------------------------------
+   Page
+-------------------------------------------------- */
+
+.d20-page h1 {
+  font-family: var(--d20-font);
+  font-weight: normal;
+}
+
+/* --------------------------------------------------
+   Dice container
+-------------------------------------------------- */
+
+.d20-content {
+  position: relative;
+
+  width: 280px;
+  height: 280px;
+
+  margin: 40px auto 20px;
+
+  perspective: 1500px;
+}
+
+/* --------------------------------------------------
+   Die
+-------------------------------------------------- */
+
+.d20-die {
+  position: absolute;
+
+  top: 40px;
+  left: 40px;
+
+  width: 200px;
+  height: 200px;
+
+  transform-style: preserve-3d;
+
+  transform: rotateX(-53deg);
+
+  transition: transform 0.5s;
+
+  cursor: pointer;
+
+  counter-reset: face;
+}
+
+.d20-die.rolling {
+  animation: d20-roll 3s linear;
+}
+
+/* --------------------------------------------------
+   Roll animation
+-------------------------------------------------- */
+
+@keyframes d20-roll {
+  10% {
+    transform:
+      rotateX(0deg)
+      rotateY(0deg)
+      rotateZ(0deg);
+  }
+
+  30% {
+    transform:
+      rotateX(120deg)
+      rotateY(240deg)
+      rotateZ(0deg)
+      translateX(40px)
+      translateY(40px);
+  }
+
+  50% {
+    transform:
+      rotateX(240deg)
+      rotateY(480deg)
+      rotateZ(0deg)
+      translateX(-40px)
+      translateY(-40px);
+  }
+
+  70% {
+    transform:
+      rotateX(360deg)
+      rotateY(720deg)
+      rotateZ(0deg);
+  }
+
+  90% {
+    transform:
+      rotateX(480deg)
+      rotateY(960deg)
+      rotateZ(0deg);
+  }
+}
+
+/* --------------------------------------------------
+   Triangle faces
+-------------------------------------------------- */
+
+.d20-face {
+  position: absolute;
+
+  width: 100px;
+  height: 86px;
+
+  margin: 0;
+
+  left: 50px;
+  top: 57px;
+
+  box-sizing: border-box;
+
+  background: var(--d20-color);
+
+  clip-path: polygon(
+    50% 0%,
+    100% 100%,
+    0% 100%
+  );
+
+  backface-visibility: hidden;
+
+  counter-increment: face;
+}
+
+/* --------------------------------------------------
+   Face outline
+-------------------------------------------------- */
+
+.d20-face::after {
+  content: "";
+
+  position: absolute;
+
+  left: -2px;
+  top: -2px;
+
+  width: 104px;
+  height: 90px;
+
+  background: var(--d20-outline);
+
+  clip-path: polygon(
+    50% 0%,
+    100% 100%,
+    0% 100%
+  );
+
+  z-index: -1;
+}
+
+/* --------------------------------------------------
+   Numbers
+-------------------------------------------------- */
+
+.d20-face::before {
+  content: counter(face);
+
+  position: absolute;
+
+  left: 5px;
+  top: 7px;
+
+  width: 90px;
+  height: 75px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  color: var(--d20-number-color);
+
+  font-family: var(--d20-font);
+
+  font-size: 25px;
+  font-weight: bold;
+
+  line-height: 1;
+
+  text-align: center;
+
+  clip-path: polygon(
+    50% 0%,
+    100% 100%,
+    0% 100%
+  );
+
+  background: var(--d20-color);
+
+  text-shadow: none;
+
+  z-index: 2;
+}
+
+/* --------------------------------------------------
+   Face positions
+-------------------------------------------------- */
+
+.d20-face:nth-child(1) {
+  transform:
+    rotateY(0deg)
+    translateZ(33.5px)
+    translateY(-12.9px)
+    rotateX(53deg);
+}
+
+.d20-face:nth-child(2) {
+  transform:
+    rotateY(-72deg)
+    translateZ(33.5px)
+    translateY(-12.9px)
+    rotateX(53deg);
+}
+
+.d20-face:nth-child(3) {
+  transform:
+    rotateY(-144deg)
+    translateZ(33.5px)
+    translateY(-12.9px)
+    rotateX(53deg);
+}
+
+.d20-face:nth-child(4) {
+  transform:
+    rotateY(-216deg)
+    translateZ(33.5px)
+    translateY(-12.9px)
+    rotateX(53deg);
+}
+
+.d20-face:nth-child(5) {
+  transform:
+    rotateY(-288deg)
+    translateZ(33.5px)
+    translateY(-12.9px)
+    rotateX(53deg);
+}
+
+.d20-face:nth-child(6) {
+  transform:
+    rotateY(360deg)
+    translateZ(75px)
+    translateY(54.18px)
+    rotateZ(180deg)
+    rotateX(-11deg);
+}
+
+.d20-face:nth-child(7) {
+  transform:
+    rotateY(288deg)
+    translateZ(75px)
+    translateY(54.18px)
+    rotateZ(180deg)
+    rotateX(-11deg);
+}
+
+.d20-face:nth-child(8) {
+  transform:
+    rotateY(216deg)
+    translateZ(75px)
+    translateY(54.18px)
+    rotateZ(180deg)
+    rotateX(-11deg);
+}
+
+.d20-face:nth-child(9) {
+  transform:
+    rotateY(144deg)
+    translateZ(75px)
+    translateY(54.18px)
+    rotateZ(180deg)
+    rotateX(-11deg);
+}
+
+.d20-face:nth-child(10) {
+  transform:
+    rotateY(72deg)
+    translateZ(75px)
+    translateY(54.18px)
+    rotateZ(180deg)
+    rotateX(-11deg);
+}
+
+.d20-face:nth-child(11) {
+  transform:
+    rotateY(252deg)
+    translateZ(75px)
+    translateY(54.18px)
+    rotateX(-11deg);
+}
+
+.d20-face:nth-child(12) {
+  transform:
+    rotateY(324deg)
+    translateZ(75px)
+    translateY(54.18px)
+    rotateX(-11deg);
+}
+
+.d20-face:nth-child(13) {
+  transform:
+    rotateY(396deg)
+    translateZ(75px)
+    translateY(54.18px)
+    rotateX(-11deg);
+}
+
+.d20-face:nth-child(14) {
+  transform:
+    rotateY(468deg)
+    translateZ(75px)
+    translateY(54.18px)
+    rotateX(-11deg);
+}
+
+.d20-face:nth-child(15) {
+  transform:
+    rotateY(540deg)
+    translateZ(75px)
+    translateY(54.18px)
+    rotateX(-11deg);
+}
+
+.d20-face:nth-child(16) {
+  transform:
+    rotateY(-108deg)
+    translateZ(33.5px)
+    translateY(121.08px)
+    rotateZ(180deg)
+    rotateX(53deg);
+}
+
+.d20-face:nth-child(17) {
+  transform:
+    rotateY(-36deg)
+    translateZ(33.5px)
+    translateY(121.08px)
+    rotateZ(180deg)
+    rotateX(53deg);
+}
+
+.d20-face:nth-child(18) {
+  transform:
+    rotateY(36deg)
+    translateZ(33.5px)
+    translateY(121.08px)
+    rotateZ(180deg)
+    rotateX(53deg);
+}
+
+.d20-face:nth-child(19) {
+  transform:
+    rotateY(108deg)
+    translateZ(33.5px)
+    translateY(121.08px)
+    rotateZ(180deg)
+    rotateX(53deg);
+}
+
+.d20-face:nth-child(20) {
+  transform:
+    rotateY(180deg)
+    translateZ(33.5px)
+    translateY(121.08px)
+    rotateZ(180deg)
+    rotateX(53deg);
+}
+
+/* --------------------------------------------------
+   Final face positions
+-------------------------------------------------- */
+
+.d20-die[data-face="1"] {
+  transform: rotateX(-53deg) rotateY(0deg);
+}
+
+.d20-die[data-face="2"] {
+  transform: rotateX(-53deg) rotateY(72deg);
+}
+
+.d20-die[data-face="3"] {
+  transform: rotateX(-53deg) rotateY(144deg);
+}
+
+.d20-die[data-face="4"] {
+  transform: rotateX(-53deg) rotateY(216deg);
+}
+
+.d20-die[data-face="5"] {
+  transform: rotateX(-53deg) rotateY(288deg);
+}
+
+.d20-die[data-face="6"] {
+  transform: rotateX(11deg) rotateZ(180deg) rotateY(0deg);
+}
+
+.d20-die[data-face="7"] {
+  transform: rotateX(11deg) rotateZ(180deg) rotateY(72deg);
+}
+
+.d20-die[data-face="8"] {
+  transform: rotateX(11deg) rotateZ(180deg) rotateY(144deg);
+}
+
+.d20-die[data-face="9"] {
+  transform: rotateX(11deg) rotateZ(180deg) rotateY(216deg);
+}
+
+.d20-die[data-face="10"] {
+  transform: rotateX(11deg) rotateZ(180deg) rotateY(288deg);
+}
+
+.d20-die[data-face="11"] {
+  transform: rotateX(11deg) rotateY(-252deg);
+}
+
+.d20-die[data-face="12"] {
+  transform: rotateX(11deg) rotateY(-324deg);
+}
+
+.d20-die[data-face="13"] {
+  transform: rotateX(11deg) rotateY(-396deg);
+}
+
+.d20-die[data-face="14"] {
+  transform: rotateX(11deg) rotateY(-468deg);
+}
+
+.d20-die[data-face="15"] {
+  transform: rotateX(11deg) rotateY(-540deg);
+}
+
+.d20-die[data-face="16"] {
+  transform: rotateX(127deg) rotateY(-72deg);
+}
+
+.d20-die[data-face="17"] {
+  transform: rotateX(127deg) rotateY(-144deg);
+}
+
+.d20-die[data-face="18"] {
+  transform: rotateX(127deg) rotateY(-216deg);
+}
+
+.d20-die[data-face="19"] {
+  transform: rotateX(127deg) rotateY(-288deg);
+}
+
+.d20-die[data-face="20"] {
+  transform: rotateX(127deg) rotateY(-360deg);
+}
+
+/* --------------------------------------------------
+   Roll area
+-------------------------------------------------- */
+
+.d20-roll-area {
+  position: relative;
+
+  display: inline-block;
+
+  margin-top: 5px;
+}
+
+/* --------------------------------------------------
+   Retro Georgia Roll button
+-------------------------------------------------- */
+
+.d20-randomize {
+  position: relative;
+
+  min-width: 125px;
+
+  padding: 10px 22px;
+
+  border: 2px solid var(--d20-color);
+
+  border-radius: 3px;
+
+  background: transparent;
+
+  color: var(--d20-color);
+
+  font-family: var(--d20-font);
+
+  font-size: 17px;
+  font-weight: bold;
+
+  letter-spacing: 1px;
+
+  cursor: pointer;
+
+  /*
+    Slow idle breathing/blinking.
+  */
+  animation: idle-blink 3.2s ease-in-out infinite;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+/* --------------------------------------------------
+   Slow idle blinking
+-------------------------------------------------- */
+
+@keyframes idle-blink {
+  0%,
+  100% {
+    opacity: 1;
+    background: transparent;
+    color: var(--d20-color);
+  }
+
+  50% {
+    opacity: 0.55;
+    background: rgba(138, 15, 35, 0.08);
+    color: var(--d20-color);
+  }
+}
+
+/* --------------------------------------------------
+   Click / rolling blink
+-------------------------------------------------- */
+
+.d20-randomize.sparkling {
+  animation: roll-blink 1.4s ease-in-out infinite;
+}
+
+@keyframes roll-blink {
+  0%,
+  100% {
+    opacity: 1;
+    background: var(--d20-color);
+    color: #fff;
+  }
+
+  50% {
+    opacity: 0.65;
+    background: transparent;
+    color: var(--d20-color);
+  }
+}
+
+.d20-randomize:hover {
+  opacity: 1;
+
+  background: var(--d20-color);
+
+  color: #fff;
+
+  animation: none;
+}
+
+.d20-randomize:active {
+  transform: translateY(1px);
+}
+
+/* --------------------------------------------------
+   Button sparks
+-------------------------------------------------- */
+
+.d20-button-sparks {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  width: 1px;
+  height: 1px;
+
+  pointer-events: none;
+
+  z-index: 20;
+}
+
+.d20-button-spark {
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background: var(--d20-color);
+
+  opacity: 0;
+
+  animation: button-spark 650ms ease-out forwards;
+}
+
+@keyframes button-spark {
+  0% {
+    opacity: 1;
+
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--spark-angle))
+      translateX(5px)
+      scale(1);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--spark-angle))
+      translateX(var(--spark-distance))
+      scale(0);
+  }
+}
