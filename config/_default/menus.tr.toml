@@ -1,8 +1,9 @@
-# -- Main Menu --
-
 [[main]]
   name = "Kütüphane"
   pageRef = "library"
   weight = 10
 
-# -- Footer Menu --
+[[main]]
+  name = "🎲 Zar"
+  url = "/d20/"
+  weight = 20

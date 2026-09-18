@@ -4,6 +4,6 @@
   weight = 10
 
 [[main]]
-  name = "🎲"
+  name = "🎲 Dice"
   pageRef = "d20"
   weight = 20
