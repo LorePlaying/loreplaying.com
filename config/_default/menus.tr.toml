@@ -7,3 +7,8 @@
   name = "🎲 Zar"
   url = "/d20/"
   weight = 20
+
+[[main]]
+  pre = "github"
+  url = "https://github.com/LorePlaying/loreplaying.com"
+  weight = 30
