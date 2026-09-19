@@ -319,8 +319,8 @@
 
   /*
     Long final hold.
-    Lore remains fully visible until the
-    very end of the animation cycle.
+    Lore remains fully visible until
+    almost the end of the animation cycle.
   */
   52%, 94% {
     opacity: 1;
@@ -666,8 +666,18 @@
     letter-spacing: -0.025em;
   }
 
+  /*
+    Give the animated word more horizontal
+    breathing room on real mobile screens.
+  */
+  .lp-transform-word {
+    width: 4.25ch;
+
+    flex-basis: 4.25ch;
+  }
+
   .lp-play {
-    margin-left: -0.17em;
+    margin-left: -0.08em;
 
     top: auto;
   }
@@ -721,8 +731,18 @@
     font-size: 1.7rem;
   }
 
+  /*
+    Extra room for the animated word on
+    narrow physical phone screens.
+  */
+  .lp-transform-word {
+    width: 4.35ch;
+
+    flex-basis: 4.35ch;
+  }
+
   .lp-play {
-    margin-left: -0.18em;
+    margin-left: -0.05em;
 
     top: auto;
   }
