@@ -1,6 +1,6 @@
 [[main]]
-  name = "Kütüphane"
-  pageRef = "library"
+  name = "📙 Kütüphane"
+  url = "/library/"
   weight = 10
 
 [[main]]
@@ -9,6 +9,13 @@
   weight = 20
 
 [[main]]
-  pre = "github"
-  url = "https://github.com/LorePlaying/loreplaying.com"
+  name = "🗺️ Yol Haritası"
+  pre = "map"
+  url = "/roadmap/"
   weight = 30
+
+[[main]]
+  pre = "github"
+  name = "GitHub"
+  url = "https://github.com/LorePlaying/loreplaying.com"
+  weight = 40
