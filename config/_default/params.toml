@@ -24,7 +24,7 @@ disableImageOptimizationMD = false
 disableTextInHeader = false
 # backgroundImageWidth = 1200
 
-defaultBackgroundImage = "/img/background.svg"
+# defaultBackgroundImage = "/img/background.svg"
 defaultFeaturedImage = "/img/featured.svg"
 defaultSocialImage = "/img/blowfish_banner.png"
 hotlinkFeatureImage = false
@@ -58,7 +58,7 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
   showMoreLinkDest = "docs"
   cardView = true
   cardViewScreenWidth = false
-  layoutBackgroundBlur = true # only used when layout equals background
+  layoutBackgroundBlur = false # only use as "true" when layout equals background
   disableHeroImageFilter = false # only used when layout equals hero
 
 [article]

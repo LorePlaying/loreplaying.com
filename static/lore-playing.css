@@ -1,0 +1,755 @@
+/* =========================================================
+   LORE PLAYING
+   ROLE → LORE
+   ========================================================= */
+
+.lp-slogan {
+  width: 100%;
+  padding:
+    clamp(5rem, 14vw, 11rem)
+    1rem
+    clamp(4rem, 10vw, 8rem);
+
+  text-align: center;
+}
+
+.lp-slogan-inner {
+  position: relative;
+
+  width: fit-content;
+  max-width: 100%;
+
+  margin-inline: auto;
+
+  padding-inline: clamp(1.5rem, 5vw, 4rem);
+}
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.lp-title {
+  display: inline-block;
+
+  margin: 0;
+
+  color: rgb(38 38 38);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(2.2rem, 6vw, 6.5rem);
+
+  font-weight: 500;
+
+  line-height: 1;
+
+  letter-spacing: -0.035em;
+}
+
+.dark .lp-title {
+  color: rgb(229 229 229);
+}
+
+/* =========================================================
+   FIRST LINE
+   ========================================================= */
+
+.lp-main-line {
+  display: block;
+
+  white-space: nowrap;
+
+  line-height: 1;
+}
+
+.lp-word-wrap {
+  display: inline-flex;
+
+  align-items: baseline;
+
+  white-space: nowrap;
+
+  line-height: 1;
+}
+
+/* =========================================================
+   "-PLAY"
+   ========================================================= */
+
+.lp-play {
+  display: inline-block;
+
+  position: relative;
+
+  top: auto;
+
+  margin-left: -0.16em;
+
+  white-space: nowrap;
+
+  line-height: 1;
+
+  letter-spacing: -0.025em;
+}
+
+/* =========================================================
+   SECOND LINE
+   ========================================================= */
+
+.lp-second-line {
+  display: block;
+
+  margin-top: 0.42em;
+
+  white-space: nowrap;
+
+  line-height: 1;
+}
+
+/* =========================================================
+   ANIMATED WORD CONTAINER
+   ========================================================= */
+
+.lp-transform-word {
+  position: relative;
+
+  display: inline-block;
+
+  width: 4.05ch;
+
+  height: 1em;
+
+  flex: 0 0 4.05ch;
+
+  vertical-align: baseline;
+
+  line-height: 1;
+}
+
+/* =========================================================
+   ROLE / LORE LAYERS
+   ========================================================= */
+
+.lp-role,
+.lp-lore {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: baseline;
+  justify-content: center;
+
+  white-space: nowrap;
+
+  line-height: 1;
+
+  letter-spacing: 0.025em;
+
+  padding-top: 0.11em;
+
+  box-sizing: border-box;
+}
+
+.lp-role {
+  z-index: 2;
+
+  opacity: 1;
+
+  animation:
+    lp-role-fade
+    9s
+    ease-in-out
+    infinite;
+}
+
+.lp-lore {
+  z-index: 1;
+
+  opacity: 0;
+
+  /*
+    Lore becomes the final resting state.
+    The orange colour appears as it settles in.
+  */
+  color: #dc843d;
+
+  animation:
+    lp-lore-fade
+    9s
+    ease-in-out
+    infinite;
+}
+
+.lp-role span,
+.lp-lore span {
+  display: inline-block;
+
+  position: relative;
+
+  transform-origin: center center;
+
+  will-change:
+    transform,
+    opacity,
+    filter;
+
+  line-height: 1;
+}
+
+/* =========================================================
+   ROLE LETTER ANIMATIONS
+   ========================================================= */
+
+.lp-role span:nth-child(1) {
+  animation:
+    lp-r-leaves
+    9s
+    ease-in-out
+    infinite;
+}
+
+.lp-role span:nth-child(2) {
+  animation:
+    lp-o-pulse
+    9s
+    ease-in-out
+    infinite;
+}
+
+.lp-role span:nth-child(3) {
+  animation:
+    lp-l-moves
+    9s
+    ease-in-out
+    infinite;
+}
+
+.lp-role span:nth-child(4) {
+  animation:
+    lp-e-wiggle
+    9s
+    ease-in-out
+    infinite;
+}
+
+/* =========================================================
+   LORE LETTER ANIMATIONS
+   ========================================================= */
+
+.lp-lore span:nth-child(1) {
+  animation:
+    lp-new-l
+    9s
+    ease-in-out
+    infinite;
+}
+
+.lp-lore span:nth-child(2) {
+  animation:
+    lp-new-o
+    9s
+    ease-in-out
+    infinite;
+}
+
+.lp-lore span:nth-child(3) {
+  animation:
+    lp-new-r
+    9s
+    ease-in-out
+    infinite;
+}
+
+.lp-lore span:nth-child(4) {
+  animation:
+    lp-new-e
+    9s
+    ease-in-out
+    infinite;
+}
+
+/* =========================================================
+   ROLE → LORE FADE
+   ========================================================= */
+
+@keyframes lp-role-fade {
+
+  /* ROLE stays dominant at the beginning */
+  0%, 20% {
+    opacity: 1;
+  }
+
+  /* Transformation begins */
+  34% {
+    opacity: 0.8;
+  }
+
+  42% {
+    opacity: 0;
+  }
+
+  /* Stay gone until the next cycle */
+  42%, 100% {
+    opacity: 0;
+  }
+}
+
+@keyframes lp-lore-fade {
+
+  /* Hidden while ROLE is dominant */
+  0%, 32% {
+    opacity: 0;
+  }
+
+  /* Lore begins emerging */
+  44% {
+    opacity: 0.35;
+  }
+
+  /* Fully established */
+  52% {
+    opacity: 1;
+  }
+
+  /*
+    Long final hold.
+    Lore remains fully visible until the
+    very end of the animation cycle.
+  */
+  52%, 94% {
+    opacity: 1;
+  }
+
+  /* Gentle fade before restarting */
+  100% {
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+   R
+   ========================================================= */
+
+@keyframes lp-r-leaves {
+  0%, 20% {
+    transform:
+      translate3d(0, 0, 0)
+      rotate(0deg)
+      scale(1);
+
+    filter: blur(0);
+  }
+
+  30% {
+    transform:
+      translate3d(-0.45em, -0.2em, 0)
+      rotate(-15deg)
+      scale(1.08);
+
+    filter: blur(0);
+  }
+
+  42%, 100% {
+    transform:
+      translate3d(-1.2em, 0.35em, 0)
+      rotate(-40deg)
+      scale(0.55);
+
+    filter: blur(5px);
+  }
+}
+
+/* =========================================================
+   O
+   ========================================================= */
+
+@keyframes lp-o-pulse {
+  0%, 20% {
+    transform:
+      translate3d(0, 0, 0)
+      scale(1);
+  }
+
+  30% {
+    transform:
+      translate3d(0, -0.08em, 0)
+      scale(1.12);
+  }
+
+  42%, 100% {
+    transform:
+      translate3d(0, 0, 0)
+      scale(1);
+  }
+}
+
+/* =========================================================
+   L
+   ========================================================= */
+
+@keyframes lp-l-moves {
+  0%, 20% {
+    transform:
+      translate3d(0, 0, 0)
+      rotate(0deg)
+      scale(1);
+  }
+
+  30% {
+    transform:
+      translate3d(0.3em, -0.3em, 0)
+      rotate(18deg)
+      scale(1.1);
+  }
+
+  42%, 100% {
+    transform:
+      translate3d(1.4em, 0, 0)
+      rotate(38deg)
+      scale(0.75);
+  }
+}
+
+/* =========================================================
+   E
+   ========================================================= */
+
+@keyframes lp-e-wiggle {
+  0%, 20% {
+    transform:
+      translate3d(0, 0, 0)
+      rotate(0deg);
+  }
+
+  31% {
+    transform:
+      translate3d(0.08em, 0.12em, 0)
+      rotate(-10deg);
+  }
+
+  42%, 100% {
+    transform:
+      translate3d(0, 0, 0)
+      rotate(0deg);
+  }
+}
+
+/* =========================================================
+   NEW L
+   ========================================================= */
+
+@keyframes lp-new-l {
+  0%, 34% {
+    transform:
+      translate3d(1.4em, -0.2em, 0)
+      rotate(40deg)
+      scale(0.55);
+
+    filter: blur(5px);
+  }
+
+  45% {
+    transform:
+      translate3d(0.2em, 0, 0)
+      rotate(8deg)
+      scale(1.1);
+
+    filter: blur(1px);
+  }
+
+  55%, 100% {
+    transform:
+      translate3d(0, 0, 0)
+      rotate(0deg)
+      scale(1);
+
+    filter: blur(0);
+  }
+}
+
+/* =========================================================
+   NEW O
+   ========================================================= */
+
+@keyframes lp-new-o {
+  0%, 34% {
+    transform:
+      translate3d(0, -0.1em, 0)
+      scale(0.9);
+  }
+
+  45% {
+    transform:
+      translate3d(0, 0, 0)
+      scale(1.12);
+  }
+
+  55%, 100% {
+    transform:
+      translate3d(0, 0, 0)
+      scale(1);
+  }
+}
+
+/* =========================================================
+   NEW R
+   ========================================================= */
+
+@keyframes lp-new-r {
+  0%, 34% {
+    transform:
+      translate3d(-1.2em, 0.35em, 0)
+      rotate(-40deg)
+      scale(0.55);
+
+    filter: blur(5px);
+  }
+
+  45% {
+    transform:
+      translate3d(-0.2em, 0, 0)
+      rotate(-8deg)
+      scale(1.1);
+
+    filter: blur(1px);
+  }
+
+  55%, 100% {
+    transform:
+      translate3d(0, 0, 0)
+      rotate(0deg)
+      scale(1);
+
+    filter: blur(0);
+  }
+}
+
+/* =========================================================
+   NEW E
+   ========================================================= */
+
+@keyframes lp-new-e {
+  0%, 34% {
+    transform:
+      translate3d(0, 0.12em, 0)
+      rotate(-10deg)
+      scale(0.9);
+  }
+
+  45% {
+    transform:
+      translate3d(0, 0, 0)
+      rotate(0deg)
+      scale(1.08);
+  }
+
+  55%, 100% {
+    transform:
+      translate3d(0, 0, 0)
+      rotate(0deg)
+      scale(1);
+  }
+}
+
+/* =========================================================
+   CANONIC LINK
+   ========================================================= */
+
+.lp-canonic-link {
+  color: inherit;
+
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.12em;
+
+  text-decoration-color: rgb(163 163 163);
+
+  transition:
+    color 160ms ease,
+    text-decoration-color 160ms ease;
+}
+
+.lp-canonic-link:hover {
+  color: #f5c7ab;
+
+  text-decoration-color: #f5c7ab;
+}
+
+/* =========================================================
+   QUOTATION MARKS
+   ========================================================= */
+
+.lp-slogan-mark {
+  position: absolute;
+
+  z-index: 0;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size:
+    clamp(5.5rem, 12vw, 11rem);
+
+  font-weight: 400;
+
+  line-height: 0.8;
+
+  color: #f5c7ab;
+
+  opacity: 0.95;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.lp-slogan-mark-open {
+  top: -0.28em;
+  left: 0.2em;
+}
+
+.lp-slogan-mark-close {
+  right: -0.85em;
+  bottom: -0.24em;
+}
+
+/* =========================================================
+   DECORATIVE LINE
+   ========================================================= */
+
+.lp-slogan-rule {
+  display: block;
+
+  width:
+    clamp(4rem, 10vw, 7rem);
+
+  height: 2px;
+
+  margin:
+    clamp(2.5rem, 5vw, 4rem)
+    auto
+    0;
+
+  background: currentColor;
+
+  opacity: 0.2;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .lp-slogan {
+    padding:
+      4rem
+      0.5rem
+      4rem;
+  }
+
+  .lp-slogan-inner {
+    padding-inline: 1.25rem;
+  }
+
+  .lp-title {
+    font-size:
+      clamp(2rem, 11vw, 4rem);
+
+    letter-spacing: -0.025em;
+  }
+
+  .lp-play {
+    margin-left: -0.17em;
+
+    top: auto;
+  }
+
+  .lp-second-line {
+    margin-top: 0.42em;
+
+    font-size:
+      clamp(0.58em, 6vw, 0.7em);
+
+    white-space: nowrap;
+  }
+
+  .lp-role,
+  .lp-lore {
+    letter-spacing: 0.02em;
+
+    padding-top: 0.11em;
+  }
+
+  .lp-slogan-mark {
+    font-size: 5.5rem;
+  }
+
+  .lp-slogan-mark-open {
+    left: -0.3em;
+    top: -0.25em;
+  }
+
+  .lp-slogan-mark-close {
+    right: -0.38em;
+    bottom: -0.28em;
+  }
+}
+
+/* =========================================================
+   VERY SMALL SCREENS
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+  .lp-slogan {
+    padding-inline: 0.25rem;
+  }
+
+  .lp-slogan-inner {
+    padding-inline: 1rem;
+  }
+
+  .lp-title {
+    font-size: 1.7rem;
+  }
+
+  .lp-play {
+    margin-left: -0.18em;
+
+    top: auto;
+  }
+
+  .lp-second-line {
+    margin-top: 0.48em;
+
+    font-size: 0.65em;
+
+    white-space: nowrap;
+  }
+
+  .lp-role,
+  .lp-lore {
+    padding-top: 0.11em;
+  }
+
+  .lp-slogan-mark {
+    font-size: 4rem;
+  }
+
+  .lp-slogan-mark-open {
+    left: -0.28em;
+  }
+
+  .lp-slogan-mark-close {
+    right: -0.35em;
+    bottom: -0.3em;
+  }
+}
