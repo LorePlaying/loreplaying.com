@@ -131,7 +131,7 @@
 }
 
 /* =========================================================
-   ROLE / LORE LAYERS
+   ROLE / LORE
    ========================================================= */
 
 .lp-role,
@@ -173,10 +173,6 @@
 
   opacity: 0;
 
-  /*
-    Lore becomes the final resting state.
-    The orange colour appears as it settles in.
-  */
   color: #dc843d;
 
   animation:
@@ -279,13 +275,10 @@
    ========================================================= */
 
 @keyframes lp-role-fade {
-
-  /* ROLE stays dominant at the beginning */
   0%, 20% {
     opacity: 1;
   }
 
-  /* Transformation begins */
   34% {
     opacity: 0.8;
   }
@@ -294,39 +287,28 @@
     opacity: 0;
   }
 
-  /* Stay gone until the next cycle */
   42%, 100% {
     opacity: 0;
   }
 }
 
 @keyframes lp-lore-fade {
-
-  /* Hidden while ROLE is dominant */
   0%, 32% {
     opacity: 0;
   }
 
-  /* Lore begins emerging */
   44% {
     opacity: 0.35;
   }
 
-  /* Fully established */
   52% {
     opacity: 1;
   }
 
-  /*
-    Long final hold.
-    Lore remains fully visible until
-    almost the end of the animation cycle.
-  */
   52%, 94% {
     opacity: 1;
   }
 
-  /* Gentle fade before restarting */
   100% {
     opacity: 0;
   }
@@ -558,7 +540,7 @@
 }
 
 /* =========================================================
-   CANONIC LINK
+   CANONICAL LINK
    ========================================================= */
 
 .lp-canonic-link {
@@ -667,17 +649,21 @@
   }
 
   /*
-    Give the animated word more horizontal
-    breathing room on real mobile screens.
-  */
+   * IMPORTANT:
+   * The mobile word container is deliberately much wider
+   * than the desktop version.
+   *
+   * This prevents the animated ROLE/LORE layer from
+   * physically entering the "-play" area on phones.
+   */
   .lp-transform-word {
-    width: 4.25ch;
+    width: 4.55ch;
 
-    flex-basis: 4.25ch;
+    flex: 0 0 4.55ch;
   }
 
   .lp-play {
-    margin-left: -0.08em;
+    margin-left: 0;
 
     top: auto;
   }
@@ -732,19 +718,16 @@
   }
 
   /*
-    Extra room for the animated word on
-    narrow physical phone screens.
-  */
+   * Even more room for narrow phones.
+   */
   .lp-transform-word {
-    width: 4.35ch;
+    width: 4.75ch;
 
-    flex-basis: 4.35ch;
+    flex: 0 0 4.75ch;
   }
 
   .lp-play {
-    margin-left: -0.05em;
-
-    top: auto;
+    margin-left: 0;
   }
 
   .lp-second-line {
