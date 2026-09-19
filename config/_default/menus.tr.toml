@@ -10,7 +10,6 @@
 
 [[main]]
   name = "🗺️ Yol Haritası"
-  pre = "map"
   url = "/roadmap/"
   weight = 30
 

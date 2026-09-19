@@ -10,7 +10,6 @@
 
 [[main]]
   name = "🗺️ Roadmap"
-  pre = "map"
   url = "/roadmap/"
   weight = 30
 
