@@ -1,0 +1,284 @@
+/* ─────────────────────────────────────
+   Print Out!
+   ───────────────────────────────────── */
+
+.lp-printout {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+  box-sizing: border-box;
+}
+
+
+/* ─────────────────────────────────────
+   Header
+   ───────────────────────────────────── */
+
+.lp-printout-header {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.lp-printout-header h1 {
+  margin: 0;
+
+  color: rgb(45 45 45);
+
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.lp-printout-header p {
+  max-width: 650px;
+
+  margin: 0.75rem auto 0;
+
+  color: rgb(90 90 90);
+
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+
+/* ─────────────────────────────────────
+   Document list
+   ───────────────────────────────────── */
+
+.lp-printout-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+
+/* ─────────────────────────────────────
+   Document card
+   ───────────────────────────────────── */
+
+.lp-printout-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 1.75rem;
+
+  border: 1px solid rgb(215 215 215);
+  border-radius: 12px;
+
+  background: rgb(250 250 250);
+}
+
+
+/* Icon */
+
+.lp-printout-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  width: 3.25rem;
+  height: 3.25rem;
+
+  border-radius: 9px;
+
+  background: rgb(235 235 235);
+
+  font-size: 1.6rem;
+}
+
+
+/* Card content */
+
+.lp-printout-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.lp-printout-card-body h2 {
+  margin: 0 0 0.5rem;
+
+  color: rgb(55 55 55);
+
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.lp-printout-card-body p {
+  max-width: 650px;
+
+  margin: 0;
+
+  color: rgb(75 75 75);
+
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+
+/* ─────────────────────────────────────
+   Buttons
+   ───────────────────────────────────── */
+
+.lp-printout-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 1.25rem;
+  padding: 0.7rem 1.1rem;
+
+  border: 1px solid rgb(55 55 55);
+  border-radius: 7px;
+
+  background: rgb(55 55 55);
+  color: white !important;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+
+  text-decoration: none !important;
+
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.lp-printout-button:hover {
+  background: rgb(25 25 25);
+  border-color: rgb(25 25 25);
+  color: white !important;
+  text-decoration: none !important;
+}
+
+
+/* ─────────────────────────────────────
+   Dark theme
+   ───────────────────────────────────── */
+
+.dark .lp-printout-header h1 {
+  color: rgb(235 235 235);
+}
+
+.dark .lp-printout-header p {
+  color: rgb(175 175 175);
+}
+
+.dark .lp-printout-card {
+  border-color: rgb(70 70 70);
+  background: rgb(30 30 30);
+}
+
+.dark .lp-printout-card-icon {
+  background: rgb(55 55 55);
+}
+
+.dark .lp-printout-card-body h2 {
+  color: rgb(235 235 235);
+}
+
+.dark .lp-printout-card-body p {
+  color: rgb(180 180 180);
+}
+
+.dark .lp-printout-button {
+  border-color: rgb(220 220 220);
+  background: rgb(220 220 220);
+  color: rgb(30 30 30) !important;
+}
+
+.dark .lp-printout-button:hover {
+  background: rgb(245 245 245);
+  border-color: rgb(245 245 245);
+  color: rgb(20 20 20) !important;
+}
+
+
+/* ─────────────────────────────────────
+   Mobile
+   ───────────────────────────────────── */
+
+@media (max-width: 700px) {
+
+  .lp-printout {
+    padding: 1rem 1rem 3rem;
+  }
+
+  .lp-printout-header {
+    margin-bottom: 2rem;
+  }
+
+  .lp-printout-header h1 {
+    font-size: 2rem;
+  }
+
+  .lp-printout-header p {
+    margin-top: 0.6rem;
+    font-size: 0.98rem;
+  }
+
+  .lp-printout-list {
+    gap: 1rem;
+  }
+
+  .lp-printout-card {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+  }
+
+  .lp-printout-card-icon {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.45rem;
+  }
+
+  .lp-printout-card-body {
+    width: 100%;
+  }
+
+  .lp-printout-card-body h2 {
+    font-size: 1.3rem;
+  }
+
+  .lp-printout-card-body p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .lp-printout-button {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 1rem;
+    padding: 0.8rem 1rem;
+    text-align: center;
+  }
+}
+
+
+/* Very small phones */
+
+@media (max-width: 400px) {
+
+  .lp-printout {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .lp-printout-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .lp-printout-card {
+    padding: 1rem;
+  }
+
+}

@@ -1,0 +1,83 @@
+{{ define "main" }}
+
+<link rel="stylesheet" href="{{ "print-out.css" | relURL }}">
+
+<article class="lp-printout">
+
+  <header class="lp-printout-header">
+    <h1>{{ .Title }}</h1>
+
+    {{ with .Description }}
+      <p>{{ . }}</p>
+    {{ end }}
+  </header>
+
+
+  <div class="lp-printout-list">
+
+    <!-- Player Character Sheet -->
+
+    <section class="lp-printout-card">
+
+      <div class="lp-printout-card-icon" aria-hidden="true">
+        🎭
+      </div>
+
+      <div class="lp-printout-card-body">
+
+        <h2>Player Character Sheet</h2>
+
+        <p>
+          A simple character sheet for Players to print and use during
+          a Lore Play session.
+        </p>
+
+        <a
+          href="{{ "print-outs/player-character-sheet.pdf" | relURL }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="lp-printout-button"
+        >
+          🖨️ View Character Sheet
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- Lore Master Guide -->
+
+    <section class="lp-printout-card">
+
+      <div class="lp-printout-card-icon" aria-hidden="true">
+        📖
+      </div>
+
+      <div class="lp-printout-card-body">
+
+        <h2>Lore Master Guide</h2>
+
+        <p>
+          A printable guide for Lore Masters to prepare, organize,
+          and manage a Lore Play session.
+        </p>
+
+        <a
+          href="{{ "print-outs/lore-master-guide.pdf" | relURL }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="lp-printout-button"
+        >
+          🖨️ Print Lore Master Guide
+        </a>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</article>
+
+{{ end }}

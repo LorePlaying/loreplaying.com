@@ -9,14 +9,14 @@
   weight = 20
 
 [[main]]
+  name = "🖨️ Yazdır"
+  url = "/print-out/"
+  weight = 25
+
+[[main]]
   name = "🗺️ Yol Haritası"
   url = "/roadmap/"
   weight = 30
-
-[[main]]
-  name = "⚙️ İş Akışı"
-  url = "/workflow/"
-  weight = 35
 
 [[main]]
   pre = "github"
