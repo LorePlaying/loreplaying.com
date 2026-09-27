@@ -1,0 +1,340 @@
+{{ define "main" }}
+
+<link rel="stylesheet" href="{{ "workflow.css" | relURL }}">
+
+<article class="lp-workflow">
+
+  <header class="lp-workflow-header">
+    <h1>{{ .Title }}</h1>
+
+    {{ with .Description }}
+      <p>{{ . }}</p>
+    {{ end }}
+  </header>
+
+
+  <!-- PLAYER -->
+  <section class="lp-workflow-section">
+
+    <div class="lp-workflow-section-heading">
+
+      <div class="lp-workflow-role-icon" aria-hidden="true">
+        🎭
+      </div>
+
+      <div>
+        <span class="lp-workflow-kicker">FOR PLAYERS</span>
+        <h2>If you are a Player</h2>
+      </div>
+
+    </div>
+
+
+    <div class="lp-workflow-diagram" data-workflow="player">
+
+      <!-- Step 01 -->
+      <div class="lp-workflow-step">
+        <div class="lp-workflow-number">01</div>
+
+        <div class="lp-workflow-icon">
+          📖
+        </div>
+
+        <h3>Choose a Story</h3>
+
+        <p>Find a Lore Master.</p>
+      </div>
+
+
+      <div class="lp-workflow-connector" aria-hidden="true">
+        <span></span>
+      </div>
+
+
+      <!-- Step 02 -->
+      <a
+        class="lp-workflow-step lp-workflow-step-link"
+        href="{{ "print-out/" | relURL }}"
+      >
+        <div class="lp-workflow-number">02</div>
+
+        <div class="lp-workflow-icon">
+          📄
+        </div>
+
+        <h3>Prepare</h3>
+
+        <p>Print your character sheet.</p>
+      </a>
+
+
+      <div class="lp-workflow-connector" aria-hidden="true">
+        <span></span>
+      </div>
+
+
+      <!-- Step 03 -->
+      <div class="lp-workflow-step">
+        <div class="lp-workflow-number">03</div>
+
+        <div class="lp-workflow-icon">
+          💬
+        </div>
+
+        <h3>Pre-Session</h3>
+
+        <p>Shape your character and role.</p>
+      </div>
+
+
+      <div class="lp-workflow-connector" aria-hidden="true">
+        <span></span>
+      </div>
+
+
+      <!-- Step 04 -->
+      <div class="lp-workflow-step">
+        <div class="lp-workflow-number">04</div>
+
+        <div class="lp-workflow-icon">
+          🎭
+        </div>
+
+        <h3>Play</h3>
+
+        <p>Join the session and play.</p>
+      </div>
+
+    </div>
+
+
+    <!-- Player details -->
+    <div class="lp-workflow-details">
+
+      <h3>Player steps in detail</h3>
+
+      <ol>
+
+        <li>
+          <span>
+            <strong>Choose a story</strong> and find a Lore Master.
+            Finding other Players is optional.
+          </span>
+        </li>
+
+        <li>
+          <span>
+            <strong>Print the Player Character Sheet</strong>
+            and prepare for the pre-session.
+          </span>
+        </li>
+
+        <li>
+          <span>
+            <strong>Discuss your character, role, and other details</strong>
+            with the Lore Master.
+          </span>
+        </li>
+
+        <li>
+          <span>
+            <strong>Take notes</strong> and set the session place and date.
+          </span>
+        </li>
+
+        <li>
+          <span>
+            <strong>Join the session on time</strong>
+            and enjoy your role-play!
+          </span>
+        </li>
+
+      </ol>
+
+    </div>
+
+  </section>
+
+
+  <!-- LORE MASTER -->
+  <section class="lp-workflow-section">
+
+    <div class="lp-workflow-section-heading">
+
+      <div class="lp-workflow-role-icon" aria-hidden="true">
+        📜
+      </div>
+
+      <div>
+        <span class="lp-workflow-kicker">FOR LORE MASTERS</span>
+        <h2>If you are a Lore Master</h2>
+      </div>
+
+    </div>
+
+
+    <div class="lp-workflow-diagram" data-workflow="lore-master">
+
+      <!-- Step 01 -->
+      <div class="lp-workflow-step">
+        <div class="lp-workflow-number">01</div>
+
+        <div class="lp-workflow-icon">
+          📖
+        </div>
+
+        <h3>Choose a Story</h3>
+
+        <p>Gather the Players.</p>
+      </div>
+
+
+      <div class="lp-workflow-connector" aria-hidden="true">
+        <span></span>
+      </div>
+
+
+      <!-- Step 02 -->
+      <a
+        class="lp-workflow-step lp-workflow-step-link"
+        href="{{ "print-out/" | relURL }}"
+      >
+        <div class="lp-workflow-number">02</div>
+
+        <div class="lp-workflow-icon">
+          📋
+        </div>
+
+        <h3>Prepare</h3>
+
+        <p>Print your guide.</p>
+      </a>
+
+
+      <div class="lp-workflow-connector" aria-hidden="true">
+        <span></span>
+      </div>
+
+
+      <!-- Step 03 -->
+      <div class="lp-workflow-step">
+        <div class="lp-workflow-number">03</div>
+
+        <div class="lp-workflow-icon">
+          💬
+        </div>
+
+        <h3>Pre-Sessions</h3>
+
+        <p>Meet with the Players.</p>
+      </div>
+
+
+      <div class="lp-workflow-connector" aria-hidden="true">
+        <span></span>
+      </div>
+
+
+      <!-- Step 04 -->
+      <div class="lp-workflow-step">
+        <div class="lp-workflow-number">04</div>
+
+        <div class="lp-workflow-icon">
+          🎲
+        </div>
+
+        <h3>Manage</h3>
+
+        <p>Run the Lore Play session.</p>
+      </div>
+
+    </div>
+
+
+    <!-- Lore Master details -->
+    <div class="lp-workflow-details">
+
+      <h3>Lore Master steps in detail</h3>
+
+      <ol>
+
+        <li>
+          <span>
+            <strong>Choose a story</strong> and gather the Players.
+          </span>
+        </li>
+
+        <li>
+          <span>
+            <strong>Print the Lore Master Guide</strong>
+            and prepare for the pre-sessions.
+          </span>
+        </li>
+
+        <li>
+          <span>
+            <strong>Hold a pre-session</strong> with each Player.
+          </span>
+        </li>
+
+        <li>
+          <span>
+            <strong>Discuss characters, roles, and other details</strong>
+            and take notes.
+          </span>
+        </li>
+
+        <li>
+          <span>
+            <strong>Set the session place and date</strong>
+            with the Players.
+          </span>
+        </li>
+
+        <li>
+          <span>
+            <strong>Prepare the Lore Play session.</strong>
+          </span>
+        </li>
+
+        <li>
+          <span>
+            <strong>Manage the session</strong>
+            while the Players play their roles.
+          </span>
+        </li>
+
+        <li>
+          <span>
+            <strong>Take session notes</strong>
+            during or after the session,
+            and enjoy your LM experience!
+          </span>
+        </li>
+
+      </ol>
+
+    </div>
+
+  </section>
+
+
+  <footer class="lp-workflow-footer">
+
+    <span aria-hidden="true">✦</span>
+
+    The process may evolve as Lore Playing develops.
+
+    <span aria-hidden="true">✦</span>
+
+  </footer>
+
+</article>
+
+
+<script
+  src="{{ "workflow.js" | relURL }}"
+  defer>
+</script>
+
+{{ end }}

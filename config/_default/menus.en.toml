@@ -14,9 +14,14 @@
   weight = 25
 
 [[main]]
+  name = "⚙️ How to Play?"
+  url = "/workflow/"
+  weight = 30
+
+[[main]]
   name = "🗺️ Roadmap"
   url = "/roadmap/"
-  weight = 30
+  weight = 35
 
 [[main]]
   pre = "github"
