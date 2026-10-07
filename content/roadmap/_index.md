@@ -18,7 +18,7 @@ description: "The development roadmap for Lore Playing."
 
 - Project aplication for the upcoming TÜBİTAK 2209-A.
 - Presentation for the upcoming KTUDELL Conference in Trabzon.
-<p align="right">cross the fingers guys... 🙂‍↕️</p>
+<p align="right">fingers crossed, guys! 🙂‍↕️</p>
 
 
 ## 😎 Launched
