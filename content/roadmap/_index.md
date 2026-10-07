@@ -3,16 +3,25 @@ title: "Roadmap"
 description: "The development roadmap for Lore Playing."
 ---
 
-This roadmap shows the current and planned development of Lore Playing.
+## 🥰 Active
+- Tabletop Rore-Playing Games (TTRPG):
+	- **İyeler** (Turkic mytology).
+	- **Frankenstein** (English literature).
 
-## ⚡ Active
+## 🤔 Planned
+- Standalone pages for each book in the [library](/library/) page.
+- [Fate like](https://en.wikipedia.org/wiki/Fate/Stay_Night) TTRPG (English literature).
+- Zine series.
+- Chapbook series.
 
-Current activities and work in progress will appear here.
+### 🤞 Kind of Hail Mary Projects
 
-## ⌛ Planned
+- Project aplication for the upcoming TÜBİTAK 2209-A.
+- Presentation for the upcoming KTUDELL Conference in Trabzon.
+<p align="right">cross the fingers guys... 🙂‍↕️</p>
 
-Upcoming activities and projects will be listed here.
 
-## 🚀 Launched
+## 😎 Launched
 
-Completed milestones and launched parts of Lore Playing will be recorded here.
+- Project workflow is launced on [GitHub](https://github.com/kamilfatsa/lpw) as an open source repository.
+- Project website is launced on [GitHub](https://github.com/LorePlaying/loreplaying.com)  as an open source repository.
