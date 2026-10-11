@@ -1,3 +1,4 @@
+
 .github-contributions-section {
   width: 100%;
   margin-top: 3rem;
@@ -39,6 +40,7 @@
   border-radius: 8px;
   padding: 4px 8px 4px 4px;
   transition: opacity 0.15s ease;
+  cursor: pointer;
 }
 
 .github-contributor:hover {
@@ -51,6 +53,10 @@
   border-radius: 50%;
   object-fit: cover;
   display: block;
+  pointer-events: none;
+  cursor: inherit !important;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .github-contributor-name {
@@ -204,4 +210,11 @@
     width: 32px;
     height: 32px;
   }
+}
+
+/* Prevent contributor avatars from triggering image zoom tools. */
+.github-contributor img,
+.github-contributor-avatar {
+  pointer-events: none;
+  cursor: inherit !important;
 }

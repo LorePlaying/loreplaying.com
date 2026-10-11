@@ -1,3 +1,4 @@
+
 <div class="github-contributions-section">
 
   <h2 class="github-contributions-title">
@@ -17,38 +18,29 @@
   </h2>
 
   <div class="github-contributors">
-
     {{ with index hugo.Data "loreplaying-contributors" }}
-
       {{ range . }}
-
         <a
           class="github-contributor"
-          href="{{ .html_url }}"
+          href="{{ .profile_url }}"
           target="_blank"
-          rel="noopener"
-          title="{{ .login }}">
+          rel="noopener noreferrer"
+          title="View {{ .username }} on GitHub">
 
           <img
             class="github-contributor-avatar"
             src="{{ .avatar_url }}"
-            alt="{{ .login }}"
-            loading="lazy">
-
-          <span class="github-contributor-name">
-            {{ .login }}
-          </span>
+            alt="{{ .username }}"
+            loading="lazy"
+            data-no-lightbox
+            data-zoomable="false">
 
         </a>
-
       {{ end }}
-
     {{ end }}
-
   </div>
 
   <div class="github-calendar">
-
     <div class="github-calendar-chart">
 
       <div class="github-calendar-days">
@@ -62,45 +54,32 @@
       </div>
 
       <div class="github-calendar-main">
-
         <div class="github-calendar-months">
-
           {{ $today := now }}
           {{ $weekday := int $today.Weekday }}
           {{ $end := $today.AddDate 0 0 (sub 6 $weekday) }}
           {{ $start := $end.AddDate 0 0 -370 }}
 
           {{ range $week := seq 0 52 }}
-
             {{ $weekStart := $start.AddDate 0 0 (mul $week 7) }}
             {{ $label := "" }}
 
             {{ if eq $week 0 }}
-
               {{ $label = $weekStart.Format "Jan" }}
-
             {{ else }}
-
               {{ range $day := seq 0 6 }}
-
                 {{ $date := $weekStart.AddDate 0 0 $day }}
-
                 {{ if eq (int $date.Day) 1 }}
                   {{ $label = $date.Format "Jan" }}
                 {{ end }}
-
               {{ end }}
-
             {{ end }}
 
             <span>{{ $label }}</span>
-
           {{ end }}
-
         </div>
 
         <div class="github-contributions-grid">
-
           {{ $contributions := index hugo.Data "github-contributions" | default dict }}
 
           {{ $today := now }}
@@ -109,88 +88,64 @@
           {{ $start := $end.AddDate 0 0 -370 }}
 
           {{ range $week := seq 0 52 }}
-
             <div class="github-week">
-
               {{ $weekStart := $start.AddDate 0 0 (mul $week 7) }}
 
               {{ range $day := seq 0 6 }}
-
                 {{ $date := $weekStart.AddDate 0 0 $day }}
                 {{ $key := $date.Format "2006-01-02" }}
                 {{ $count := index $contributions $key | default 0 }}
-
                 {{ $level := 0 }}
 
                 {{ if ge $count 1 }}
                   {{ $level = 1 }}
                 {{ end }}
-
                 {{ if ge $count 2 }}
                   {{ $level = 2 }}
                 {{ end }}
-
                 {{ if ge $count 4 }}
                   {{ $level = 3 }}
                 {{ end }}
-
                 {{ if ge $count 8 }}
                   {{ $level = 4 }}
                 {{ end }}
 
                 {{ if $date.After $today }}
-
                   <span class="github-contribution-day future"></span>
-
                 {{ else }}
-
                   <a
                     class="github-contribution-day level-{{ $level }}"
-                    href="https://github.com/LorePlaying/loreplaying.com/commits/main/?since={{ $key }}&until={{ $key }}"
+                    href="https://github.com/LorePlaying/loreplaying.com/commits/main/?since={{ $key }}&amp;until={{ $key }}"
                     target="_blank"
-                    rel="noopener"
+                    rel="noopener noreferrer"
                     title="{{ $date.Format "Jan 2, 2006" }}: {{ $count }} contribution{{ if ne $count 1 }}s{{ end }}">
                   </a>
-
                 {{ end }}
-
               {{ end }}
-
             </div>
-
           {{ end }}
-
         </div>
 
         <div class="github-calendar-legend">
-
           <span>Less</span>
-
           <span class="github-contribution-day level-0"></span>
           <span class="github-contribution-day level-1"></span>
           <span class="github-contribution-day level-2"></span>
           <span class="github-contribution-day level-3"></span>
           <span class="github-contribution-day level-4"></span>
-
           <span>More</span>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
 
   <div class="github-calendar-link">
-
     <a
       href="https://github.com/LorePlaying/loreplaying.com/graphs/contributors?all=1"
       target="_blank"
-      rel="noopener">
+      rel="noopener noreferrer">
       View all contributors on GitHub →
     </a>
-
   </div>
 
 </div>
