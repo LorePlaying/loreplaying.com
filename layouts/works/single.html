@@ -1,0 +1,97 @@
+
+{{ define "main" }}
+
+{{ $style := .Params.workStyle | default "default" }}
+
+<link rel="stylesheet" href="{{ printf "works/%s.css" $style | relURL }}">
+
+<article class="lp-work lp-work--{{ $style }}">
+
+  <header class="frank-hero">
+    <p class="frank-eyebrow">THE MODERN PROMETHEUS · 1818</p>
+
+    <h1>{{ .Title }}</h1>
+
+    {{ with .Params.author }}
+      <p class="frank-author">by {{ . }}</p>
+    {{ end }}
+
+    <div class="frank-divider" aria-hidden="true">✦</div>
+
+    <p class="frank-intro">
+      A Gothic tale of creation, ambition, isolation, and responsibility.
+    </p>
+  </header>
+
+  <section class="frank-content">
+    {{ .Content }}
+  </section>
+
+  <section class="frank-characters" aria-labelledby="frank-characters-title">
+    <header class="frank-section-header">
+      <span class="frank-section-number">01 / THE PEOPLE</span>
+      <h2 id="frank-characters-title">Characters</h2>
+      <p>Four lives shaped by one extraordinary creation.</p>
+    </header>
+
+    <div class="frank-character-grid">
+
+      <article class="frank-character frank-victor">
+        <span class="frank-character-symbol" aria-hidden="true">⚗</span>
+        <span class="frank-character-index">I</span>
+        <p class="frank-character-role">THE CREATOR</p>
+        <h3>Victor Frankenstein</h3>
+        <p>
+          A young scientist whose pursuit of the secret of life leads him
+          beyond the limits of his responsibility.
+        </p>
+        <span class="frank-character-theme">AMBITION</span>
+      </article>
+
+      <article class="frank-character frank-creature">
+        <span class="frank-character-symbol" aria-hidden="true">◈</span>
+        <span class="frank-character-index">II</span>
+        <p class="frank-character-role">THE CREATION</p>
+        <h3>The Creature</h3>
+        <p>
+          Abandoned by his creator, he searches for companionship and
+          acceptance in a world that rejects him.
+        </p>
+        <span class="frank-character-theme">ISOLATION</span>
+      </article>
+
+      <article class="frank-character frank-elizabeth">
+        <span class="frank-character-symbol" aria-hidden="true">❦</span>
+        <span class="frank-character-index">III</span>
+        <p class="frank-character-role">THE BELOVED</p>
+        <h3>Elizabeth Lavenza</h3>
+        <p>
+          Victor's beloved, whose life becomes entangled in the tragic
+          consequences of his actions.
+        </p>
+        <span class="frank-character-theme">LOVE</span>
+      </article>
+
+      <article class="frank-character frank-henry">
+        <span class="frank-character-symbol" aria-hidden="true">✒</span>
+        <span class="frank-character-index">IV</span>
+        <p class="frank-character-role">THE FRIEND</p>
+        <h3>Henry Clerval</h3>
+        <p>
+          Victor's close friend, whose kindness and humanity contrast
+          with Victor's obsessive ambition.
+        </p>
+        <span class="frank-character-theme">HUMANITY</span>
+      </article>
+
+    </div>
+  </section>
+
+  <footer class="frank-footer">
+    <span aria-hidden="true">✦</span>
+    <p>Play the lore. Build the story.</p>
+  </footer>
+
+</article>
+
+{{ end }}

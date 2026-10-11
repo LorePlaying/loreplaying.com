@@ -1,6 +1,7 @@
 ---
 title: "Frankenstein"
 author: "Mary Shelley"
+workStyle: "frankenstein"
 ---
 
 *Frankenstein; or, The Modern Prometheus* is a Gothic novel by Mary Shelley, first published in 1818.

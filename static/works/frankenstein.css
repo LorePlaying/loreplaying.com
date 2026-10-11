@@ -1,0 +1,302 @@
+
+/* =====================================================
+   LORE PLAYING — FRANKENSTEIN
+   Lightweight Gothic theme
+   ===================================================== */
+
+.lp-work--frankenstein {
+  --f-paper: #eee7d6;
+  --f-ink: #292923;
+  --f-muted: #716f65;
+  --f-green: #30473b;
+  --f-copper: #a66a42;
+  --f-red: #783f3b;
+  --f-border: #d0c4ae;
+
+  max-width: 1100px;
+  margin: 0 auto;
+  color: var(--f-ink);
+  background: var(--f-paper);
+}
+
+/* HERO */
+
+.lp-work--frankenstein .frank-hero {
+  padding: 5rem 1.5rem 4rem;
+  text-align: center;
+  color: #f5f0e5;
+  background: #192820;
+  border-bottom: 3px double var(--f-copper);
+}
+
+.lp-work--frankenstein .frank-eyebrow {
+  margin: 0 0 2rem;
+  color: #c79a72;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.lp-work--frankenstein .frank-hero h1 {
+  margin: 0;
+  color: #f5f0e5;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.lp-work--frankenstein .frank-author {
+  margin: 1rem 0 0;
+  color: #c79a72;
+  font-family: Georgia, serif;
+  font-style: italic;
+}
+
+.lp-work--frankenstein .frank-divider {
+  margin: 1.75rem 0;
+  color: #c79a72;
+}
+
+.lp-work--frankenstein .frank-intro {
+  max-width: 460px;
+  margin: 0 auto;
+  color: #d0d6ce;
+  font-family: Georgia, serif;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* STORY CONTENT */
+
+.lp-work--frankenstein .frank-content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 1rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.05rem;
+  line-height: 1.85;
+}
+
+.lp-work--frankenstein .frank-content p {
+  margin: 0 0 1.4rem;
+}
+
+.lp-work--frankenstein .frank-content h2 {
+  margin: 3rem 0 1rem;
+  padding-bottom: 0.6rem;
+  color: var(--f-green);
+  border-bottom: 1px solid var(--f-border);
+  font-family: Georgia, serif;
+  font-size: 1.65rem;
+}
+
+.lp-work--frankenstein .frank-content a {
+  color: var(--f-red);
+  text-underline-offset: 3px;
+}
+
+/* CHARACTER SECTION */
+
+.lp-work--frankenstein .frank-characters {
+  padding: 3.5rem 2rem 4.5rem;
+  background: #192820;
+  color: #f5f0e5;
+}
+
+.lp-work--frankenstein .frank-section-header {
+  max-width: 900px;
+  margin: 0 auto 2rem;
+}
+
+.lp-work--frankenstein .frank-section-number {
+  color: #c79a72;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.17em;
+}
+
+.lp-work--frankenstein .frank-section-header h2 {
+  margin: 0.5rem 0;
+  color: #f5f0e5;
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 500;
+}
+
+.lp-work--frankenstein .frank-section-header > p {
+  margin: 0;
+  color: #b9c2b9;
+  font-family: Georgia, serif;
+  font-size: 0.9rem;
+}
+
+/* RESPONSIVE CHARACTER GRID */
+
+.lp-work--frankenstein .frank-character-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* CHARACTER PROFILES */
+
+.lp-work--frankenstein .frank-character {
+  position: relative;
+  min-width: 0;
+  padding: 1.5rem;
+  border: 1px solid #435147;
+  border-top: 3px solid var(--f-copper);
+  background: #202d25;
+}
+
+.lp-work--frankenstein .frank-character-symbol {
+  display: block;
+  margin-bottom: 1.5rem;
+  color: #c79a72;
+  font-size: 1.5rem;
+}
+
+.lp-work--frankenstein .frank-character-index {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  color: #829084;
+  font-family: Georgia, serif;
+  font-size: 0.8rem;
+}
+
+.lp-work--frankenstein .frank-character-role {
+  margin: 0 0 0.5rem;
+  color: #c79a72;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.lp-work--frankenstein .frank-character h3 {
+  margin: 0;
+  color: #f5f0e5;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.2rem, 2.5vw, 1.7rem);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.lp-work--frankenstein .frank-character > p:not(.frank-character-role) {
+  margin: 1rem 0 1.5rem;
+  color: #c2c9c0;
+  font-family: Georgia, serif;
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.lp-work--frankenstein .frank-character-theme {
+  display: inline-block;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid #536156;
+  color: #d7b28e;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+/* CHARACTER-SPECIFIC ACCENTS */
+
+.lp-work--frankenstein .frank-victor {
+  border-top-color: #8ba38d;
+}
+
+.lp-work--frankenstein .frank-creature {
+  border-top-color: #a56b65;
+  background: #252523;
+}
+
+.lp-work--frankenstein .frank-creature .frank-character-symbol,
+.lp-work--frankenstein .frank-creature .frank-character-role {
+  color: #d08a83;
+}
+
+.lp-work--frankenstein .frank-elizabeth {
+  border-top-color: #c79a72;
+}
+
+.lp-work--frankenstein .frank-henry {
+  border-top-color: #9da99b;
+}
+
+/* LIGHT HOVER EFFECT */
+
+@media (hover: hover) {
+  .lp-work--frankenstein .frank-character {
+    transition: border-color 0.15s ease;
+  }
+
+  .lp-work--frankenstein .frank-character:hover {
+    border-color: #a66a42;
+  }
+}
+
+/* FOOTER */
+
+.lp-work--frankenstein .frank-footer {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: #f5f0e5;
+  background: #111a14;
+}
+
+.lp-work--frankenstein .frank-footer span {
+  color: #c79a72;
+}
+
+.lp-work--frankenstein .frank-footer p {
+  margin: 0.5rem 0 0;
+  font-family: Georgia, serif;
+  font-size: 0.9rem;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+  .lp-work--frankenstein .frank-hero {
+    padding: 3.5rem 1rem;
+  }
+
+  .lp-work--frankenstein .frank-eyebrow {
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+  }
+
+  .lp-work--frankenstein .frank-content {
+    padding: 2.5rem 1.1rem 1rem;
+    font-size: 1rem;
+  }
+
+  .lp-work--frankenstein .frank-characters {
+    padding: 3rem 1rem;
+  }
+
+  .lp-work--frankenstein .frank-character-grid {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .lp-work--frankenstein .frank-character {
+    padding: 1.25rem;
+  }
+
+  .lp-work--frankenstein .frank-character-symbol {
+    margin-bottom: 1rem;
+  }
+}
+
+/* REDUCED MOTION */
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-work--frankenstein .frank-character {
+    transition: none;
+  }
+}
