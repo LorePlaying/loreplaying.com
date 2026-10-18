@@ -1,8 +1,9 @@
 const DATABASE_NAME = "goof-local-library";
-const DATABASE_VERSION = 2;
+const DATABASE_VERSION = 3;
 const PROJECTS_STORE = "projects";
 const ASSETS_STORE = "assets";
 const COLLECTIONS_STORE = "collections";
+const NOTES_STORE = "notes";
 
 let databasePromise;
 
@@ -25,6 +26,9 @@ function openDatabase() {
         }
         if (!database.objectStoreNames.contains(COLLECTIONS_STORE)) {
           database.createObjectStore(COLLECTIONS_STORE, { keyPath: "id" });
+        }
+        if (!database.objectStoreNames.contains(NOTES_STORE)) {
+          database.createObjectStore(NOTES_STORE, { keyPath: "id" });
         }
       });
 
@@ -103,6 +107,19 @@ export async function listProjects() {
 
 export async function deleteProject(id) {
   await deleteRecord(PROJECTS_STORE, id);
+}
+
+export async function saveNote(note) {
+  await writeRecord(NOTES_STORE, note);
+}
+
+export async function listNotes() {
+  const notes = await listRecords(NOTES_STORE);
+  return notes.sort((left, right) => right.updatedAt - left.updatedAt);
+}
+
+export async function deleteNote(id) {
+  await deleteRecord(NOTES_STORE, id);
 }
 
 export async function saveImageAsset(asset) {

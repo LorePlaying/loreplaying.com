@@ -1,179 +1,257 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-GB">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#fff5dc">
-    <title>GOOF — “Your lore, your chaos.🌪️”</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#202124">
+    <title>GOOF v0.2 — “Your lore, your chaos.🌪️”</title>
     <link rel="stylesheet" href="style.css">
     <script type="module" src="src/main.js"></script>
   </head>
   <body>
+    <canvas class="gallery-web-canvas" id="gallery-web-canvas" aria-hidden="true"></canvas>
     <div class="app-shell">
-      <header class="topbar">
-        <a class="brand" href="./" aria-label="GOOF home">
-          <span class="brand-mark" aria-hidden="true">
-            <span>💀</span>
-          </span>
-          <span class="brand-copy">
-            <span class="brand-name">GOOF</span>
-            <span class="brand-tagline">“Your lore, your chaos.🌪️”</span>
-          </span>
-        </a>
-        <div class="topbar-actions">
-          <span class="topbar-note"><span aria-hidden="true">✳</span> made for <a href="https://loreplaying.com/" target="_blank" rel="noopener noreferrer">Lore Playing</a> with love 💗</span>
-          <button class="about-button" id="about-button" type="button" aria-haspopup="dialog">About</button>
-          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">
-            <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
-            <svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 15.1A8.5 8.5 0 0 1 8.9 3.7 8.7 8.7 0 1 0 20.3 15.1Z"/><path d="m16.5 4 .7 1.8L19 6.5l-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z"/></svg>
-          </button>
-          <button class="theme-toggle fullscreen-toggle" id="fullscreen-toggle" type="button" aria-label="Enter fullscreen workspace" title="Fullscreen workspace">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg>
-          </button>
+      <main class="gallery-screen" id="gallery-screen" aria-label="Artwork home">
+        <header class="gallery-header">
+          <a class="gallery-brand" href="./" aria-label="GOOF artwork gallery">
+            <span class="brand-mark" aria-hidden="true"><span>✳</span></span>
+            <span class="gallery-brand-name glitch" data-text="GOOF Studio" aria-label="GOOF Studio">GOOF Studio</span>
+          </a>
+          <div class="gallery-header-actions">
+            <button class="gallery-icon-button theme-toggle" id="gallery-theme-toggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+              <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+              <svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 15.1A8.5 8.5 0 0 1 8.9 3.7 8.7 8.7 0 1 0 20.3 15.1Z"/><path d="m16.5 4 .7 1.8-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z"/></svg>
+            </button>
+            <button class="gallery-new-button" id="new-project-button" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m-7-7h14"/></svg>New artwork
+            </button>
+          </div>
+        </header>
+        <div class="gallery-toolbar">
+          <label class="gallery-search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
+            <input id="project-search" type="search" placeholder="Search your artwork" aria-label="Search artwork">
+          </label>
+          <div class="gallery-toolbar-actions">
+            <div class="gallery-view-toggle" role="group" aria-label="Artwork layout">
+              <button type="button" id="project-grid-view" aria-label="Grid view" aria-pressed="true">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg>
+              </button>
+              <button type="button" id="project-list-view" aria-label="List view" aria-pressed="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r=".7"/><circle cx="4.5" cy="12" r=".7"/><circle cx="4.5" cy="18" r=".7"/></svg>
+              </button>
+            </div>
+            <button class="gallery-about-link" id="gallery-about-button" type="button" aria-haspopup="dialog" aria-controls="about-dialog">About GOOF</button>
+          </div>
         </div>
-      </header>
+        <section id="project-grid" class="project-grid" aria-label="Your artwork"></section>
+        <section class="saved-notes-section" aria-labelledby="saved-notes-heading">
+          <div class="saved-notes-heading">
+            <h2 id="saved-notes-heading">Saved Notes</h2>
+            <span id="saved-notes-count" role="status" aria-live="polite"></span>
+          </div>
+          <div class="saved-notes-grid" id="saved-notes-grid"></div>
+        </section>
+      </main>
 
-      <main class="workspace">
+      <main class="workspace" id="workspace-screen" hidden>
         <section class="drawing-app" aria-label="Drawing workspace">
-          <div class="toolbar" role="toolbar" aria-label="Drawing tools">
-            <div class="view-mode" role="group" aria-label="Workspace view">
-              <button class="view-mode-button" id="simple-view" type="button" aria-pressed="false" title="Show essential drawing controls">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h7"/></svg><span>Simple</span>
+          <div class="toolbar" role="toolbar" aria-label="Painting tools">
+            <div class="toolbar-leading">
+              <button class="workspace-icon-button" id="workspace-actions-toggle" type="button" aria-label="Actions and settings" aria-controls="workspace-actions-menu" aria-expanded="false" title="Actions and settings">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
               </button>
-              <button class="view-mode-button is-active" id="advanced-view" type="button" aria-pressed="true" title="Show labeled drawing controls">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM8 9h3m5 0h.1M8 15h3m5 0h.1"/></svg><span>Studio</span>
-              </button>
+              <span class="sr-only" id="canvas-document-title">Untitled artwork</span>
             </div>
-            <span class="toolbar-divider" aria-hidden="true"></span>
-            <div class="tool-group" role="group" aria-label="Choose a tool">
-              <button class="tool-button" id="select-tool" type="button"
-                aria-pressed="false" aria-label="Select objects" title="Select any object on the canvas">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 3 14 11-6 .7-3.1 5.2L5 3Z"/><path d="m13 15 3.4 5.2"/></svg>
-                <span>Select</span>
+            <div class="toolbar-controls-row">
+            <div class="toolbar-center-tools" role="group" aria-label="Drawing tools">
+              <button class="tool-button toolbar-text-button" id="add-text" type="button" aria-pressed="false" aria-label="Text" title="Text">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14M12 5v14m-4 0h8"/></svg>
+                <span>Text</span>
               </button>
-              <button class="tool-button shape-tool" id="shapes-tool" type="button" aria-pressed="false" aria-label="Rectangle shape" title="Rectangle — double-click to choose a shape">
-                <svg id="selected-shape-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="1"/></svg>
-                <span id="selected-shape-name">Rectangle</span><span class="double-click-hint" aria-hidden="true">2×</span>
-              </button>
-              <button class="tool-button is-active has-double-click-hint" id="brush-tool" type="button"
-                aria-pressed="true" aria-label="Brush" title="Brush">
-                <svg id="selected-brush-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5.5 4 4M4 20c4.5 0 6.2-1.8 7-4.2l7.9-7.9a2.1 2.1 0 0 0-3-3L8 12.8C5.8 13.6 4 15.5 4 20Z"/></svg>
-                <span id="selected-brush-name">Brush</span><span class="double-click-hint" aria-hidden="true">2×</span>
-              </button>
-              <button class="tool-button has-double-click-hint" id="eraser-tool" type="button"
-                aria-pressed="false" aria-label="Eraser" title="Eraser">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 15 9.5-9.5a2 2 0 0 1 2.8 0l3.2 3.2a2 2 0 0 1 0 2.8L10 21H7.5L4 17.5A1.8 1.8 0 0 1 4 15Z"/><path d="m8.2 10.8 6.5 6.5M11 21h9"/></svg>
-                <span>Eraser</span><span class="double-click-hint" aria-hidden="true">2×</span>
-              </button>
-              <button class="tool-button" id="fill-tool" type="button" aria-pressed="false" aria-label="Fill canvas or shape" title="Click a shape to fill it or the canvas to change its background; double-click for fill options">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 12 8-8 9 9-8 8H5l-2-2v-7Z"/><path d="m7 8 9 9M18 4l2-2 2 2-2 2M3 21h18"/></svg>
-                <span>Fill</span>
-              </button>
-            </div>
-            <div class="fill-options-popover" id="fill-options-popover" role="group" aria-label="Fill behavior" hidden>
-              <strong>Fill target</strong>
-              <label><input type="radio" name="fill-mode" value="smart" checked> Smart: shape or background</label>
-              <label><input type="radio" name="fill-mode" value="canvas"> Canvas background only</label>
-              <label><input type="radio" name="fill-mode" value="shape"> Shape under pointer only</label>
-            </div>
-
-            <span class="toolbar-divider" aria-hidden="true"></span>
-
-            <button class="action-button" id="add-text" type="button" aria-label="Add text" title="Add text">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6V4h16v2M12 4v16m-4 0h8"/></svg><span>Text</span>
-            </button>
-            <button class="action-button" id="add-image" type="button" aria-label="Add image" title="Add image">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="3"/><circle cx="9" cy="9" r="1.5"/><path d="m5 17 5-5 3.5 3 2.5-2 3 3"/></svg><span>Image</span>
-            </button>
-            <input class="sr-only" id="image-file" type="file" accept="image/*" aria-label="Choose an image to add to your library">
-            <div class="color-picker-control drawing-control">
-              <button class="color-trigger" id="brush-color-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Choose brush color" title="Choose brush color">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.2 6.2 3.6 3.6M4 20l4.8-1.1 10-10a2.55 2.55 0 0 0-3.6-3.6l-10 10L4 20Z"/><path d="m12.8 7.6 3.6 3.6"/></svg>
-                  <span class="color-chip" id="brush-color-chip" aria-hidden="true"></span><span>Color</span>
-              </button>
-              <div class="color-popover" id="brush-color-popover" role="dialog" aria-label="Brush color picker" hidden>
-                <strong>Color wheel</strong>
-                <div class="color-wheel" data-color-wheel role="slider" tabindex="0" aria-label="Hue color wheel" aria-valuemin="0" aria-valuemax="359" aria-valuenow="260"></div>
-                <div class="color-sv" data-color-sv role="application" aria-label="Saturation and brightness picker" tabindex="0"></div>
-                <div class="color-extremes"><button type="button" data-color-extreme="#ffffff">White</button><button type="button" data-color-extreme="#000000">Black</button></div>
-                <label class="custom-color-label">Custom color <input id="brush-color" type="color" value="#34314a" aria-label="Custom brush color"></label>
-                <strong>Palette</strong><div class="palette-grid" data-palette></div>
-                <button class="small-button palette-save" type="button" data-palette-save hidden>Save color</button>
+              <div class="tool-group workspace-paint-tools" role="group" aria-label="Drawing tools">
+                <button class="tool-button is-active" id="brush-tool" type="button" aria-pressed="true" aria-label="Brush" title="Brush (B) — double-click for the brush library">
+                  <svg id="selected-brush-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5.5 4 4M4 20c4.5 0 6.2-1.8 7-4.2l7.9-7.9a2.1 2.1 0 0 0-3-3L8 12.8C5.8 13.6 4 15.5 4 20Z"/></svg>
+                  <span id="selected-brush-name">Brush</span>
+                </button>
+                <button class="tool-button" id="eraser-tool" type="button" aria-pressed="false" aria-label="Eraser" title="Eraser (E) — double-click for eraser settings">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 15 9.5-9.5a2 2 0 0 1 2.8 0l3.2 3.2a2 2 0 0 1 0 2.8L10 21H7.5L4 17.5A1.8 1.8 0 0 1 4 15Z"/><path d="m8.2 10.8 6.5 6.5M11 21h9"/></svg>
+                  <span>Eraser</span>
+                </button>
+              </div>
+              <div class="tool-group workspace-selection-tools" role="group" aria-label="Selection and shape tools">
+                <button class="tool-button" id="select-tool" type="button" aria-pressed="false" aria-label="Select and transform objects" title="Select and transform objects (S)">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 3 14 11-6 .7-3.1 5.2L5 3Z"/><path d="m13 15 3.4 5.2"/></svg>
+                  <span>Select</span>
+                </button>
+                <button class="tool-button shape-tool" id="shapes-tool" type="button" aria-pressed="false" aria-label="Rectangle shape" title="Rectangle (R) — double-click to choose a shape">
+                  <svg id="selected-shape-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="1"/></svg>
+                  <span id="selected-shape-name">Rectangle</span>
+                </button>
+                <button class="tool-button" id="fill-tool" type="button" aria-pressed="false" aria-label="Fill canvas or shape" title="Fill (F) — click a shape or canvas; double-click for fill options">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 8 8-5 7 10-8 5L5 8Z"/><path d="m5 8 8-5M8 10l7 10M5 8l-2 3 3 5 5-3M15 20h6"/><path d="M18 3c1.5 1.7 1.5 2.6 0 3.5-1.5-.9-1.5-1.8 0-3.5Z"/></svg>
+                  <span>Fill</span>
+                </button>
               </div>
             </div>
-
-            <div class="tool-settings-popover" id="tool-settings-popover" role="dialog" aria-label="Brush settings" hidden>
-              <strong id="tool-settings-title">Brush settings</strong>
+            <div class="toolbar-trailing">
+              <button class="workspace-icon-button" id="sidebar-toggle" type="button" aria-controls="editor-panel" aria-expanded="false" aria-label="Show layers" title="Show layers (L)">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 16l9 5 9-5"/></svg><span>Layers</span>
+              </button>
+              <button class="workspace-icon-button" id="assets-toggle" type="button" aria-controls="editor-panel" aria-expanded="false" aria-label="Show assets" title="Assets">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5 12 3l8 2.5v13L12 21l-8-2.5v-13Z"/><path d="m4 5.5 8 2.8 8-2.8M12 8.3V21M8 4.2l8 2.6"/></svg><span>Assets</span>
+              </button>
+              <button class="workspace-icon-button notes-toggle" id="notes-toggle" type="button" aria-controls="notes-panel" aria-expanded="false" aria-label="Notes" title="Notes">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h14a2 2 0 0 1 2 2v11l-5 5H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>Notes</span>
+              </button>
+              <button class="tool-button toolbar-clear-button" id="clear-canvas" type="button" aria-label="Clear Canvas" title="Clear Canvas">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 17 9-9 4 4-9 9H3v-4Z"/><path d="m10 10 4 4m2-9 4 4M4 21h16"/></svg>
+                <span>Clear Canvas</span>
+              </button>
+            </div>
+            </div>
+            <div class="toolbar-utilities">
+              <button class="action-button toolbar-utility-button theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">
+                <svg class="theme-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+                <svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 15.1A8.5 8.5 0 0 1 8.9 3.7 8.7 8.7 0 1 0 20.3 15.1Z"/><path d="m16.5 4 .7 1.8-.7 1.8-.7-1.8-1.8-.7 1.8-.7.7-1.8Z"/></svg><span>Theme</span>
+              </button>
+              <button class="action-button toolbar-utility-button" id="fullscreen-toggle" type="button" aria-label="Enter fullscreen workspace" title="Fullscreen workspace">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg><span>Fullscreen</span>
+              </button>
+            </div>
+            <div class="tool-settings-popover brush-library-panel" id="tool-settings-popover" role="dialog" aria-label="Brush library" hidden>
+              <strong id="tool-settings-title">Brush library</strong>
               <div class="brush-kind-control" id="brush-kind-control" role="group" aria-label="Brush styles">
                 <div id="brush-kind-options" class="brush-kind-options"></div>
                 <select id="brush-kind" class="sr-only" aria-label="Selected brush style">
-                  <option value="brush">Brush</option><option value="calligraphy-brush">Calligraphy brush</option>
-                  <option value="calligraphy-pen">Calligraphy pen</option><option value="airbrush">Airbrush</option>
-                  <option value="oil-brush">Oil brush</option><option value="crayon">Crayon</option>
-                  <option value="marker">Marker</option><option value="natural-pencil">Natural pencil</option>
-                  <option value="watercolour-brush">Watercolour brush</option>
+                  <option value="ink">Ink</option><option value="crayon">Crayon</option>
+                  <option value="airbrush">Airbrush</option>
                 </select>
               </div>
-              <label class="tool-settings-size" for="brush-size">
-                <span class="control-label">Size <output id="brush-size-value" for="brush-size">6 px</output></span>
-                <input id="brush-size" type="range" min="1" max="128" value="6">
-              </label>
               <label class="tool-settings-type" for="tool-settings-type"><span id="tool-settings-type-label">Tip</span>
                 <select id="tool-settings-type">
                   <option value="round">Round</option>
                   <option value="square">Square</option>
                 </select>
               </label>
-            </div>
-
-            <span class="toolbar-spacer"></span>
-
-            <div class="action-group" role="group" aria-label="Canvas actions">
-              <button class="action-button" id="clear-canvas" type="button" aria-label="Clear canvas" title="Clear canvas">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6m4-6v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg><span>Clear</span>
-              </button>
-              <button class="icon-button history-button" id="undo-action" type="button" aria-label="Undo" title="Undo (Ctrl+Z)" disabled>
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5M4 9h9a7 7 0 0 1 0 14h-2"/></svg>
-              </button>
-              <button class="icon-button history-button" id="redo-action" type="button" aria-label="Redo" title="Redo (Ctrl+Shift+Z)" disabled>
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 14 5-5-5-5m5 5h-9a7 7 0 0 0 0 14h2"/></svg>
-              </button>
-              <button class="action-button" id="open-scene" type="button" aria-label="Open a GOOF scene" title="Open a GOOF scene">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5h7l2 2h9v9H3zM3 7.5V5h7l2 2"/></svg><span>Open</span>
-              </button>
-              <div class="save-control">
-                <button class="action-button save-button" id="save-scene" type="button" aria-label="Save or export" aria-haspopup="true" aria-expanded="false" title="Save or export">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3h13l4 4v14H3V3zM7 3v6h10V3M7 21v-8h10v8"/></svg><span>Save</span>
+              <div class="color-picker-control drawing-control">
+                <button class="color-trigger brush-library-color-trigger" id="brush-color-trigger" type="button" aria-haspopup="dialog" aria-controls="brush-color-popover" aria-expanded="false" aria-label="Choose brush colour" title="Choose brush colour">
+                  <span class="color-chip" id="brush-color-chip" aria-hidden="true"></span><span>Brush colour</span>
                 </button>
-                <div class="save-menu" id="save-menu" role="group" aria-label="Save format" hidden>
-                  <button class="save-menu-option" type="button" data-save-format="goof" aria-label="Save editable GOOF scene">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h11l4 4v14H4V3zM8 3v6h8V3M8 21v-7h8v7"/></svg><span>GOOF scene</span>
-                  </button>
-                  <button class="save-menu-option" type="button" data-save-format="png" aria-label="Export PNG image">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="1.5"/><path d="m4 17 5-5 4 4 3-3 4 4"/></svg><span>PNG image</span>
-                  </button>
-                  <button class="save-menu-option" type="button" data-save-format="svg" aria-label="Export SVG vector image">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM8 15l3-6 3 6m-5-2h4m3 2 2-6"/></svg><span>SVG vector</span>
-                  </button>
-                  <button class="save-menu-option" type="button" data-save-format="asset" aria-label="Save all items on the active layer to Assets">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM8 8h8m-8 4h8m-8 4h5"/></svg><span>Assets</span>
-                  </button>
+                <div class="color-popover" id="brush-color-popover" role="dialog" aria-label="Brush colour picker" hidden>
+                  <strong>Colour wheel</strong>
+                  <div class="color-wheel" data-color-wheel role="slider" tabindex="0" aria-label="Hue colour wheel" aria-valuemin="0" aria-valuemax="359" aria-valuenow="260"></div>
+                  <div class="color-sv" data-color-sv role="application" aria-label="Saturation and brightness picker" tabindex="0"></div>
+                  <label class="color-value-control">White <input type="range" data-color-value min="0" max="100" value="0" aria-label="White to black colour value"> Black</label>
+                  <label class="custom-color-label">Custom colour <input id="brush-color" type="color" value="#34314a" aria-label="Custom brush colour"></label>
+                  <strong>Palette</strong><div class="palette-grid" data-palette></div>
+                  <button class="small-button palette-save" type="button" data-palette-save hidden>Save colour</button>
+                  <button class="small-button color-apply" type="button" data-color-apply>Apply</button>
                 </div>
               </div>
-              <input class="sr-only" id="scene-file" type="file" accept=".goof,.json,application/json" aria-label="Open a GOOF scene">
             </div>
+            <div class="fill-options-popover" id="fill-options-popover" role="group" aria-label="Fill behaviour" hidden>
+              <strong>Fill target</strong>
+              <label><input type="radio" name="fill-mode" value="smart" checked> Smart: shape or background</label>
+              <label><input type="radio" name="fill-mode" value="canvas"> Canvas background only</label>
+              <label><input type="radio" name="fill-mode" value="shape"> Shape under pointer only</label>
+            </div>
+            <div class="workspace-actions-menu" id="workspace-actions-menu" aria-label="Workspace actions" hidden>
+              <div class="workspace-actions-utilities">
+                <button class="action-button" id="open-scene" type="button" aria-label="Open a GOOF scene" title="Open a GOOF scene">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5h7l2 2h9v9H3zM3 7.5V5h7l2 2"/></svg><span>Open scene</span>
+                </button>
+                <button class="action-button" id="add-image" type="button" aria-label="Add image" title="Add image">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="3"/><circle cx="9" cy="9" r="1.5"/><path d="m5 17 5-5 3.5 3 2.5-2 3 3"/></svg><span>Image</span>
+                </button>
+                <button class="action-button" id="open-command-palette" type="button" aria-label="Open command palette" title="Command palette (Ctrl+Shift+P or /)">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-14-2 20"/></svg><span>Commands</span>
+                </button>
+                <button class="action-button" id="open-hotkeys" type="button" aria-label="Keyboard shortcuts" title="Keyboard shortcuts">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 13h.01M10 13h.01M14 13h.01M18 13h.01M8 16h8"/></svg><span>Keyboard shortcuts</span>
+                </button>
+              <div class="save-control">
+                <button class="action-button save-button" id="save-scene" type="button" aria-label="Save or export" aria-haspopup="true" aria-expanded="false" title="Save or export">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3h13l4 4v14H3V3zM7 3v6h10V3M7 21v-8h10v8"/></svg><span>Save and export</span>
+                </button>
+                <div class="save-menu" id="save-menu" role="group" aria-label="Save format" hidden>
+                  <button class="save-menu-option" type="button" data-save-format="project" aria-label="Save artwork to this device"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM8 9h8m-8 4h8m-8 4h5"/></svg><span>Save artwork</span></button>
+                  <button class="save-menu-option" type="button" data-save-format="goof" aria-label="Save editable GOOF scene"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h11l4 4v14H4V3zM8 3v6h8V3M8 21v-7h8v7"/></svg><span>GOOF scene</span></button>
+                  <button class="save-menu-option" type="button" data-save-format="png" aria-label="Export PNG image"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="1.5"/><path d="m4 17 5-5 4 4 3-3 4 4"/></svg><span>PNG image</span></button>
+                  <button class="save-menu-option" type="button" data-save-format="svg" aria-label="Export SVG vector image"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM8 15l3-6 3 6m-5-2h4m3 2 2-6"/></svg><span>SVG vector</span></button>
+                </div>
+              </div>
+              </div>
+            </div>
+            <input class="sr-only" id="image-file" type="file" accept="image/*" aria-label="Choose an image to add to your library">
+            <input class="sr-only" id="scene-file" type="file" accept=".goof,.json,application/json" aria-label="Open a GOOF scene">
           </div>
 
-          <div class="editor-layout">
-            <div class="canvas-frame">
-              <div class="canvas-heading">
-                <span class="canvas-heading-actions">
-                  <button class="sidebar-toggle canvas-sidebar-toggle" id="sidebar-toggle" type="button" aria-controls="editor-panel" aria-expanded="true" aria-label="Expand left sidebar" title="Show panel">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v13H4zM9 5.5v13m4-9 3 2.5-3 2.5"/></svg>
-                    <span>Show panel</span>
-                  </button>
-                </span>
+          <section class="notes-panel" id="notes-panel" aria-label="Artwork notes" hidden inert>
+            <header class="notes-panel-header">
+              <div class="notes-mode-switch" role="group" aria-label="Notes mode">
+                <button class="notes-mode-button is-active" id="notes-edit-mode" type="button" aria-pressed="true">Edit</button>
+                <button class="notes-mode-button" id="notes-preview-mode" type="button" aria-pressed="false">Preview</button>
               </div>
+              <span id="notes-save-status" role="status" aria-live="polite">Saved</span>
+              <button class="icon-button notes-header-action" id="notes-save" type="button" aria-label="Save note" title="Save note as Plain Text or Markdown" aria-haspopup="menu" aria-expanded="false" aria-controls="notes-save-menu">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h12l4 4v14H3V3h2Zm2 0v6h10V3M7 21v-8h10v8"/></svg>
+              </button>
+              <div class="notes-save-menu" id="notes-save-menu" role="menu" aria-label="Save note format" hidden>
+                <button type="button" role="menuitem" data-notes-format="txt">Plain Text (.txt)</button>
+                <button type="button" role="menuitem" data-notes-format="md">Markdown (.md)</button>
+              </div>
+              <button class="icon-button notes-header-action" id="saved-notes-toggle" type="button" aria-label="Saved Notes" title="Saved Notes" aria-expanded="false" aria-controls="saved-notes-popover">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14v16H5zM8 8h8m-8 4h8m-8 4h5"/></svg>
+              </button>
+              <button class="icon-button notes-header-action notes-neovim-toggle" id="notes-neovim-toggle" type="button" aria-label="Enable Notes Vim mode" title="Vim" aria-pressed="false"><span>VIM</span></button>
+              <button class="icon-button notes-header-action notes-crt-theme-toggle" id="notes-crt-theme-toggle" type="button" aria-label="Switch CRT theme to amber" title="Green CRT theme" hidden>Green</button>
+              <span class="notes-editor-state" id="notes-editor-mode" aria-live="polite">INSERT</span>
+              <label class="notes-vim-search" id="notes-vim-search" hidden>
+                <span aria-hidden="true">/</span>
+                <input id="notes-vim-search-input" type="search" aria-label="Search in this note" placeholder="Search this note">
+              </label>
+              <div class="saved-notes-popover" id="saved-notes-popover" hidden>
+                <strong>Saved Notes</strong>
+                <div id="saved-notes-list"></div>
+              </div>
+            </header>
+            <label class="notes-title-field" for="notes-title"><span class="sr-only">Note title</span>
+              <input id="notes-title" type="text" maxlength="100" placeholder="Untitled note" autocomplete="off">
+            </label>
+            <textarea class="notes-editor" id="notes-content" maxlength="100000" placeholder="Write a quick note or Markdown…" aria-label="Note text in Markdown"></textarea>
+            <span class="notes-block-caret" id="notes-block-caret" aria-hidden="true" hidden></span>
+            <article class="notes-preview" id="notes-preview" aria-label="Markdown preview" hidden></article>
+            <span class="notes-preview-status" id="notes-preview-status" role="status" aria-live="polite"></span>
+            <p class="notes-help" id="notes-help" hidden>Vim keys: Esc normal · i/a/o insert · h/j/k/l move · 0/^/$ line · w/b/e words · gg/G document · /, n, N search · dd/cc line · yy/p/P yank and paste · x/D delete · cw/C change · r replace · J join · u/Ctrl+R undo/redo.</p>
+          </section>
+
+          <div class="editor-layout sidebar-collapsed">
+            <aside class="tool-rail" aria-label="Brush controls">
+              <button class="icon-button rail-gallery-button" id="back-to-gallery" type="button" aria-label="Home" title="Home">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7h-6v7H4a1 1 0 0 1-1-1V10Z"/></svg><span>Home</span>
+              </button>
+              <label class="rail-slider" for="brush-size">
+                <span>Size</span><output id="brush-size-value" for="brush-size">6 px</output>
+                <input id="brush-size" type="range" min="1" max="128" value="6" aria-label="Brush size">
+              </label>
+              <label class="rail-slider" for="brush-opacity">
+                <span>Opacity</span><output id="brush-opacity-value" for="brush-opacity">100%</output>
+                <input id="brush-opacity" type="range" min="0" max="100" value="100" aria-label="Brush opacity">
+              </label>
+              <span class="rail-divider" aria-hidden="true"></span>
+              <div class="rail-history" role="group" aria-label="History">
+                <button class="icon-button history-button" id="undo-action" type="button" aria-label="Undo" title="Undo (Ctrl+Z)" disabled>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5M4 9h9a7 7 0 0 1 0 14h-2"/></svg>
+                </button>
+                <button class="icon-button history-button" id="redo-action" type="button" aria-label="Redo" title="Redo (Ctrl+Shift+Z)" disabled>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 14 5-5-5-5m5 5h-9a7 7 0 0 0 0 14h2"/></svg>
+                </button>
+              </div>
+              <span class="rail-divider" aria-hidden="true"></span>
+              <div class="rail-modifier" aria-label="Current tool"><span id="rail-modifier-label">Brush</span></div>
+            </aside>
+            <div class="canvas-frame">
               <div class="canvas-container">
                 <textarea class="canvas-text-entry" id="canvas-text-entry" rows="1" maxlength="500" placeholder="Type a story beat…" aria-label="New canvas text" hidden></textarea>
                 <div class="canvas-status" aria-live="polite">
@@ -186,13 +264,23 @@
                   Your browser does not support the HTML canvas element.
                 </canvas>
               </div>
+              <button class="action-button about-under-canvas" id="about-button" type="button" aria-haspopup="dialog" aria-label="About GOOF" title="About GOOF">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/></svg><span>About GOOF</span>
+              </button>
             </div>
 
-            <aside class="editor-panel" id="editor-panel" aria-label="Assets and layers">
-              <button class="sidebar-toggle panel-sidebar-toggle" id="panel-sidebar-toggle" type="button" aria-controls="editor-panel" aria-expanded="true" aria-label="Collapse left sidebar" title="Hide panel">
+            <aside class="editor-panel" id="editor-panel" aria-label="Workspace panel" aria-hidden="true" inert>
+              <header class="editor-panel-header">
+                <div class="editor-panel-tabs" role="group" aria-label="Workspace panels">
+                  <button class="editor-panel-tab is-active" type="button" data-workspace-panel="layers" aria-pressed="true">Layers</button>
+                  <button class="editor-panel-tab" type="button" data-workspace-panel="assets" aria-pressed="false">Assets</button>
+                </div>
+                <button class="sidebar-toggle panel-sidebar-toggle" id="panel-sidebar-toggle" type="button" aria-controls="editor-panel" aria-expanded="false" aria-label="Hide panel" title="Hide panel">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v13H4zM9 5.5v13m4-9 3 2.5-3 2.5"/></svg>
-                <span>Hide panel</span>
-              </button>
+                <span>Close</span>
+                </button>
+              </header>
+              <div class="workspace-panel-view" id="assets-panel-view" hidden>
               <details class="panel-section library-section" open aria-label="Assets">
                 <summary class="panel-heading" title="Expand or collapse Assets">
                   <button class="small-button add-collection-button" id="add-collection" type="button" aria-label="Add collection" title="Add collection">+</button>
@@ -201,6 +289,7 @@
                   <h2>Assets</h2>
                   <span class="panel-count" id="asset-count">0</span>
                 </summary>
+                <button class="small-button save-assets-button" id="save-layer-assets" type="button">Save selection or layer to Assets</button>
                 <label class="asset-search-label" for="asset-search">Search assets or collections</label>
                 <input class="asset-search" id="asset-search" type="search" placeholder="Search assets or collections" aria-label="Search assets or collections">
                 <button class="filter-toggle" id="asset-filter-toggle" type="button" aria-expanded="true" aria-controls="asset-filters">
@@ -211,7 +300,7 @@
                   <button class="asset-filter is-active" type="button" data-asset-filter="all" aria-pressed="true">All</button>
                   <button class="asset-filter" type="button" data-asset-filter="text" aria-pressed="false">Text</button>
                   <button class="asset-filter" type="button" data-asset-filter="image" aria-pressed="false">Images</button>
-                  <button class="asset-filter" type="button" data-asset-filter="stroke" aria-pressed="false">Scribbles</button>
+                  <button class="asset-filter" type="button" data-asset-filter="drawing" aria-pressed="false">Drawings</button>
                   <button class="asset-filter" type="button" data-asset-filter="shape" aria-pressed="false">Shapes</button>
                 </div>
                 <div class="asset-selection-controls" id="asset-selection-controls">
@@ -223,16 +312,9 @@
                 <div class="collection-list" id="collection-list" aria-label="Asset collections"></div>
                 <div class="asset-list" id="asset-list" aria-live="polite"></div>
               </details>
-
-              <div class="panel-footer-controls" aria-label="Panel and canvas options">
-                <button class="icon-button" id="toggle-all-panes" type="button" aria-label="Collapse all panes" title="Collapse all panes">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/><path d="m8 4 4 3 4-3m-8 16 4-3 4 3"/></svg>
-                </button>
-                <button class="icon-button transparency-toggle" id="toggle-transparent" type="button" aria-pressed="false" aria-label="Use transparent canvas" title="Transparent canvas">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM4 12h16M12 4v16"/><path d="M4 4h8v8H4zM12 12h8v8h-8z" fill="currentColor" stroke="none"/></svg>
-                </button>
               </div>
 
+              <div class="workspace-panel-view" id="layers-panel-view">
               <details class="panel-section" open aria-label="Layers">
                 <summary class="panel-heading" title="Expand or collapse Layers"><svg class="panel-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 10 4 4 4-4"/></svg><svg class="panel-section-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="8" cy="6" r="1"/><circle cx="15" cy="12" r="1"/></svg><h2>Layers</h2></summary>
                 <button class="small-button" id="add-layer" type="button">New layer</button>
@@ -245,11 +327,118 @@
                 <button class="small-button" id="edit-selected-text" type="button" hidden>Edit text</button>
                 <button class="small-button danger-button" id="delete-selected" type="button">Delete object</button>
               </section>
+
+              <div class="panel-footer-controls" aria-label="Panel and canvas options">
+                <button class="icon-button" id="toggle-all-panes" type="button" aria-label="Collapse asset and layer sections" title="Collapse asset and layer sections">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="6" rx="1"/><rect x="4" y="14" width="16" height="6" rx="1"/><path d="m9 7 3 2 3-2m-6 10 3-2 3 2"/></svg>
+                </button>
+                <button class="icon-button transparency-toggle" id="toggle-transparent" type="button" aria-pressed="false" aria-label="Enable transparent canvas" title="Enable transparent canvas">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM4 12h16M12 4v16"/><path d="M4 4h8v8H4zM12 12h8v8h-8z" fill="currentColor" stroke="none"/></svg>
+                  <span>Transparent canvas</span>
+                </button>
+              </div>
+              </div>
             </aside>
           </div>
           <p class="sr-only" id="drawing-status" role="status" aria-live="polite"></p>
         </section>
       </main>
+
+      <dialog class="command-palette-dialog" id="command-palette" aria-label="Command palette">
+        <label class="command-palette-search-label" for="command-palette-search">Search commands</label>
+        <input id="command-palette-search" type="search" autocomplete="off" placeholder="Type a tool or action…" aria-controls="command-palette-results">
+        <span class="notes-block-caret notes-search-caret" id="notes-search-caret" aria-hidden="true" hidden></span>
+        <ul id="command-palette-results" role="listbox" aria-label="Matching commands"></ul>
+        <p class="command-palette-hint">↑ ↓ to navigate · Enter to run · Esc to close</p>
+      </dialog>
+
+      <dialog class="text-dialog project-dialog" id="new-project-dialog" aria-labelledby="new-project-title">
+        <form id="new-project-form">
+          <h2 id="new-project-title">Create artwork</h2>
+          <label for="new-project-name">Name</label>
+          <input id="new-project-name" type="text" value="Untitled artwork" maxlength="50" required>
+          <div class="project-presets" role="group" aria-label="Canvas presets">
+            <button type="button" data-canvas-preset="infinite" aria-pressed="false">Infinite</button>
+            <button type="button" data-canvas-preset="portrait">Portrait</button>
+            <button type="button" data-canvas-preset="landscape">Landscape</button>
+          </div>
+          <div class="project-dimension-row">
+            <label for="new-project-width">Width (px)<input id="new-project-width" type="number" min="256" max="8192" value="2048" required></label>
+            <label for="new-project-height">Height (px)<input id="new-project-height" type="number" min="256" max="8192" value="2048" required></label>
+          </div>
+          <fieldset class="project-background-options">
+            <legend>Canvas background</legend>
+            <button type="button" data-background-preset="white" aria-pressed="true">White</button>
+            <button type="button" data-background-preset="black" aria-pressed="false">Black</button>
+            <button type="button" data-background-preset="transparent" aria-pressed="false">Transparent</button>
+            <button class="project-background-custom" id="new-project-custom-background" type="button" aria-haspopup="dialog" aria-controls="new-project-background-popover" aria-expanded="false" aria-label="Choose custom canvas colour" title="Choose custom colour">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9h-9V3Z"/><path d="M16 3.8A9 9 0 0 1 20.2 8H16V3.8Z"/></svg>
+              <span class="background-colour-swatch" id="new-project-background-chip" aria-hidden="true"></span>Custom
+            </button>
+            <div class="color-popover project-background-popover" id="new-project-background-popover" role="dialog" aria-label="Canvas background colour picker" hidden>
+              <strong>Colour wheel</strong>
+              <div class="color-wheel" data-color-wheel role="slider" tabindex="0" aria-label="Hue colour wheel" aria-valuemin="0" aria-valuemax="359" aria-valuenow="0"></div>
+              <div class="color-sv" data-color-sv role="application" aria-label="Saturation and brightness picker" tabindex="0"></div>
+              <label class="color-value-control">White <input type="range" data-color-value min="0" max="100" value="0" aria-label="White to black canvas colour value"> Black</label>
+              <label class="custom-color-label">Custom colour <input id="new-project-background" type="color" value="#ffffff" aria-label="Custom canvas colour"></label>
+              <strong>Palette</strong><div class="palette-grid" data-palette></div>
+              <button class="small-button palette-save" type="button" data-palette-save hidden>Save colour</button>
+              <button class="small-button color-apply" type="button" data-color-apply>Apply</button>
+            </div>
+          </fieldset>
+          <div class="dialog-actions">
+            <button class="action-button" id="cancel-new-project" type="button">Cancel</button>
+            <button class="action-button export-button" type="submit">Create canvas</button>
+          </div>
+        </form>
+      </dialog>
+      <dialog class="clear-dialog" id="clear-dialog" aria-labelledby="clear-dialog-title">
+        <form method="dialog">
+          <h2 id="clear-dialog-title">Clear canvas</h2>
+          <p>Choose an effect. Remember it on this device to use it with a single click next time.</p>
+          <div class="clear-effect-options" role="group" aria-label="Canvas clearing animation">
+            <button type="button" data-clear-effect="circling" aria-pressed="true" autofocus><span class="effect-preview effect-circling"></span><strong>Circling</strong><small>Orbiting sweep</small></button>
+            <button type="button" data-clear-effect="dots"><span class="effect-preview effect-dots"></span><strong>Dots</strong><small>Expanding dot field</small></button>
+            <button type="button" data-clear-effect="spinner"><span class="effect-preview effect-spinner"></span><strong>Spinner</strong><small>Spinning radial wipe</small></button>
+          </div>
+          <label class="remember-clear-effect"><input type="checkbox" id="remember-clear-effect"> Remember this effect on this device</label>
+          <div class="dialog-actions">
+            <button class="action-button clear-cancel" type="button" id="cancel-clear">Cancel</button>
+            <button class="action-button export-button" type="button" id="confirm-clear">Clear canvas</button>
+          </div>
+        </form>
+      </dialog>
+      <dialog class="text-dialog hotkeys-dialog" id="hotkeys-dialog" aria-labelledby="hotkeys-title">
+        <div>
+          <h2 id="hotkeys-title">Keyboard shortcuts</h2>
+          <dl class="hotkeys-list">
+            <div><dt>Brush</dt><dd><kbd>B</kbd></dd></div>
+            <div><dt>Eraser</dt><dd><kbd>E</kbd></dd></div>
+            <div><dt>Select</dt><dd><kbd>S</kbd></dd></div>
+            <div><dt>Rectangle</dt><dd><kbd>R</kbd></dd></div>
+            <div><dt>Fill</dt><dd><kbd>F</kbd></dd></div>
+            <div><dt>Add text</dt><dd><kbd>T</kbd></dd></div>
+            <div><dt>Layers</dt><dd><kbd>L</kbd></dd></div>
+            <div><dt>Assets</dt><dd><kbd>A</kbd></dd></div>
+            <div><dt>Notes</dt><dd><kbd>N</kbd></dd></div>
+            <div><dt>Clear canvas</dt><dd><kbd>C</kbd></dd></div>
+            <div><dt>Command palette</dt><dd><kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>P</kbd> / <kbd>`</kbd></dd></div>
+            <div><dt>Search in notes</dt><dd><kbd>Ctrl</kbd> <kbd>O</kbd></dd></div>
+            <div><dt>Notes preview</dt><dd><kbd>Ctrl</kbd> <kbd>E</kbd></dd></div>
+            <div><dt>Toggle Notes Vim mode</dt><dd>Command palette</dd></div>
+            <div><dt>Undo / redo</dt><dd><kbd>Ctrl</kbd> <kbd>Z</kbd> / <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>Z</kbd></dd></div>
+            <div><dt>Pan</dt><dd>Hold <kbd>Space</kbd> and drag</dd></div>
+          </dl>
+          <button class="action-button" id="close-hotkeys" type="button">Close</button>
+        </div>
+      </dialog>
+      <dialog class="text-dialog saved-note-dialog" id="saved-note-dialog" aria-labelledby="saved-note-dialog-title">
+        <article>
+          <h2 id="saved-note-dialog-title">Saved note</h2>
+          <pre id="saved-note-dialog-body"></pre>
+          <button class="action-button" id="saved-note-dialog-close" type="button">Close</button>
+        </article>
+      </dialog>
     </div>
 
     <dialog class="text-dialog" id="collection-dialog" aria-labelledby="collection-dialog-title">
@@ -285,7 +474,12 @@
       <form method="dialog">
         <h2 id="shape-dialog-title">Pick a shape</h2>
         <div class="shape-grid" id="shape-options"></div>
+        <label class="polygon-sides-control" id="polygon-sides-control" hidden>
+          Polygon sides <output id="polygon-sides-value" for="polygon-sides">6</output>
+          <input id="polygon-sides" type="range" min="3" max="12" step="1" value="6">
+        </label>
         <label class="shape-fill-option"><input id="shape-fill" type="checkbox"> Fill shapes</label>
+        <label class="shape-fill-option"><input id="shape-stroke" type="checkbox" checked> Outline shapes</label>
         <div class="dialog-actions"><button class="action-button" type="submit">Done</button></div>
       </form>
     </dialog>
@@ -293,33 +487,49 @@
     <dialog class="text-dialog shape-properties-dialog" id="shape-properties-dialog" aria-labelledby="shape-properties-title">
       <form id="shape-properties-form">
         <h2 id="shape-properties-title">Shape options</h2>
-        <label class="shape-fill-option"><input id="shape-fill-enabled" type="checkbox"> Fill shape</label>
+        <div class="shape-style-controls" role="group" aria-label="Shape fill and outline">
+          <label class="shape-style-toggle" for="shape-fill-enabled">
+            <input id="shape-fill-enabled" type="checkbox" role="switch">
+            <span class="shape-toggle-track" aria-hidden="true"></span><span>Fill</span>
+          </label>
+          <label class="shape-style-toggle" for="shape-stroke-enabled">
+            <input id="shape-stroke-enabled" type="checkbox" role="switch">
+            <span class="shape-toggle-track" aria-hidden="true"></span><span>Outline</span>
+          </label>
+        </div>
         <div class="color-picker-control shape-color-picker">
-          <button class="color-trigger" id="shape-fill-color-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Choose shape fill color">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M7 7h10v10H7z"/></svg>
-            <span class="color-chip" id="shape-fill-color-chip" aria-hidden="true"></span><span>Fill color</span>
+          <button class="color-trigger" id="shape-fill-color-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Choose shape fill colour">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z" fill="currentColor"/><path d="M8 12h8" stroke="var(--paper)" stroke-width="2"/></svg>
+            <span class="color-chip" id="shape-fill-color-chip" aria-hidden="true"></span><span>Fill colour</span>
           </button>
-          <div class="color-popover" id="shape-fill-color-popover" role="dialog" aria-label="Shape fill color picker" hidden>
-            <strong>Color wheel</strong><div class="color-wheel" data-color-wheel role="slider" tabindex="0" aria-label="Hue color wheel" aria-valuemin="0" aria-valuemax="359" aria-valuenow="260"></div>
+          <div class="color-popover" id="shape-fill-color-popover" role="dialog" aria-label="Shape fill colour picker" hidden>
+            <strong>Colour wheel</strong><div class="color-wheel" data-color-wheel role="slider" tabindex="0" aria-label="Hue colour wheel" aria-valuemin="0" aria-valuemax="359" aria-valuenow="260"></div>
             <div class="color-sv" data-color-sv role="application" aria-label="Saturation and brightness picker" tabindex="0"></div>
-            <div class="color-extremes"><button type="button" data-color-extreme="#ffffff">White</button><button type="button" data-color-extreme="#000000">Black</button></div>
-            <label class="custom-color-label">Custom color <input id="shape-fill-color" type="color" value="#ff719e" aria-label="Custom shape fill color"></label>
-            <strong>Palette</strong><div class="palette-grid" data-palette></div><button class="small-button palette-save" type="button" data-palette-save hidden>Save color</button>
+            <label class="color-value-control">White <input type="range" data-color-value min="0" max="100" value="0" aria-label="White to black fill colour value"> Black</label>
+            <label class="custom-color-label">Custom colour <input id="shape-fill-color" type="color" value="#34314a" aria-label="Custom shape fill colour"></label>
+            <strong>Palette</strong><div class="palette-grid" data-palette></div><button class="small-button palette-save" type="button" data-palette-save hidden>Save colour</button>
+            <button class="small-button color-no-fill" type="button" data-clear-fill>No fill</button>
+            <button class="small-button color-apply" type="button" data-color-apply>Apply</button>
           </div>
         </div>
         <div class="color-picker-control shape-color-picker">
-          <button class="color-trigger" id="shape-outline-color-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Choose shape outline color">
+          <button class="color-trigger" id="shape-outline-color-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Choose shape outline colour">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5z"/></svg>
-            <span class="color-chip" id="shape-outline-color-chip" aria-hidden="true"></span><span>Outline color</span>
+            <span class="color-chip" id="shape-outline-color-chip" aria-hidden="true"></span><span>Outline colour</span>
           </button>
-          <div class="color-popover" id="shape-outline-color-popover" role="dialog" aria-label="Shape outline color picker" hidden>
-            <strong>Color wheel</strong><div class="color-wheel" data-color-wheel role="slider" tabindex="0" aria-label="Hue color wheel" aria-valuemin="0" aria-valuemax="359" aria-valuenow="260"></div>
+          <div class="color-popover" id="shape-outline-color-popover" role="dialog" aria-label="Shape outline colour picker" hidden>
+            <strong>Colour wheel</strong><div class="color-wheel" data-color-wheel role="slider" tabindex="0" aria-label="Hue colour wheel" aria-valuemin="0" aria-valuemax="359" aria-valuenow="260"></div>
             <div class="color-sv" data-color-sv role="application" aria-label="Saturation and brightness picker" tabindex="0"></div>
-            <div class="color-extremes"><button type="button" data-color-extreme="#ffffff">White</button><button type="button" data-color-extreme="#000000">Black</button></div>
-            <label class="custom-color-label">Custom color <input id="shape-outline-color" type="color" value="#34314a" aria-label="Custom shape outline color"></label>
-            <strong>Palette</strong><div class="palette-grid" data-palette></div><button class="small-button palette-save" type="button" data-palette-save hidden>Save color</button>
+            <label class="color-value-control">White <input type="range" data-color-value min="0" max="100" value="0" aria-label="White to black outline colour value"> Black</label>
+            <label class="custom-color-label">Custom colour <input id="shape-outline-color" type="color" value="#34314a" aria-label="Custom shape outline colour"></label>
+            <strong>Palette</strong><div class="palette-grid" data-palette></div><button class="small-button palette-save" type="button" data-palette-save hidden>Save colour</button>
+            <button class="small-button color-apply" type="button" data-color-apply>Apply</button>
           </div>
         </div>
+        <label class="shape-stroke-control" for="shape-outline-width">
+          Outline width <output id="shape-outline-width-value" for="shape-outline-width">3 px</output>
+          <input id="shape-outline-width" type="range" min="0.5" max="24" step="0.5" value="3">
+        </label>
         <div class="dialog-actions">
           <button class="action-button" id="cancel-shape-properties" type="button">Cancel</button>
           <button class="action-button export-button" type="submit">Apply</button>
@@ -327,16 +537,32 @@
       </form>
     </dialog>
 
+    <div class="object-context-menu" id="object-context-menu" role="menu" aria-label="Selected object actions" hidden>
+      <button type="button" role="menuitem" data-object-action="duplicate">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>
+        <span>Duplicate</span><kbd>Ctrl+D</kbd>
+      </button>
+      <button type="button" role="menuitem" data-object-action="edit">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 16-.8 4.8L8 20l11-11a2.8 2.8 0 0 0-4-4L4 16Z"/><path d="m13.5 6.5 4 4"/></svg>
+        <span>Edit</span>
+      </button>
+      <button type="button" role="menuitem" data-object-action="delete" class="context-delete">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6m4-6v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
+        <span>Delete</span><kbd>Del</kbd>
+      </button>
+    </div>
+
     <dialog class="text-dialog about-dialog" id="about-dialog" aria-labelledby="about-title">
       <div class="about-content">
+        <div class="about-scene" aria-hidden="true"><canvas id="about-signal-canvas"></canvas></div>
         <span class="about-mark" aria-hidden="true">✳</span>
-        <h2 id="about-title">GOOF</h2>
+        <h2 class="glitch" id="about-title" data-text="GOOF" aria-label="GOOF">GOOF</h2>
         <p class="about-tagline">“Your lore, your chaos.🌪️”</p>
         <dl>
           <div><dt>Organisation</dt><dd><a href="https://loreplaying.com/" target="_blank" rel="noopener noreferrer">Lore Playing</a></dd></div>
           <div><dt>Developer</dt><dd><a href="https://github.com/kamilfatsa/" target="_blank" rel="noopener noreferrer">Kamil</a></dd></div>
-          <div><dt>Release</dt><dd>Mid October '26 (v0.1)</dd></div>
-          <div><dt>License</dt><dd>© 2026 GOOF · All Rights Reserved</dd></div>
+          <div><dt>Release</dt><dd>Mid October '26 (v0.2)</dd></div>
+          <div><dt>Licence</dt><dd>© 2026 GOOF · All Rights Reserved</dd></div>
           <div><dt>Logo</dt><dd><a href="https://fatsa.xyz/" target="_blank" rel="noopener noreferrer">Kamil</a> 🐈‍⬛ · <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.en" target="_blank" rel="noopener noreferrer">CC BY-NC 4.0</a></dd></div>
         </dl>
         <button class="action-button" id="close-about" type="button">Close</button>
@@ -350,18 +576,19 @@
         <textarea id="text-content" rows="3" maxlength="500" required></textarea>
         <div class="text-options">
           <div class="text-color-picker color-picker-control">
-            <button class="color-trigger" id="text-color-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Choose text color" title="Choose text color">
+            <button class="color-trigger" id="text-color-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Choose text colour" title="Choose text colour">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.2 6.2 3.6 3.6M4 20l4.8-1.1 10-10a2.55 2.55 0 0 0-3.6-3.6l-10 10L4 20Z"/><path d="m12.8 7.6 3.6 3.6"/></svg>
-              <span class="color-chip" id="text-color-chip" aria-hidden="true"></span><span>Text color</span>
+              <span class="color-chip" id="text-color-chip" aria-hidden="true"></span><span>Text colour</span>
             </button>
-            <div class="color-popover" id="text-color-popover" role="dialog" aria-label="Text color picker" hidden>
-              <strong>Color wheel</strong>
-              <div class="color-wheel" data-color-wheel role="slider" tabindex="0" aria-label="Hue color wheel" aria-valuemin="0" aria-valuemax="359" aria-valuenow="260"></div>
+            <div class="color-popover" id="text-color-popover" role="dialog" aria-label="Text colour picker" hidden>
+              <strong>Colour wheel</strong>
+              <div class="color-wheel" data-color-wheel role="slider" tabindex="0" aria-label="Hue colour wheel" aria-valuemin="0" aria-valuemax="359" aria-valuenow="260"></div>
               <div class="color-sv" data-color-sv role="application" aria-label="Saturation and brightness picker" tabindex="0"></div>
-              <div class="color-extremes"><button type="button" data-color-extreme="#ffffff">White</button><button type="button" data-color-extreme="#000000">Black</button></div>
-              <label class="custom-color-label">Color picker <input id="text-color" type="color" value="#34314a" aria-label="Custom text color"></label>
+              <label class="color-value-control">White <input type="range" data-color-value min="0" max="100" value="0" aria-label="White to black text colour value"> Black</label>
+              <label class="custom-color-label">Colour picker <input id="text-color" type="color" value="#34314a" aria-label="Custom text colour"></label>
               <strong>Palette</strong><div class="palette-grid" data-palette></div>
-              <button class="small-button palette-save" type="button" data-palette-save hidden>Save color</button>
+              <button class="small-button palette-save" type="button" data-palette-save hidden>Save colour</button>
+              <button class="small-button color-apply" type="button" data-color-apply>Apply</button>
             </div>
           </div>
           <label for="text-size">Size <input id="text-size" type="number" min="8" max="120" value="32"></label>

@@ -5,6 +5,18 @@ function createId(prefix) {
   return `${prefix}-${crypto.randomUUID()}`;
 }
 
+function offsetItem(item, deltaX, deltaY) {
+  if (Number.isFinite(item.x)) item.x += deltaX;
+  if (Number.isFinite(item.y)) item.y += deltaY;
+  for (const key of ["points", "curvePoints"]) {
+    if (!Array.isArray(item[key])) continue;
+    item[key] = item[key].map((point) => ({
+      x: point.x + deltaX,
+      y: point.y + deltaY,
+    }));
+  }
+}
+
 function createLayer(index) {
   return {
     id: createId("layer"),
@@ -66,15 +78,18 @@ export class DrawingCanvas {
     this.touchTapCandidate = null;
     this.lastTouchTap = null;
     this.transparentCanvas = false;
+    this.infiniteCanvas = false;
     this.backgroundColor = BACKGROUND_COLOR;
     this.undoStack = [];
     this.redoStack = [];
     this.width = 0;
     this.height = 0;
-    this.brush = { color: "#34314a", size: 6, tool: "brush", shape: "round", kind: "brush" };
+    this.brush = { color: "#34314a", size: 6, opacity: 1, tool: "brush", shape: "round", kind: "brush" };
     this.zoom = 1;
+    this.itemTypeFilter = "all";
     this.shapeKind = "rectangle";
     this.shapeFill = false;
+    this.shapeStroke = true;
     this.fillMode = "smart";
     this.widthCalculator = (size) => size;
     this.imageAssets = new Map();
@@ -90,6 +105,8 @@ export class DrawingCanvas {
     this.onHistoryChange = () => {};
     this.onZoomChange = () => {};
     this.onShapeCreated = () => {};
+    this.onContextMenu = () => {};
+    this.shapeSides = 6;
 
     if (!this.context) {
       throw new Error("A 2D canvas context is not available.");
@@ -108,13 +125,26 @@ export class DrawingCanvas {
     canvas.addEventListener("pointerup", (event) => this.endPointer(event));
     canvas.addEventListener("pointercancel", (event) => this.endPointer(event));
     canvas.addEventListener("lostpointercapture", (event) => this.endPointer(event));
+    canvas.addEventListener("pointerleave", () => {
+      if (this.activePointerId !== null || !this.hoveredItemId) return;
+      this.hoveredItemId = null;
+      this.canvas.classList.remove("object-hovered", "resize-hovered", "rotate-hovered");
+      this.render();
+    });
     canvas.addEventListener("dblclick", (event) => this.editTextAtPointer(event));
+    canvas.addEventListener("contextmenu", (event) => {
+      const point = this.normalizedPoint(event);
+      const hit = this.hitTest(point, { includeLocked: true });
+      if (!hit) return;
+      event.preventDefault();
+      this.openContextMenu(event, hit);
+    });
 
     this.resize();
   }
 
-  setBrush({ color = this.brush.color, size = this.brush.size, tool = this.brush.tool, shape = this.brush.shape, kind = this.brush.kind }) {
-    this.brush = { color, size, tool, shape, kind };
+  setBrush({ color = this.brush.color, size = this.brush.size, opacity = this.brush.opacity, tool = this.brush.tool, shape = this.brush.shape, kind = this.brush.kind }) {
+    this.brush = { color, size, opacity: Math.max(0, Math.min(1, opacity)), tool, shape, kind };
   }
 
   setPanMode(active) {
@@ -137,15 +167,24 @@ export class DrawingCanvas {
     return true;
   }
 
-  updateShapeStyle(id, { fill, fillColor, color } = {}) {
+  setInfiniteCanvas(enabled) {
+    this.infiniteCanvas = enabled === true;
+    if (this.infiniteCanvas) this.transparentCanvas = true;
+    this.render();
+    this.notifyChange();
+  }
+
+  updateShapeStyle(id, { fill, fillColor, color, stroke, strokeWidth } = {}) {
     const found = this.findItem(id);
     if (!found || found.item.type !== "shape" || found.layer.locked) {
       return false;
     }
     this.recordHistory();
     if (typeof fill === "boolean") found.item.fill = fill;
+    if (typeof stroke === "boolean") found.item.stroke = stroke;
     if (typeof fillColor === "string" && /^#[\da-f]{6}$/i.test(fillColor)) found.item.fillColor = fillColor;
     if (typeof color === "string" && /^#[\da-f]{6}$/i.test(color)) found.item.color = color;
+    if (Number.isFinite(strokeWidth)) found.item.strokeWidth = Math.max(0.5, Math.min(24, strokeWidth));
     this.render();
     this.notifyChange();
     return true;
@@ -237,6 +276,7 @@ export class DrawingCanvas {
       })),
       activeLayerId: this.activeLayerId,
       transparentCanvas: this.transparentCanvas,
+      infiniteCanvas: this.infiniteCanvas,
       backgroundColor: this.backgroundColor,
     };
   }
@@ -250,6 +290,10 @@ export class DrawingCanvas {
       opacity: layer.opacity ?? 1,
       itemCount: layer.items.length,
     }));
+  }
+
+  getLayerPreviewItems(id) {
+    return this.layers.find((layer) => layer.id === id)?.items ?? [];
   }
 
   loadState(state) {
@@ -299,6 +343,7 @@ export class DrawingCanvas {
     this.selectedItemIds = [];
     this.hoveredItemId = null;
     this.transparentCanvas = state.transparentCanvas === true;
+    this.infiniteCanvas = state.infiniteCanvas === true;
     this.backgroundColor = typeof state.backgroundColor === "string" && /^#[\da-f]{6}$/i.test(state.backgroundColor)
       ? state.backgroundColor
       : BACKGROUND_COLOR;
@@ -339,9 +384,10 @@ export class DrawingCanvas {
     return true;
   }
 
-  addLayer() {
+  addLayer(name = null) {
     this.recordHistory();
     const layer = createLayer(this.layers.length);
+    if (typeof name === "string" && name.trim()) layer.name = name.trim().slice(0, 40);
     this.layers.push(layer);
     this.activeLayerId = layer.id;
     this.render();
@@ -541,7 +587,7 @@ export class DrawingCanvas {
       type: "text",
       text: text.trim(),
       color,
-      fontSize: Math.max(8, Math.min(120, fontSize)),
+      fontSize: Math.round(Math.max(8, Math.min(120, fontSize))),
       x: Math.max(0, Math.min(1, x)),
       y: Math.max(0, Math.min(1, y)),
     };
@@ -552,9 +598,31 @@ export class DrawingCanvas {
     return item;
   }
 
-  addSavedItem(asset) {
+  addSavedItem(asset, point = null) {
     const layer = this.activeLayer();
     if (!layer || layer.locked || !layer.visible || !asset.item) return false;
+    if (asset.item.type === "group") {
+      const group = structuredClone(asset.item);
+      if (!Array.isArray(group.items) || !group.items.length) return false;
+      for (const imageAsset of asset.imageAssets ?? []) {
+        this.imageAssets.set(imageAsset.id, imageAsset);
+      }
+      const center = point ?? { x: 0.5, y: 0.5 };
+      const deltaX = Math.max(0, Math.min(1 - group.width, center.x - group.width / 2));
+      const deltaY = Math.max(0, Math.min(1 - group.height, center.y - group.height / 2));
+      const items = group.items.map((entry) => {
+        const item = structuredClone(entry);
+        item.id = createId(item.type);
+        offsetItem(item, deltaX, deltaY);
+        return item;
+      });
+      this.recordHistory();
+      layer.items.push(...items);
+      this.setSelectedItems(items.map((item) => item.id));
+      this.render();
+      this.notifyChange();
+      return true;
+    }
     const item = structuredClone(asset.item);
     item.id = createId(item.type);
     if (item.type === "image") {
@@ -563,8 +631,9 @@ export class DrawingCanvas {
       item.assetId = asset.imageAsset.id;
     }
     const bounds = this.itemBounds(item);
-    item.x = Math.max(0, Math.min(1 - bounds.width, 0.5 - bounds.width / 2));
-    item.y = Math.max(0, Math.min(1 - bounds.height, 0.5 - bounds.height / 2));
+    const center = point ?? { x: 0.5, y: 0.5 };
+    item.x = Math.max(0, Math.min(1 - bounds.width, center.x - bounds.width / 2));
+    item.y = Math.max(0, Math.min(1 - bounds.height, center.y - bounds.height / 2));
     if (item.type === "stroke" || (item.type === "shape" && item.shape === "freeform")) {
       const centerX = bounds.x + bounds.width / 2;
       const centerY = bounds.y + bounds.height / 2;
@@ -595,6 +664,31 @@ export class DrawingCanvas {
     this.onZoomChange(this.zoom);
   }
 
+  setItemTypeFilter(type) {
+    if (!["all", "text", "image", "shape", "drawing"].includes(type)) {
+      throw new Error(`Unsupported canvas item filter: ${type}`);
+    }
+    this.itemTypeFilter = type;
+    this.hoveredItemId = null;
+    this.canvas.classList.remove("object-hovered", "resize-hovered", "rotate-hovered");
+    if (type !== "all") {
+      const visibleSelection = this.selectedItemIds.filter((id) => {
+        const found = this.findItem(id);
+        return found && this.itemMatchesType(found.item, type);
+      });
+      if (visibleSelection.length !== this.selectedItemIds.length) {
+        this.setSelectedItems(visibleSelection);
+      }
+    }
+    this.render();
+  }
+
+  itemMatchesType(item, type = this.itemTypeFilter) {
+    if (type === "all") return true;
+    const itemType = item.type === "stroke" ? "drawing" : item.type;
+    return itemType === type;
+  }
+
   updateSelectedText({ text, color, fontSize }) {
     const selected = this.findItem(this.selectedItemId);
     if (!selected || selected.item.type !== "text") {
@@ -609,7 +703,7 @@ export class DrawingCanvas {
     Object.assign(selected.item, {
       text: text.trim(),
       color,
-      fontSize: Math.max(8, Math.min(120, fontSize)),
+      fontSize: Math.round(Math.max(8, Math.min(120, fontSize))),
     });
     this.render();
     this.notifyChange();
@@ -617,7 +711,7 @@ export class DrawingCanvas {
     return true;
   }
 
-  async addImage(asset) {
+  async addImage(asset, point = null) {
     const layer = this.activeLayer();
     if (!layer || layer.locked || !layer.visible) {
       return null;
@@ -638,8 +732,10 @@ export class DrawingCanvas {
       id: createId("image"),
       type: "image",
       assetId: asset.id,
-      x: Math.max(0, (this.width - imageWidth) / 2 / this.width),
-      y: Math.max(0, (this.height - imageHeight) / 2 / this.height),
+      x: Math.max(0, Math.min(1 - imageWidth / this.width,
+        (point?.x ?? 0.5) - imageWidth / this.width / 2)),
+      y: Math.max(0, Math.min(1 - imageHeight / this.height,
+        (point?.y ?? 0.5) - imageHeight / this.height / 2)),
       width: imageWidth / this.width,
       height: imageHeight / this.height,
       aspectRatio: image.naturalWidth / image.naturalHeight,
@@ -660,14 +756,21 @@ export class DrawingCanvas {
   getSelectedItems() {
     return this.selectedItemIds.flatMap((id) => {
       const found = this.findItem(id);
-      return found ? [{ ...found.item, layerId: found.layer.id, locked: found.layer.locked }] : [];
+      return found ? [{
+        ...found.item,
+        layerId: found.layer.id,
+        locked: found.layer.locked,
+        visible: found.layer.visible,
+      }] : [];
     });
   }
 
   selectAllItems() {
     const ids = this.layers
       .filter((layer) => layer.visible && !layer.locked)
-      .flatMap((layer) => layer.items.map((item) => item.id));
+      .flatMap((layer) => layer.items
+        .filter((item) => this.itemMatchesType(item))
+        .map((item) => item.id));
     this.setSelectedItems(ids);
     return ids.length;
   }
@@ -708,14 +811,47 @@ export class DrawingCanvas {
     return true;
   }
 
-  async exportPng() {
+  duplicateSelectedItems() {
+    const selected = this.transformableSelection();
+    if (!selected.length) return false;
+    const bounds = this.selectionBounds(selected);
+    const deltaX = Math.min(0.025, Math.max(0, 1 - bounds.x - bounds.width));
+    const deltaY = Math.min(0.025, Math.max(0, 1 - bounds.y - bounds.height));
+    if (deltaX === 0 && deltaY === 0) return false;
+    this.recordHistory();
+    const copies = selected.map(({ layer, item }) => {
+      const copy = structuredClone(item);
+      copy.id = createId(copy.type);
+      offsetItem(copy, deltaX, deltaY);
+      layer.items.splice(layer.items.indexOf(item) + 1, 0, copy);
+      return copy;
+    });
+    this.setSelectedItems(copies.map((item) => item.id));
+    this.render();
+    this.notifyChange();
+    return true;
+  }
+
+  openContextMenu(event, hit) {
+    if (!this.selectedItemIds.includes(hit.item.id)) {
+      this.setSelectedItems([hit.item.id]);
+    }
+    if (!hit.layer.locked) this.activeLayerId = hit.layer.id;
+    this.onContextMenu({
+      clientX: event.clientX,
+      clientY: event.clientY,
+      selectedItems: this.getSelectedItems(),
+    });
+  }
+
+  async exportPng(width = this.canvas.width, height = this.canvas.height) {
     const imageIds = this.layers.filter((layer) => layer.visible)
       .flatMap((layer) => layer.items.filter((item) => item.type === "image").map((item) => item.assetId));
     await Promise.all([...new Set(imageIds)].map((id) => this.loadImage(id)));
 
     const output = document.createElement("canvas");
-    output.width = this.canvas.width;
-    output.height = this.canvas.height;
+    output.width = Math.max(1, Math.min(8192, Math.round(width)));
+    output.height = Math.max(1, Math.min(8192, Math.round(height)));
     const outputContext = output.getContext("2d");
     if (!outputContext) {
       throw new Error("A 2D canvas context is not available for PNG export.");
@@ -739,7 +875,7 @@ export class DrawingCanvas {
     this.zoom = 1;
     this.pan = { x: 0, y: 0 };
     try {
-      this.render();
+      this.render({ ignoreTypeFilter: true });
     } finally {
       this.canvas = originalCanvas;
       this.context = originalContext;
@@ -764,7 +900,7 @@ export class DrawingCanvas {
     downloadBlob(blob, "goof-doodle.png");
   }
 
-  async exportSvg() {
+  async exportSvg(width = Math.round(this.width), height = Math.round(this.height)) {
     const imageIds = [...new Set(this.layers.filter((layer) => layer.visible).flatMap((layer) =>
       layer.items.filter((item) => item.type === "image").map((item) => item.assetId)))];
     await Promise.all(imageIds.map((id) => this.loadImage(id)));
@@ -775,9 +911,27 @@ export class DrawingCanvas {
         ? asset.dataUrl
         : await blobToDataUrl(asset.blob));
     }
-    const width = Math.round(this.width);
-    const height = Math.round(this.height);
+    width = Math.max(1, Math.min(8192, Math.round(width)));
+    height = Math.max(1, Math.min(8192, Math.round(height)));
+    let viewMinX = 0;
+    let viewMinY = 0;
+    let viewWidth = width;
+    let viewHeight = height;
+    if (this.infiniteCanvas) {
+      const bounds = this.layers.filter((layer) => layer.visible)
+        .flatMap((layer) => layer.items.map((item) => this.itemBounds(item)));
+      if (bounds.length) {
+        const margin = 32;
+        viewMinX = Math.min(...bounds.map((boundsItem) => boundsItem.x * width)) - margin;
+        viewMinY = Math.min(...bounds.map((boundsItem) => boundsItem.y * height)) - margin;
+        const viewMaxX = Math.max(...bounds.map((boundsItem) => (boundsItem.x + boundsItem.width) * width)) + margin;
+        const viewMaxY = Math.max(...bounds.map((boundsItem) => (boundsItem.y + boundsItem.height) * height)) + margin;
+        viewWidth = Math.max(1, viewMaxX - viewMinX);
+        viewHeight = Math.max(1, viewMaxY - viewMinY);
+      }
+    }
     const definitions = [];
+    const eraserPaths = [];
     const rotateMarkup = (item, markup) => {
       const rotation = Number.isFinite(item.rotation) ? item.rotation : 0;
       if (!rotation) return markup;
@@ -788,7 +942,7 @@ export class DrawingCanvas {
     };
     const layers = this.layers.filter((layer) => layer.visible).map((layer) => {
       let content = "";
-      layer.items.forEach((item, itemIndex) => {
+      layer.items.forEach((item) => {
         if (item.type === "stroke") {
           const first = item.points[0];
           if (!first) return;
@@ -796,12 +950,10 @@ export class DrawingCanvas {
           const path = item.points.map((point, index) =>
             `${index === 0 ? "M" : "L"} ${point.x * width} ${point.y * height}`).join(" ");
           if (item.tool === "eraser") {
-            const maskId = `${layer.id}-erase-${itemIndex}`;
             const pathOrPoint = rotateMarkup(item, item.points.length === 1
               ? `<circle cx="${first.x * width}" cy="${first.y * height}" r="${item.size / 2}" fill="black"/>`
               : `<path d="${path}" fill="none" stroke="black" stroke-width="${item.size}" stroke-linecap="round" stroke-linejoin="round"/>`);
-            definitions.push(`<mask id="${maskId}" mask-type="luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="${width}" height="${height}"><rect width="${width}" height="${height}" fill="white"/>${pathOrPoint}</mask>`);
-            content = `<g mask="url(#${maskId})">${content}</g>`;
+            eraserPaths.push(pathOrPoint);
           } else if (item.points.length === 1) {
             if (item.shape === "square") {
               content += `<rect x="${first.x * width - item.size / 2}" y="${first.y * height - item.size / 2}" width="${item.size}" height="${item.size}" fill="${escapeXml(item.color)}"/>`;
@@ -832,9 +984,9 @@ export class DrawingCanvas {
           const y = item.y * height;
           const shapeWidth = item.width * width;
           const shapeHeight = item.height * height;
-              const fill = item.fill && !["line", "curve", "arc", "spiral"].includes(item.shape)
-                ? escapeXml(item.fillColor ?? item.color) : "none";
-          const stroke = escapeXml(item.color);
+          const fill = item.fill && !["line", "curve", "arc", "spiral"].includes(item.shape)
+            ? escapeXml(item.fillColor ?? item.color) : "none";
+          const stroke = item.stroke === false ? "none" : escapeXml(item.color);
           if (["circle", "oval", "ellipse"].includes(item.shape)) {
             content += `<ellipse cx="${x + shapeWidth / 2}" cy="${y + shapeHeight / 2}" rx="${shapeWidth / 2}" ry="${shapeHeight / 2}" fill="${fill}" stroke="${stroke}" stroke-width="${item.strokeWidth ?? 3}"/>`;
           } else if (item.shape === "line") {
@@ -847,6 +999,15 @@ export class DrawingCanvas {
               { x: item.x + item.width, y: item.y },
             ];
             content += `<path d="M ${points[0].x * width} ${points[0].y * height} C ${points[1].x * width} ${points[1].y * height}, ${points[2].x * width} ${points[2].y * height}, ${points[3].x * width} ${points[3].y * height}" fill="none" stroke="${stroke}" stroke-width="${item.strokeWidth ?? 3}"/>`;
+          } else if (item.shape === "polygon") {
+            const sides = Math.max(3, Math.min(12, Math.round(item.sides ?? 6)));
+            const path = Array.from({ length: sides }, (_, index) => {
+              const angle = -Math.PI / 2 + index * Math.PI * 2 / sides;
+              const pointX = x + shapeWidth / 2 + Math.cos(angle) * shapeWidth / 2;
+              const pointY = y + shapeHeight / 2 + Math.sin(angle) * shapeHeight / 2;
+              return `${index === 0 ? "M" : "L"} ${pointX} ${pointY}`;
+            }).join(" ") + " Z";
+            content += `<path d="${path}" fill="${fill}" stroke="${stroke}" stroke-width="${item.strokeWidth ?? 3}" stroke-linejoin="round"/>`;
           } else if (item.shape === "crescent") {
             content += `<path d="M ${x + shapeWidth * .7} ${y + shapeHeight * .08} C ${x + shapeWidth * .25} ${y + shapeHeight * .08}, ${x + shapeWidth * .16} ${y + shapeHeight * .78}, ${x + shapeWidth * .55} ${y + shapeHeight * .95} C ${x + shapeWidth * .25} ${y + shapeHeight * .66}, ${x + shapeWidth * .45} ${y + shapeHeight * .23}, ${x + shapeWidth * .7} ${y + shapeHeight * .08} Z" fill="${fill}" stroke="${stroke}" stroke-width="${item.strokeWidth ?? 3}"/>`;
           } else if (item.shape === "cloud") {
@@ -909,9 +1070,17 @@ export class DrawingCanvas {
       });
       return `<g opacity="${layer.opacity ?? 1}">${content}</g>`;
     }).join("");
-    const background = this.transparentCanvas ? "" : `<rect width="100%" height="100%" fill="${escapeXml(this.backgroundColor)}"/>`;
+    const background = this.transparentCanvas ? "" : `<rect x="${viewMinX}" y="${viewMinY}" width="${viewWidth}" height="${viewHeight}" fill="${escapeXml(this.backgroundColor)}"/>`;
+    if (eraserPaths.length) {
+      definitions.push(`<mask id="goof-global-erase" mask-type="luminance" maskUnits="userSpaceOnUse" x="${viewMinX}" y="${viewMinY}" width="${viewWidth}" height="${viewHeight}"><rect x="${viewMinX}" y="${viewMinY}" width="${viewWidth}" height="${viewHeight}" fill="white"/>${eraserPaths.join("")}</mask>`);
+    }
+    const scene = eraserPaths.length
+      ? `<g mask="url(#goof-global-erase)">${background}${layers}</g>`
+      : `${background}${layers}`;
     const defs = definitions.length ? `<defs>${definitions.join("")}</defs>` : "";
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">${defs}${background}${layers}</svg>`;
+    const outputWidth = this.infiniteCanvas ? Math.min(8192, Math.ceil(viewWidth)) : width;
+    const outputHeight = this.infiniteCanvas ? Math.min(8192, Math.ceil(viewHeight)) : height;
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${outputWidth}" height="${outputHeight}" viewBox="${viewMinX} ${viewMinY} ${viewWidth} ${viewHeight}">${defs}${scene}</svg>`;
     downloadBlob(new Blob([svg], { type: "image/svg+xml" }), "goof-doodle.svg");
   }
 
@@ -976,13 +1145,23 @@ export class DrawingCanvas {
       if (this.brush.tool === "select" && this.lastTouchTap &&
           performance.now() - this.lastTouchTap.time < 400 &&
           Math.hypot(event.clientX - this.lastTouchTap.x, event.clientY - this.lastTouchTap.y) < 24) {
-        const hit = this.hitTest(this.normalizedPoint(event));
+        const point = this.normalizedPoint(event);
+        let hit = this.hitTest(point);
         this.lastTouchTap = null;
-        if (hit?.item.type === "shape" || hit?.item.type === "text") {
-          this.activeLayerId = hit.layer.id;
-          this.setSelectedItem(hit.item.id);
-          if (hit.item.type === "shape") this.onEditShape({ ...hit.item });
-          else this.onEditText({ ...hit.item });
+        if (!hit && this.selectedItemId) {
+          const selected = this.findItem(this.selectedItemId);
+          if (selected) {
+            const bounds = this.itemBounds(selected.item);
+            const paddingX = 24 / (this.width * this.zoom);
+            const paddingY = 24 / (this.height * this.zoom);
+            if (point.x >= bounds.x - paddingX && point.x <= bounds.x + bounds.width + paddingX &&
+                point.y >= bounds.y - paddingY && point.y <= bounds.y + bounds.height + paddingY) {
+              hit = selected;
+            }
+          }
+        }
+        if (hit) {
+          this.openContextMenu(event, hit);
           event.preventDefault();
           return;
         }
@@ -1145,6 +1324,17 @@ export class DrawingCanvas {
       return;
     }
 
+    if (this.brush.tool === "eraser") {
+      const hit = this.hitTest(point);
+      if (hit && hit.item.type !== "stroke") {
+        if (!hit.layer.locked) {
+          this.setSelectedItem(hit.item.id);
+          this.deleteSelectedItem();
+        }
+        return;
+      }
+    }
+
     const layer = this.activeLayer();
     if (!layer || layer.locked || !layer.visible) {
       return;
@@ -1237,8 +1427,11 @@ export class DrawingCanvas {
       this.hoveredItemId = hoveredId;
       this.render();
     }
-    this.canvas.classList.toggle("object-hovered", hoveredId !== null && !hit?.handle && !hit?.rotateHandle && hit?.curveHandle === undefined);
-    this.canvas.classList.toggle("resize-hovered", this.brush.tool === "select" && (Boolean(hit?.handle) || hit?.rotateHandle || hit?.curveHandle !== undefined));
+    const overRotateHandle = Boolean(hit?.rotateHandle) || hit?.groupHandle === "rotate";
+    const overResizeHandle = Boolean(hit?.handle) || hit?.curveHandle !== undefined || hit?.groupHandle === "resize";
+    this.canvas.classList.toggle("object-hovered", hoveredId !== null && !overResizeHandle && !overRotateHandle);
+    this.canvas.classList.toggle("resize-hovered", this.brush.tool === "select" && overResizeHandle);
+    this.canvas.classList.toggle("rotate-hovered", this.brush.tool === "select" && overRotateHandle);
     this.canvas.classList.toggle("move-active", this.brush.tool === "select");
     this.canvas.classList.toggle("select-active", this.brush.tool === "select");
   }
@@ -1299,20 +1492,24 @@ export class DrawingCanvas {
       const isValidLine = this.shapeKind === "line" && (width > 0.003 || height > 0.003);
       if (hasShapeArea || isValidLine) {
         const layer = this.activeLayer();
-        const constrainedSize = Math.max(width, height);
+        const constrainedSize = Math.min(width * this.width, height * this.height);
+        const constrainedWidth = constrainedSize / this.width;
+        const constrainedHeight = constrainedSize / this.height;
         const item = {
           id: createId("shape"),
           type: "shape",
           shape: this.shapeKind,
           x,
           y,
-          width: ["circle", "square"].includes(this.shapeKind) ? constrainedSize : width,
-          height: ["circle", "square"].includes(this.shapeKind) ? constrainedSize : height,
+          width: ["circle", "square"].includes(this.shapeKind) ? constrainedWidth : width,
+          height: ["circle", "square"].includes(this.shapeKind) ? constrainedHeight : height,
           color: this.brush.color,
           fillColor: this.brush.color,
           fill: this.shapeFill,
+          stroke: this.shapeStroke,
           strokeWidth: this.brush.size,
         };
+        if (this.shapeKind === "polygon") item.sides = this.shapeSides;
         if (this.shapeKind === "curve") {
           item.curvePoints = [
             { x, y: y + height },
@@ -1358,6 +1555,7 @@ export class DrawingCanvas {
     };
     return this.layers.filter((layer) => layer.visible).flatMap((layer) =>
       layer.items.filter((item) => {
+        if (!this.itemMatchesType(item)) return false;
         const bounds = this.itemBounds(item);
         return bounds.x <= rect.x + rect.width &&
           bounds.x + bounds.width >= rect.x &&
@@ -1421,10 +1619,12 @@ export class DrawingCanvas {
       let right = bounds.x + bounds.width;
       let top = bounds.y;
       let bottom = bounds.y + bounds.height;
-      if (drag.handle.includes("w")) left = Math.max(0, Math.min(right - 0.005, point.x));
-      if (drag.handle.includes("e")) right = Math.min(1, Math.max(left + 0.005, point.x));
-      if (drag.handle.includes("n")) top = Math.max(0, Math.min(bottom - 0.005, point.y));
-      if (drag.handle.includes("s")) bottom = Math.min(1, Math.max(top + 0.005, point.y));
+      const minimum = this.infiniteCanvas ? -Infinity : 0;
+      const maximum = this.infiniteCanvas ? Infinity : 1;
+      if (drag.handle.includes("w")) left = Math.max(minimum, Math.min(right - 0.005, point.x));
+      if (drag.handle.includes("e")) right = Math.min(maximum, Math.max(left + 0.005, point.x));
+      if (drag.handle.includes("n")) top = Math.max(minimum, Math.min(bottom - 0.005, point.y));
+      if (drag.handle.includes("s")) bottom = Math.min(maximum, Math.max(top + 0.005, point.y));
       const next = { x: left, y: top, width: right - left, height: bottom - top };
       const scaleX = next.width / Math.max(bounds.width, 0.005);
       const scaleY = next.height / Math.max(bounds.height, 0.005);
@@ -1448,8 +1648,8 @@ export class DrawingCanvas {
         } else if (original.type === "text") {
           entry.item.x = nextItemBounds.x;
           entry.item.y = nextItemBounds.y;
-          entry.item.fontSize = Math.max(8, Math.min(240,
-            original.fontSize * Math.sqrt(scaleX * scaleY)));
+          entry.item.fontSize = Math.round(Math.max(8, Math.min(240,
+            original.fontSize * Math.sqrt(scaleX * scaleY))));
         } else if (original.type === "image") {
           entry.item.x = nextItemBounds.x;
           entry.item.y = nextItemBounds.y;
@@ -1479,9 +1679,11 @@ export class DrawingCanvas {
 
     if (drag.type === "curve-handle") {
       const localPoint = this.pointForItem(point, drag.item);
+      const minimum = this.infiniteCanvas ? -Infinity : 0;
+      const maximum = this.infiniteCanvas ? Infinity : 1;
       drag.item.curvePoints[drag.handle] = {
-        x: Math.max(0, Math.min(1, localPoint.x)),
-        y: Math.max(0, Math.min(1, localPoint.y)),
+        x: Math.max(minimum, Math.min(maximum, localPoint.x)),
+        y: Math.max(minimum, Math.min(maximum, localPoint.y)),
       };
       this.render();
       this.notifyChange();
@@ -1494,10 +1696,12 @@ export class DrawingCanvas {
         y: Math.min(combined.y, entry.bounds.y),
         right: Math.max(combined.right, entry.bounds.x + entry.bounds.width),
         bottom: Math.max(combined.bottom, entry.bounds.y + entry.bounds.height),
-      }), { x: 1, y: 1, right: 0, bottom: 0 });
+      }), { x: Infinity, y: Infinity, right: -Infinity, bottom: -Infinity });
+      const deltaX = point.x - drag.start.x;
+      const deltaY = point.y - drag.start.y;
       const delta = {
-        x: Math.max(-bounds.x, Math.min(1 - bounds.right, point.x - drag.start.x)),
-        y: Math.max(-bounds.y, Math.min(1 - bounds.bottom, point.y - drag.start.y)),
+        x: this.infiniteCanvas ? deltaX : Math.max(-bounds.x, Math.min(1 - bounds.right, deltaX)),
+        y: this.infiniteCanvas ? deltaY : Math.max(-bounds.y, Math.min(1 - bounds.bottom, deltaY)),
       };
       for (const entry of drag.items) {
         if (entry.type === "stroke") {
@@ -1529,9 +1733,11 @@ export class DrawingCanvas {
     if (drag.type === "rotate") return;
 
     if (["stroke", "shape"].includes(drag.item.type)) {
+      const deltaX = point.x - drag.start.x;
+      const deltaY = point.y - drag.start.y;
       const delta = {
-        x: Math.max(-drag.bounds.x, Math.min(1 - drag.bounds.x - drag.bounds.width, point.x - drag.start.x)),
-        y: Math.max(-drag.bounds.y, Math.min(1 - drag.bounds.y - drag.bounds.height, point.y - drag.start.y)),
+        x: this.infiniteCanvas ? deltaX : Math.max(-drag.bounds.x, Math.min(1 - drag.bounds.x - drag.bounds.width, deltaX)),
+        y: this.infiniteCanvas ? deltaY : Math.max(-drag.bounds.y, Math.min(1 - drag.bounds.y - drag.bounds.height, deltaY)),
       };
       if (drag.item.type === "stroke") {
         drag.item.points = drag.points.map((entry) => ({ x: entry.x + delta.x, y: entry.y + delta.y }));
@@ -1553,12 +1759,16 @@ export class DrawingCanvas {
 
     const dimensions = this.itemSize(drag.item);
     const proposed = {
-      x: Math.max(0, Math.min(1 - dimensions.width, drag.x + point.x - drag.start.x)),
-      y: Math.max(0, Math.min(1 - dimensions.height, drag.y + point.y - drag.start.y)),
+      x: this.infiniteCanvas ? drag.x + point.x - drag.start.x
+        : Math.max(0, Math.min(1 - dimensions.width, drag.x + point.x - drag.start.x)),
+      y: this.infiniteCanvas ? drag.y + point.y - drag.start.y
+        : Math.max(0, Math.min(1 - dimensions.height, drag.y + point.y - drag.start.y)),
     };
     const snap = this.findSnap(drag.item, proposed, dimensions);
-    drag.item.x = Math.max(0, Math.min(1 - dimensions.width, proposed.x + snap.x.offset));
-    drag.item.y = Math.max(0, Math.min(1 - dimensions.height, proposed.y + snap.y.offset));
+    drag.item.x = this.infiniteCanvas ? proposed.x + snap.x.offset
+      : Math.max(0, Math.min(1 - dimensions.width, proposed.x + snap.x.offset));
+    drag.item.y = this.infiniteCanvas ? proposed.y + snap.y.offset
+      : Math.max(0, Math.min(1 - dimensions.height, proposed.y + snap.y.offset));
     this.guides = { x: snap.x.guide, y: snap.y.guide };
     this.render();
     this.notifyChange();
@@ -1578,10 +1788,12 @@ export class DrawingCanvas {
     let right = bounds.x + bounds.width;
     let top = bounds.y;
     let bottom = bounds.y + bounds.height;
-    if (drag.handle.includes("w")) left = Math.min(right - 0.005, Math.max(0, bounds.x + dx));
-    if (drag.handle.includes("e")) right = Math.max(left + 0.005, Math.min(1, bounds.x + bounds.width + dx));
-    if (drag.handle.includes("n")) top = Math.min(bottom - 0.005, Math.max(0, bounds.y + dy));
-    if (drag.handle.includes("s")) bottom = Math.max(top + 0.005, Math.min(1, bounds.y + bounds.height + dy));
+    const minimum = this.infiniteCanvas ? -Infinity : 0;
+    const maximum = this.infiniteCanvas ? Infinity : 1;
+    if (drag.handle.includes("w")) left = Math.min(right - 0.005, Math.max(minimum, bounds.x + dx));
+    if (drag.handle.includes("e")) right = Math.max(left + 0.005, Math.min(maximum, bounds.x + bounds.width + dx));
+    if (drag.handle.includes("n")) top = Math.min(bottom - 0.005, Math.max(minimum, bounds.y + dy));
+    if (drag.handle.includes("s")) bottom = Math.max(top + 0.005, Math.min(maximum, bounds.y + bounds.height + dy));
     const next = { x: left, y: top, width: right - left, height: bottom - top };
     const scaleX = next.width / Math.max(bounds.width, 0.005);
     const scaleY = next.height / Math.max(bounds.height, 0.005);
@@ -1591,7 +1803,7 @@ export class DrawingCanvas {
     });
     if (original.type === "text") {
       const scale = Math.sqrt(scaleX * scaleY);
-      drag.item.fontSize = Math.max(8, Math.min(240, original.fontSize * scale));
+      drag.item.fontSize = Math.round(Math.max(8, Math.min(240, original.fontSize * scale)));
       const measured = this.itemBounds(drag.item);
       drag.item.x = next.x;
       drag.item.y = next.y;
@@ -1679,15 +1891,12 @@ export class DrawingCanvas {
           (point.y - rotationHandle.y) * this.height) <= 9 / this.zoom) {
         return { ...groupEntries[0], groupHandle: "rotate", bounds };
       }
-      for (const handle of this.resizeHandles(bounds)) {
-        if (Math.hypot((point.x - handle.x) * this.width,
-            (point.y - handle.y) * this.height) <= 9 / this.zoom) {
-          return { ...groupEntries[0], groupHandle: "resize", handle: handle.name, bounds };
-        }
-      }
+      const handle = this.resizeHandleInBounds(point, bounds);
+      if (handle) return { ...groupEntries[0], groupHandle: "resize", handle, bounds };
     }
     const selected = this.findItem(this.selectedItemId);
-    if (this.selectedItemIds.length === 1 && selected && !selected.layer.locked && selected.layer.visible) {
+    if (this.selectedItemIds.length === 1 && selected && this.itemMatchesType(selected.item) &&
+        !selected.layer.locked && selected.layer.visible) {
       const localPoint = this.pointForItem(point, selected.item);
       const rotateHandle = this.rotationHandleAt(point, selected.item);
       if (rotateHandle) {
@@ -1702,7 +1911,8 @@ export class DrawingCanvas {
       const handle = this.resizeHandleAt(localPoint, selected.item, true);
       if (handle) return { layer: selected.layer, item: selected.item, handle };
     }
-    if (selected && !selected.layer.locked && selected.layer.visible &&
+    if (selected && this.itemMatchesType(selected.item) &&
+        !selected.layer.locked && selected.layer.visible &&
         selected.item.type === "shape" && selected.item.shape === "curve") {
       const localPoint = this.pointForItem(point, selected.item);
       const curvePoints = selected.item.curvePoints ?? [];
@@ -1720,6 +1930,7 @@ export class DrawingCanvas {
       }
       for (let itemIndex = layer.items.length - 1; itemIndex >= 0; itemIndex -= 1) {
         const item = layer.items[itemIndex];
+        if (!this.itemMatchesType(item)) continue;
         if (item.type === "stroke") {
           if (this.hitStroke(point, item)) {
             return { layer, item };
@@ -1817,15 +2028,23 @@ export class DrawingCanvas {
     }
     const paddingX = (stroke.size / 2 + 3) / this.width;
     const paddingY = (stroke.size / 2 + 3) / this.height;
-    let left = 1;
-    let top = 1;
-    let right = 0;
-    let bottom = 0;
+    let left = Infinity;
+    let top = Infinity;
+    let right = -Infinity;
+    let bottom = -Infinity;
     for (const point of points) {
       left = Math.min(left, point.x);
       top = Math.min(top, point.y);
       right = Math.max(right, point.x);
       bottom = Math.max(bottom, point.y);
+    }
+    if (this.infiniteCanvas) {
+      return {
+        x: left - paddingX,
+        y: top - paddingY,
+        width: right - left + paddingX * 2,
+        height: bottom - top + paddingY * 2,
+      };
     }
     return {
       x: Math.max(0, left - paddingX),
@@ -1838,12 +2057,30 @@ export class DrawingCanvas {
   resizeHandleAt(point, item, isLocal = false) {
     const bounds = this.itemBounds(item);
     const localPoint = isLocal ? point : this.pointForItem(point, item);
-    const x = localPoint.x * this.width;
-    const y = localPoint.y * this.height;
+    return this.resizeHandleInBounds(localPoint, bounds);
+  }
+
+  resizeHandleInBounds(point, bounds) {
+    const x = point.x * this.width;
+    const y = point.y * this.height;
+    const tolerance = 18 / this.zoom;
     for (const handle of this.resizeHandles(bounds)) {
-      if (Math.hypot(x - handle.x * this.width, y - handle.y * this.height) <= 9 / this.zoom) {
+      if (Math.hypot(x - handle.x * this.width, y - handle.y * this.height) <= tolerance) {
         return handle.name;
       }
+    }
+    const left = bounds.x * this.width;
+    const right = (bounds.x + bounds.width) * this.width;
+    const top = bounds.y * this.height;
+    const bottom = (bounds.y + bounds.height) * this.height;
+    const edgeTolerance = 14 / this.zoom;
+    if (x >= left - edgeTolerance && x <= right + edgeTolerance) {
+      if (Math.abs(y - top) <= edgeTolerance) return "n";
+      if (Math.abs(y - bottom) <= edgeTolerance) return "s";
+    }
+    if (y >= top - edgeTolerance && y <= bottom + edgeTolerance) {
+      if (Math.abs(x - left) <= edgeTolerance) return "w";
+      if (Math.abs(x - right) <= edgeTolerance) return "e";
     }
     return null;
   }
@@ -1918,10 +2155,10 @@ export class DrawingCanvas {
     const bounds = this.canvas.getBoundingClientRect();
     const x = (event.clientX - bounds.left - this.pan.x) / bounds.width;
     const y = (event.clientY - bounds.top - this.pan.y) / bounds.height;
-    return {
-      x: Math.max(0, Math.min(1, (x - 0.5) / this.zoom + 0.5)),
-      y: Math.max(0, Math.min(1, (y - 0.5) / this.zoom + 0.5)),
-    };
+    const point = { x: (x - 0.5) / this.zoom + 0.5, y: (y - 0.5) / this.zoom + 0.5 };
+    return this.infiniteCanvas
+      ? point
+      : { x: Math.max(0, Math.min(1, point.x)), y: Math.max(0, Math.min(1, point.y)) };
   }
 
   activeLayer() {
@@ -1968,45 +2205,71 @@ export class DrawingCanvas {
     this.onSelectionChange(this.getSelectedItems());
   }
 
-  drawPoint(point, stroke) {
+  drawStroke(stroke) {
     const context = this.context;
-    context.save();
-    context.globalCompositeOperation = stroke.tool === "eraser" ? "destination-out" : "source-over";
-    context.fillStyle = stroke.tool === "eraser" ? "#000" : stroke.color;
-    if (stroke.shape === "square") {
-      const halfSize = stroke.size / 2;
-      context.fillRect(point.x * this.width - halfSize, point.y * this.height - halfSize, stroke.size, stroke.size);
-    } else {
-      context.beginPath();
-      context.arc(point.x * this.width, point.y * this.height, stroke.size / 2, 0, Math.PI * 2);
-      context.fill();
-    }
-    context.restore();
-  }
-
-  drawSegment(start, end, stroke) {
-    const context = this.context;
+    const points = stroke.points;
+    if (!points.length) return;
     context.save();
     context.globalCompositeOperation = stroke.tool === "eraser" ? "destination-out" : "source-over";
     context.strokeStyle = stroke.tool === "eraser" ? "#000" : stroke.color;
-    const kind = stroke.kind ?? "brush";
-    context.globalAlpha = kind === "marker" ? 0.42
-      : kind === "airbrush" ? 0.18
-        : kind === "watercolour-brush" ? 0.3
-          : kind === "natural-pencil" ? 0.58 : 1;
-    context.lineWidth = stroke.size * (
-      ["calligraphy-brush", "oil-brush"].includes(kind) ? 1.7
-        : kind === "calligraphy-pen" ? 0.72
-          : kind === "airbrush" ? 2.3
-            : kind === "watercolour-brush" ? 1.5 : 1
-    );
+    context.fillStyle = stroke.tool === "eraser" ? "#000" : stroke.color;
+    const opacity = Math.max(0, Math.min(1, stroke.opacity ?? 1));
     context.lineCap = stroke.shape === "square" ? "square" : "round";
     context.lineJoin = stroke.shape === "square" ? "bevel" : "round";
-    if (kind === "crayon" || kind === "natural-pencil") context.setLineDash([2, 1.5]);
-    context.beginPath();
-    context.moveTo(start.x * this.width, start.y * this.height);
-    context.lineTo(end.x * this.width, end.y * this.height);
-    context.stroke();
+    const kind = stroke.kind ?? "ink";
+    const first = points[0];
+    if (points.length === 1) {
+      const width = stroke.size * (kind === "airbrush" ? 2.4 : 1);
+      context.globalAlpha = opacity * (kind === "airbrush" ? 0.24 : 1);
+      if (stroke.shape === "square") {
+        context.fillRect(first.x * this.width - width / 2, first.y * this.height - width / 2, width, width);
+      } else {
+        context.beginPath();
+        context.arc(first.x * this.width, first.y * this.height, width / 2, 0, Math.PI * 2);
+        context.fill();
+      }
+      context.restore();
+      return;
+    }
+    const drawSmoothPath = () => {
+      context.beginPath();
+      context.moveTo(first.x * this.width, first.y * this.height);
+      for (let index = 1; index < points.length - 1; index += 1) {
+        const current = points[index];
+        const next = points[index + 1];
+        context.quadraticCurveTo(
+          current.x * this.width,
+          current.y * this.height,
+          (current.x + next.x) * this.width / 2,
+          (current.y + next.y) * this.height / 2,
+        );
+      }
+      const last = points.at(-1);
+      context.lineTo(last.x * this.width, last.y * this.height);
+      context.stroke();
+    };
+    if (kind === "airbrush") {
+      context.globalAlpha = opacity * 0.075;
+      context.lineWidth = stroke.size * 3.2;
+      drawSmoothPath();
+      context.globalAlpha = opacity * 0.2;
+      context.lineWidth = stroke.size * 1.15;
+      drawSmoothPath();
+    } else if (kind === "crayon") {
+      context.globalAlpha = opacity * 0.68;
+      context.lineWidth = stroke.size * 1.1;
+      context.setLineDash([Math.max(1, stroke.size * 0.72), Math.max(1, stroke.size * 0.28)]);
+      drawSmoothPath();
+      context.globalAlpha = opacity * 0.48;
+      context.lineWidth = stroke.size * 0.64;
+      context.setLineDash([Math.max(1, stroke.size * 0.16), Math.max(1, stroke.size * 0.24)]);
+      context.lineDashOffset = Math.max(1, stroke.size * 0.11);
+      drawSmoothPath();
+    } else {
+      context.globalAlpha = opacity;
+      context.lineWidth = stroke.size * (kind === "crayon" ? 1.12 : 1);
+      drawSmoothPath();
+    }
     context.restore();
   }
 
@@ -2088,13 +2351,7 @@ export class DrawingCanvas {
         this.context.restore();
         return;
       }
-      this.drawPoint(firstPoint, item);
-      let previousPoint = firstPoint;
-      for (let index = 1; index < item.points.length; index += 1) {
-        const point = item.points[index];
-        this.drawSegment(previousPoint, point, item);
-        previousPoint = point;
-      }
+      this.drawStroke(item);
     } else if (item.type === "text") {
       this.drawText(item);
     } else if (item.type === "image") {
@@ -2152,7 +2409,9 @@ export class DrawingCanvas {
       context.lineTo(x, y + height / 2);
       context.closePath();
     } else if (["pentagon", "hexagon", "octagon", "star", "cross", "parallelogram", "trapezoid", "polygon"].includes(kind)) {
-      const sides = { pentagon: 5, hexagon: 6, octagon: 8, star: 10, cross: 12, parallelogram: 4, trapezoid: 4, polygon: 6 }[kind];
+      const sides = kind === "polygon"
+        ? Math.max(3, Math.min(12, Math.round(item.sides ?? this.shapeSides)))
+        : { pentagon: 5, hexagon: 6, octagon: 8, star: 10, cross: 12, parallelogram: 4, trapezoid: 4 }[kind];
       for (let index = 0; index < sides; index += 1) {
         let px;
         let py;
@@ -2278,7 +2537,7 @@ export class DrawingCanvas {
     context.lineWidth = item.strokeWidth ?? 3;
     context.lineJoin = "round";
     context.lineCap = "round";
-    context.stroke();
+    if (item.stroke !== false) context.stroke();
     context.restore();
   }
 
@@ -2400,7 +2659,7 @@ export class DrawingCanvas {
     context.restore();
   }
 
-  render() {
+  render({ ignoreTypeFilter = false } = {}) {
     if (!this.width || !this.height) {
       return;
     }
@@ -2425,6 +2684,8 @@ export class DrawingCanvas {
       this.context.clearRect(0, 0, this.width, this.height);
       this.applyViewTransform(this.context);
       for (const item of layer.items) {
+        if (item.type === "stroke" && item.tool === "eraser") continue;
+        if (!ignoreTypeFilter && !this.itemMatchesType(item)) continue;
         this.drawItem(item);
       }
       this.context.restore();
@@ -2434,9 +2695,27 @@ export class DrawingCanvas {
       context.globalAlpha = layer.opacity ?? 1;
       context.drawImage(this.layerCanvas, 0, 0, this.width, this.height);
       context.restore();
+    }
+
+    for (const layer of this.layers) {
+      if (!layer.visible || (layer.opacity ?? 1) <= 0) continue;
+      const erasers = layer.items.filter((item) =>
+        item.type === "stroke" && item.tool === "eraser" &&
+        (ignoreTypeFilter || this.itemMatchesType(item)));
+      if (!erasers.length) continue;
+      context.save();
+      context.globalAlpha = layer.opacity ?? 1;
+      this.applyViewTransform(context);
+      for (const item of erasers) this.drawItem(item);
+      context.restore();
+    }
+
+    for (const layer of this.layers) {
+      if (!layer.visible) continue;
       context.save();
       this.applyViewTransform(context);
       for (const item of layer.items) {
+        if (!ignoreTypeFilter && !this.itemMatchesType(item)) continue;
         if (this.selectedItemIds.includes(item.id) || item.id === this.hoveredItemId) {
           this.drawItemOutline(item);
         }
@@ -2484,6 +2763,7 @@ export class DrawingCanvas {
         height: Math.abs(current.y - start.y),
         color: this.brush.color,
         fill: this.shapeFill,
+        stroke: this.shapeStroke,
         strokeWidth: this.brush.size,
         points: this.interaction.points,
       });

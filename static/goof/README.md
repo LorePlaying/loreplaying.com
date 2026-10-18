@@ -54,15 +54,17 @@ cargo install wasm-pack
 From the project root, run:
 
 ```powershell
+$env:Path = "$env:USERPROFILE\.cargo\bin;$env:Path"
 Push-Location .\rust-engine
 wasm-pack build --target web --out-dir pkg --out-name goof_rust_engine
 Pop-Location
 ```
 
-Generated JavaScript bindings and WebAssembly files are written to
-`rust-engine/pkg/`. This generated build output is excluded by
-`rust-engine/.gitignore`; rebuild it after changing the Rust crate. The browser
-loads the generated module directly, so no bundler is necessary.
+Putting rustup's Cargo shim first ensures wasm-pack uses the toolchain with the
+WebAssembly target installed. Generated JavaScript bindings and WebAssembly
+files are written to `rust-engine/pkg/`. This generated build output is
+excluded by `rust-engine/.gitignore`; rebuild it after changing the Rust crate.
+The browser loads the generated module directly, so no bundler is necessary.
 
 Run the Rust unit tests from the project root with:
 
@@ -97,45 +99,142 @@ reports that it is using standard brush sizing until the Rust package is built.
 - `style.css` — responsive interface styles and theme variables
 - `src/main.js` — application state and WASM module initialization
 - `src/drawing.js` — high-DPI canvas drawing, pointer input, resizing, and PNG export
-- `src/library.js` — browser-local IndexedDB storage for image assets and collections
+- `src/library.js` — browser-local IndexedDB storage for projects, notes, assets, and collections
 - `rust-engine/Cargo.toml` — Rust crate manifest and wasm-bindgen dependency
 - `rust-engine/Cargo.lock` — pinned Rust dependency versions
-- `rust-engine/src/lib.rs` — Rust brush-pressure calculation exported to JavaScript
-- `rust-engine/pkg/` — generated wasm-pack output (not committed)
+- `rust-engine/src/lib.rs` — Rust brush-pressure and Markdown document parsing exported to JavaScript
+- `rust-engine/pkg/` — generated wasm-pack output; include this directory in
+  the files served by a static deployment when Rust/WASM features are enabled
+
+## Artwork notes
+
+Each local artwork has a Notes panel in the top toolbar. Its notes are
+autosaved with the artwork in IndexedDB, including the recovery record. Notes
+saved explicitly as Plain Text or Markdown also create standalone note entries
+in the Home screen's Saved Notes section. Artwork notes and standalone notes
+are local to this browser and are not included in an exported `.goof` scene.
+
+The Notes panel closes when you click outside it or choose another tool.
+**Save note** opens Plain Text and Markdown format choices; saving creates a
+new local Saved Notes entry and downloads the corresponding `.txt` or `.md`
+file. **Ctrl+E** switches the focused editor to Preview and **Ctrl+O** opens
+in-note search. The Notes editor has a small Normal/Insert keyboard mode with
+motions (`h/j/k/l`, `w/b`, `0`, `$`), insert commands (`i`, `a`, `o`), line
+delete/yank/paste (`dd`, `yy`, `p`), and undo (`u`). Press **Esc** to enter
+Normal mode and **i** to return to Insert mode.
+
+The Edit and Preview modes support headings, paragraphs, emphasis, inline and
+fenced code, ordered and unordered lists, block quotes, and links. The Rust
+WASM module parses Markdown into a typed JSON document; JavaScript creates
+preview DOM nodes using text content rather than inserting generated HTML.
+Only safe `http:`, `https:`, `mailto:`, and relative links are activated. Raw
+HTML is displayed as text.
+
+Rebuild the WASM package after changing the Rust Notes parser using the
+`wasm-pack build` command above. If the generated module or Notes parser is
+unavailable, note editing and saving still work and Preview uses the built-in
+JavaScript Markdown parser.
+
+`rust-engine/pkg/` is generated output and is ignored by Git. A static host
+such as GitHub Pages must receive that generated directory as part of its
+published files; this repository does not currently define an automatic WASM
+build/deploy workflow.
 
 ## Current features
 
+- Local Home gallery with search, grid/list layouts, portrait/landscape and
+  Infinite canvas presets, document dimensions, white/black/
+  transparent/custom backgrounds, artwork previews, and
+  create/open/rename/duplicate/delete actions
+- Home displays standalone Saved Notes and non-empty notes attached to artwork;
+  selecting an artwork note opens its artwork and Notes editor
+- Infinite canvases allow drawing, moving, and resizing beyond the initial
+  viewport bounds; SVG export frames visible artwork content
+- Named artwork and an autosave safety copy stored locally in IndexedDB; canvas
+  documents can be saved to the gallery and reopen with their layers and
+  imported image data
+- Per-artwork Notes with autosave, Edit/Preview modes, and Rust/WASM Markdown
+  parsing when the generated module is available
 - Select, brush, eraser, shape, and fill tools; Select moves, resizes, and
   rotates individual objects, and moves multi-selections together
+- Keyboard tool shortcuts: **B** Brush, **E** Eraser, **S** Select, **R**
+  Rectangle, **F** Fill, **T** on-canvas text, **L** Layers, **A** Assets,
+  **N** Notes, and **C** Clear Canvas; shortcuts pause while typing in fields
+  or dialogs. Choose **Keyboard shortcuts** in Actions and settings for the
+  complete list.
+- Searchable command palette on **Ctrl+Shift+P**, **/**, or **`**, with keyboard
+  navigation to tools, panels, every shape and brush type, artwork actions, and
+  Notes commands, including **Toggle Notes Vim mode**
+- Notes Vim mode is available from the Notes header or command palette; its
+  Green/Amber CRT theme provides a blinking block cursor and Normal/Insert
+  editing with common movement, line, word, yank/paste, change, replace,
+  delete, undo, and redo commands. Press **/** in Normal mode to search the
+  current note, **n/N** to repeat, and **Ctrl+E** to toggle Edit/Preview.
+- Standalone Notes can be saved as Plain Text or Markdown; saved notes are
+  stored in the local library and can be reopened from Notes or the Home page.
+- The Home page uses a lightweight, theme-aware animated line-and-node web
+  that stays fixed to the viewport as the page scrolls, reacts to pointer
+  movement, and uses lavender accents in both themes; it respects reduced
+  motion. Artwork and note lists load separately from the asset library so the
+  Home page can populate without waiting for asset initialization. The GOOF
+  Studio wordmark has a brief, reduced-motion-aware glitch effect. About GOOF
+  is available from both Home and the drawing workspace, with an animated,
+  circular CRT signal display that pauses when the dialog is closed.
+- Clear Canvas offers Circling, Dots, and Spinner animations. Choose an effect
+  in the Clear Canvas options and optionally remember it on this device.
+- Object-aware eraser: tapping a shape, image, or text object deletes it;
+  brush eraser strokes punch through the visible composite across layers
 - Hold Space and drag to pan; pinch with two fingers to pan and zoom on touch
   screens
-- Nine brush styles, including calligraphy, airbrush, oil, crayon, marker,
-  pencil, and watercolour; double-click Brush or Eraser for size and tip
-  settings, or double-click Brush to choose a style from its icon picker
-- A shape picker with circles, polygons, symbols, and 3D-like primitives;
-  double-click or double-tap a shape to edit its fill and outline colors
+- Three focused brush styles: smooth Ink, textured Crayon, and a soft,
+  lightweight Airbrush; double-click Brush or Eraser for size and tip
+  settings and double-click Brush to choose a style
+- Brush size and opacity affect new strokes; touch pressure adjusts stroke width
+- A compact shape picker with circles, symbols, curves, and configurable
+  regular polygons with 3–12 sides; Circle stays circular when drawn
 - A Fill bucket with Smart, Canvas-only, and Shape-only targets; filled
   backgrounds and shapes participate in undo, scene saves, PNG, and SVG exports
-- Clear resets both layer contents and the canvas background, and can be undone
+- Clear offers animated Circling, Dots, and Spinner effects before
+  resetting layer contents and the canvas background; double-click Clear to
+  choose an effect, and enable Remember to use it on the next single click.
+  Clearing can be undone.
 - Drawing with mouse, touch, and stylus via Pointer Events
 - Multiple visible, lockable, draggable/reorderable layers with per-layer
   opacity; click a layer name to edit its options
 - Movable brush strokes, shapes, text, and images; resize or rotate them with
-  their on-canvas handles
+  their on-canvas handles, including larger, easier-to-hit edge resize zones
+- Right-click a selected object on desktop, or double-tap it on touch screens,
+  to open Duplicate, Edit, and Delete actions
 - Editable text and draggable imported images with alignment snapping guides
-- Local Assets for reusable text, images, scribbles, and shapes, with search,
-  category filters, multi-collection filtering, and collection management;
-  **Save → Assets** saves every item on the active layer
+- Drop supported image files or image assets onto the canvas to place them on a
+  new, named layer
+- Local Assets for reusable text, images, drawings, and shapes, with search,
+  type filters that also filter canvas visibility, multi-collection filtering,
+  and collection management;
+  **Show assets → Save selection or layer to Assets** saves every item on the
+  active layer, or saves a multi-selection as one group asset with its relative
+  arrangement intact
 - Automatic local recovery snapshots stored in IndexedDB
 - Undo/redo buttons and Ctrl+Z, Ctrl+Shift+Z, Ctrl+Y, Ctrl+A, Escape, and Delete
   keyboard shortcuts; Ctrl+A selects all visible, unlocked canvas objects as a
   group
-- Simple icon-only and Studio labeled workspace views; mobile screens default
-  to Simple mode; the Assets and Layers sections have recognizable icons, and
-  the sidebar can be collapsed
-- Custom color wheel and eyedropper-style color controls; save chosen colors
-  into empty palette slots for brushes and text
-- Collapsible left sidebar to give the canvas more room
+- A purpose-built painting workspace with compact grouped tools across the top,
+  a vertical brush-size/opacity rail on larger screens, and a touch-friendly
+  horizontal rail on phones
+- Floating Actions, double-click brush settings, Colour Studio, and contextual
+  Layers/Assets panels; assets are grouped and filtered by type
+- Dark, translucent workspace styling by default, with an optional light theme
+- Shared HSV colour wheel and eyedropper-style colour controls for brush, text,
+  and shape colours, with a white-to-black value slider, Apply action, and
+  saved palette slots
+- New shapes default to no fill; filled shapes open with their saved fill
+  colour, and the Fill colour control provides a No fill action
+- British English interface copy (`en-GB`)
+- Editable shape outline width, and canvas text entry that commits with Enter
+  while Shift+Enter inserts a line break
+- Version 0.2
+- Compact floating Layers and Assets panel with separate tabs and outside-click
+  or Escape dismissal
 - Rust/WASM pressure-sensitive effective brush width, when the generated
   package is available; mouse input uses full brush size
 - High-DPI rendering and stroke-preserving canvas resize
@@ -149,14 +248,28 @@ Assets, collections, and automatic recovery snapshots are local to the browser
 and origin where GOOF is served; there is no account, cloud sync, or server-side
 storage. Browser privacy settings or clearing site data can remove them.
 
-Choose **Save** to export an editable `.goof` scene, PNG, or SVG, or save every
-item on the active layer to **Assets**. If exactly one collection is selected,
-the new assets are filed into it. The JSON-based `.goof` format preserves
+## Prototype boundaries
+
+GOOF remains a lightweight drawing prototype rather than a full raster-painting
+studio. Its artwork gallery and named documents are functional and stored in
+IndexedDB. Canvas dimensions determine the displayed canvas ratio and PNG/SVG
+export dimensions. Layers are editable object layers with visibility and
+opacity; brush strokes are retained as editable paths rather than independently
+composited raster bitmaps. Brush settings contain Ink, Crayon, and Airbrush
+presets; advanced brush simulation, smudge, blend modes, project
+cloud sync, and JPEG/WebP export dialogs are not implemented.
+
+Open **Actions and settings** and choose **Save and export** to export an
+editable `.goof` scene, PNG, or SVG. Open **Show assets** to save objects to
+**Assets**. With multiple canvas objects selected, Assets stores
+them together as a group so that relative spacing is preserved when placed
+again. Otherwise it saves the active layer's items. If exactly one collection
+is selected, the new assets are filed into it. The JSON-based `.goof` format preserves
 editable layers, objects, visibility, opacity, and embedded images; use
 **Open** to load it again. SVG is useful for vector interchange, while PNG
 creates a raster image.
 
-## Layers, text, and prop library
+## Layers, text, and Assets
 
 - Choose **New layer** in the Layers panel to create a layer. Select a layer to
   draw on it; click its name to edit the name, visibility, lock, and opacity.
@@ -164,11 +277,16 @@ creates a raster image.
 - Use **Select** to click and drag an object or draw a marquee across multiple
   objects. Hold Shift while clicking or marquee-selecting to add/remove objects
   from the selection. Selected objects move together. Drag the corner handles
-  to resize and the handle above an object to rotate it. Use **Text** to add a
+  to resize (the full edge is a hit target) and the handle above an object to rotate it. Use **Text** to add a
   text object. Double-click text or select it and choose **Edit text**.
 - Choose **Image** to import an image. It is added to Assets and placed on the
-  canvas. Choose **Save → Assets** to save the active layer's items as reusable
-  assets. Click an asset to select it and use its **+** button to add a copy.
+  canvas. Open **Show assets** and choose **Save selection or layer to Assets**
+  to save the active layer's items as reusable
+  assets, or multi-select objects first to store their relative layout in a
+  single group asset. Click an asset to select it and use its **+** button to
+  add a copy. Click **Text**, **Images**, **Shapes**, or **Drawings** to filter
+  both the Assets list and visible canvas items; choose **All** to restore all
+  types.
   Hold Shift or Ctrl/Cmd to multi-select assets; use Select all, Add selected,
   or Delete selected as needed. Use **+** to create
   collections, the pencil control to rename them, and the adjacent **×** or
@@ -179,8 +297,11 @@ creates a raster image.
   to Select so the new shape can be moved. Select a Curve and drag its visible
   control handles to bend it. The **Fill** tool's Smart mode fills a supported
   shape under the pointer or changes the canvas background; double-click Fill
-  to choose Smart, Canvas-only, or Shape-only behavior. Double-click a shape
-  to edit its fill and outline colors. Clear also resets a filled background.
+  to choose Smart, Canvas-only, or Shape-only behaviour. Double-click a shape
+  to edit its fill and outline colours; independent Fill and Outline switches
+  can disable either style. Shape options also set fill/outline defaults for
+  newly drawn shapes. The Fill colour picker can also remove a fill. Clear
+  also resets a filled background.
 - Use the zoom slider at the bottom of the canvas or hold Ctrl while scrolling
   the mouse wheel over the canvas. Canvas pixel dimensions and zoom are shown
   separately.
@@ -189,9 +310,8 @@ creates a raster image.
 - Choose **Text** to type directly into the on-canvas text cursor. Click away
   or press Ctrl+Enter to place it, then double-click the text to edit it.
   Double-click badges on Brush/Eraser and Shapes indicate their extra settings.
-- Use the fullscreen button beside the theme switch to show the drawing
-  toolbar and canvas in browser fullscreen; press Escape or click it again to
-  return to the full workspace.
+- Open **Actions and settings** for theme, fullscreen, import, text, and export
+  controls; press Escape or choose fullscreen again to return to the workspace.
 - Drag a layer's grip handle to reorder it; use its name to open the options
   dialog, or the eye to toggle visibility. Locking or
   hiding the last editable layer does not create a new layer. The
