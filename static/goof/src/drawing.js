@@ -588,8 +588,8 @@ export class DrawingCanvas {
       text: text.trim(),
       color,
       fontSize: Math.round(Math.max(8, Math.min(120, fontSize))),
-      x: Math.max(0, Math.min(1, x)),
-      y: Math.max(0, Math.min(1, y)),
+      x: this.infiniteCanvas ? x : Math.max(0, Math.min(1, x)),
+      y: this.infiniteCanvas ? y : Math.max(0, Math.min(1, y)),
     };
     layer.items.push(item);
     this.setSelectedItem(item.id);
@@ -845,6 +845,36 @@ export class DrawingCanvas {
   }
 
   async exportPng(width = this.canvas.width, height = this.canvas.height) {
+    if (this.infiniteCanvas) {
+      const svg = await this.exportSvg(undefined, undefined, { download: false });
+      const svgUrl = URL.createObjectURL(svg);
+      try {
+        const image = new Image();
+        await new Promise((resolve, reject) => {
+          image.addEventListener("load", resolve, { once: true });
+          image.addEventListener("error", () => reject(new Error("The browser could not render the canvas for PNG export.")), { once: true });
+          image.src = svgUrl;
+        });
+        const output = document.createElement("canvas");
+        output.width = Math.max(1, Math.min(8192, image.naturalWidth));
+        output.height = Math.max(1, Math.min(8192, image.naturalHeight));
+        const outputContext = output.getContext("2d");
+        if (!outputContext) {
+          throw new Error("A 2D canvas context is not available for PNG export.");
+        }
+        outputContext.drawImage(image, 0, 0, output.width, output.height);
+        const blob = await new Promise((resolve, reject) => {
+          output.toBlob((result) => result
+            ? resolve(result)
+            : reject(new Error("The browser could not create a PNG image.")), "image/png");
+        });
+        downloadBlob(blob, "goof-doodle.png");
+      } finally {
+        URL.revokeObjectURL(svgUrl);
+      }
+      return;
+    }
+
     const imageIds = this.layers.filter((layer) => layer.visible)
       .flatMap((layer) => layer.items.filter((item) => item.type === "image").map((item) => item.assetId));
     await Promise.all([...new Set(imageIds)].map((id) => this.loadImage(id)));
@@ -900,7 +930,7 @@ export class DrawingCanvas {
     downloadBlob(blob, "goof-doodle.png");
   }
 
-  async exportSvg(width = Math.round(this.width), height = Math.round(this.height)) {
+  async exportSvg(width = Math.round(this.width), height = Math.round(this.height), { download = true } = {}) {
     const imageIds = [...new Set(this.layers.filter((layer) => layer.visible).flatMap((layer) =>
       layer.items.filter((item) => item.type === "image").map((item) => item.assetId)))];
     await Promise.all(imageIds.map((id) => this.loadImage(id)));
@@ -1081,7 +1111,9 @@ export class DrawingCanvas {
     const outputWidth = this.infiniteCanvas ? Math.min(8192, Math.ceil(viewWidth)) : width;
     const outputHeight = this.infiniteCanvas ? Math.min(8192, Math.ceil(viewHeight)) : height;
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${outputWidth}" height="${outputHeight}" viewBox="${viewMinX} ${viewMinY} ${viewWidth} ${viewHeight}">${defs}${scene}</svg>`;
-    downloadBlob(new Blob([svg], { type: "image/svg+xml" }), "goof-doodle.svg");
+    const blob = new Blob([svg], { type: "image/svg+xml" });
+    if (download) downloadBlob(blob, "goof-doodle.svg");
+    return blob;
   }
 
   async saveScene() {
