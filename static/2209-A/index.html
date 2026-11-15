@@ -1,1 +1,414 @@
-The page will be published on 12 November, 2026.
+<!DOCTYPE html>
+<html lang="tr" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <meta name="googlebot" content="noindex, nofollow, noarchive">
+    <title>Frankenstein | Gotik Rol Yapma Deneyi</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gothic: {
+                            bgDark: '#100e0e',
+                            bgLight: '#f6f2ec',
+                            cardDark: '#171211',
+                            cardLight: '#ffffff',
+                            borderDark: '#ae8f5b',
+                            borderLight: '#d4c2a5',
+                            borderSubtleDark: 'rgba(174, 143, 91, 0.25)',
+                            borderSubtleLight: 'rgba(174, 143, 91, 0.35)',
+                            gold: '#ae8f5b',
+                            goldLight: '#c9ad7c',
+                            goldDark: '#8a6e3d',
+                            red: '#b91c1c',
+                            textDark: '#c2a77c',
+                            textLight: '#2c241d',
+                            mutedDark: '#917d60',
+                            mutedLight: '#73634c'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['Courier New', 'Courier', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gothic-bgLight dark:bg-gothic-bgDark text-gothic-textLight dark:text-gothic-textDark font-serif min-h-screen flex flex-col transition-colors duration-300 select-text">
+
+    <!-- ARKAPLAN CANVAS -->
+    <canvas id="frankenstein-web"></canvas>
+
+<section id="landing-page">
+
+  <!-- Language preferences -->
+  <header class="top-bar">
+    <div class="landing-controls">
+      <div class="language-switch" aria-label="Language preferences">
+        <button
+          class="language-btn active"
+          data-lang="tr"
+          aria-pressed="true"
+        >
+          Türkçe
+        </button>
+
+        <span class="language-divider">/</span>
+
+        <button
+          class="language-btn"
+          data-lang="en"
+          aria-pressed="false"
+        >
+          English
+        </button>
+      </div>
+
+      <button
+        type="button"
+        class="landing-theme-toggle"
+        id="landingThemeToggle"
+        aria-label="Toggle color theme"
+      >
+        <i class="ph ph-sun dark:hidden" aria-hidden="true"></i>
+        <i class="ph ph-moon hidden dark:inline" aria-hidden="true"></i>
+        <span id="landingThemeLabel">AYDINLIK</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <div class="main-content">
+
+    <h1 id="main-title">FRANKENSTEIN</h1>
+
+    <p class="subtitle" id="subtitle">
+      Edebiyat Temelli Gotik Bir Rol Yapma Deneyi
+    </p>
+
+    <button
+      type="button"
+      class="enter-button"
+      id="enter-button"
+    >
+      <span id="enter-button-text">Proje Detaylarını İncele</span>
+      <span class="button-arrow" aria-hidden="true">↗</span>
+    </button>
+
+  </div>
+
+  <!-- Project footer -->
+  <footer class="project-footer">
+
+    <div class="footer-summary" id="footer-summary">
+      TÜBİTAK 2209-A · Proje No: 1919B012609483 · 6 Ay
+    </div>
+
+  </footer>
+</section>
+<div id="interactive-site">
+
+    <!-- ÜST KONTROL ÇUBUĞU -->
+    <div class="border-b border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark bg-white/75 dark:bg-gothic-bgDark/75 backdrop-blur-md sticky top-0 z-40 px-4 py-3 transition-colors">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-3 text-center">
+            
+            <div class="flex items-center gap-3">
+                <div class="flex rounded-lg overflow-hidden border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark p-0.5 bg-gray-100 dark:bg-gothic-cardDark font-mono text-xs">
+                    <button id="langTR" onclick="setLanguage('tr')" class="px-3 py-1.5 rounded-md font-bold transition-colors bg-gothic-gold text-white dark:text-gothic-bgDark">TR</button>
+                    <button id="langEN" onclick="setLanguage('en')" class="px-3 py-1.5 rounded-md font-bold text-gray-500 hover:text-black dark:hover:text-gothic-gold transition-colors">EN</button>
+                </div>
+
+                <button id="themeToggle" class="px-3.5 py-1.5 rounded-xl border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark bg-white dark:bg-gothic-cardDark text-xs font-mono font-bold flex items-center gap-2 hover:border-gothic-gold transition-all cursor-pointer">
+                    <i class="ph ph-sun text-amber-500 inline dark:hidden"></i>
+                    <i class="ph ph-moon text-gothic-gold hidden dark:inline"></i>
+                    <span id="themeLabel">AYDINLIK</span>
+                </button>
+            </div>
+
+            <!-- ORTALANMIŞ PROJE KÜNYESİ -->
+            <div class="flex flex-wrap items-center justify-center font-mono text-xs">
+                <span class="px-4 py-1.5 rounded-full border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark text-gray-700 dark:text-gothic-mutedDark tracking-wider bg-white dark:bg-gothic-cardDark shadow-sm" data-i18n="projectInfo">
+                    TÜBİTAK 2209-A • Proje No: 1919B012609483 • Proje Süresi: 6 Ay
+                </span>
+            </div>
+
+            <div class="hidden lg:block w-24"></div>
+        </div>
+    </div>
+
+    <!-- BAŞLIK BÖLÜMÜ -->
+    <header class="project-title-section py-12 px-4 sm:px-8 border-b border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark bg-white/60 dark:bg-gothic-bgDark/60 backdrop-blur-md relative z-10 shadow-sm">
+        <div class="max-w-7xl mx-auto text-center space-y-4">
+            <div class="max-w-5xl mx-auto px-6 py-4 relative group text-center">
+                <span class="absolute -top-6 -left-2 sm:-left-6 text-6xl sm:text-8xl font-serif font-bold select-none pointer-events-none" style="color: #b91c1c;">“</span>
+                <span class="absolute -bottom-12 -right-2 sm:-right-6 text-6xl sm:text-8xl font-serif font-bold select-none pointer-events-none" style="color: #b91c1c;">”</span>
+                
+                <p class="font-mono text-xs text-gothic-gold font-bold tracking-widest mb-3" data-i18n="projectTitleLabel">// PROJE BAŞLIĞI</p>
+                
+                <h1 id="mainProjectTitle" class="text-xl sm:text-2xl md:text-3xl font-normal leading-relaxed tracking-wide text-gray-900 dark:text-gothic-goldLight italic px-4 select-text" data-i18n="projectTitle">
+                    "Farklı Üretken Yapay Zeka Modellerinin Kendi Aralarındaki Edebi Eser Temelli Rol Yapma Etkileşimlerinde Metinsel ve Görsel Çıktılarının Özgün Metne Sadakatinin İncelenmesi: Mary Shelley'nin Frankenstein Romanı Örneği"
+                </h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- ANA İÇERİK -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 md:p-8 space-y-12 relative z-10">
+
+        <!-- SLOGAN BÖLÜMÜ (NOKTASIZ, LİSTE OLMAYAN YAPI) -->
+        <section class="text-center py-8 px-4">
+            <h2 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-bold tracking-tight text-gray-900 dark:text-gothic-goldLight flex flex-wrap justify-center items-center gap-x-2 sm:gap-x-3 select-text leading-tight">
+                
+                <!-- 1. Karakterler -->
+                <span onclick="openSloganModal(1)" class="inline-flex items-center gap-1.5 cursor-pointer group transition-transform hover:scale-105">
+                    <span class="underline decoration-gothic-gold decoration-2 underline-offset-8 transition-colors group-hover:text-gothic-gold" data-i18n="sloganItem1">3 Karakter</span>
+                    <i class="ph ph-arrow-square-out text-sm text-gothic-gold opacity-60 group-hover:opacity-100 transition-opacity"></i>
+                </span>
+
+                <span class="text-gothic-gold font-normal">,</span>
+
+                <!-- 2. Yapay Zeka -->
+                <span onclick="openSloganModal(2)" class="inline-flex items-center gap-1.5 cursor-pointer group transition-transform hover:scale-105 ml-1 sm:ml-2">
+                    <span class="underline decoration-gothic-gold decoration-2 underline-offset-8 transition-colors group-hover:text-gothic-gold" data-i18n="sloganItem2">3 Yapay Zekâ</span>
+                    <i class="ph ph-arrow-square-out text-sm text-gothic-gold opacity-60 group-hover:opacity-100 transition-opacity"></i>
+                </span>
+
+                <span class="text-gothic-gold font-normal">,</span>
+
+                <!-- 3. Diller -->
+                <span onclick="openSloganModal(3)" class="inline-flex items-center gap-1.5 cursor-pointer group transition-transform hover:scale-105 ml-1 sm:ml-2">
+                    <span class="underline decoration-gothic-gold decoration-2 underline-offset-8 transition-colors group-hover:text-gothic-gold" data-i18n="sloganItem3">2 Dil</span>
+                    <i class="ph ph-arrow-square-out text-sm text-gothic-gold opacity-60 group-hover:opacity-100 transition-opacity"></i>
+                </span>
+
+                <span class="text-gothic-gold font-normal">,</span>
+
+                <!-- 4. Çıktılar -->
+                <span onclick="openSloganModal(4)" class="inline-flex items-center gap-1.5 cursor-pointer group transition-transform hover:scale-105 ml-1 sm:ml-2">
+                    <span class="underline decoration-gothic-gold decoration-2 underline-offset-8 transition-colors group-hover:text-gothic-gold" data-i18n="sloganItem4">96 Çıktı</span>
+                    <i class="ph ph-arrow-square-out text-sm text-gothic-gold opacity-60 group-hover:opacity-100 transition-opacity"></i>
+                </span>
+
+            </h2>
+        </section>
+
+        <!-- 6 AŞAMA KARTI -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 font-sans">
+            
+            <div onclick="openModal(1)" class="cursor-pointer group relative p-5 rounded-2xl bg-white/80 dark:bg-gothic-cardDark/80 border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark hover:border-gothic-gold transition-all flex flex-col justify-between h-60 shadow-md hover:shadow-xl">
+                <div class="flex items-center justify-between font-mono">
+                    <span class="text-xs text-gothic-gold font-bold">[01]</span>
+                    <i class="ph ph-book-bookmark text-2xl text-gray-400 dark:text-gothic-mutedDark group-hover:text-gothic-gold transition-colors"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm text-gray-900 dark:text-gothic-goldLight mb-1 group-hover:text-gothic-gold transition-colors" data-i18n="st1Title">VERİ KAYNAĞI</h3>
+                    <p class="text-xs text-gray-500 dark:text-gothic-mutedDark font-mono" data-i18n="st1Sub">1818 İlk Baskı • Gutenberg</p>
+                </div>
+                <div class="pt-3 border-t border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex justify-between items-center text-xs font-mono text-gray-500 dark:text-gothic-mutedDark group-hover:text-black dark:group-hover:text-gothic-goldLight">
+                    <span data-i18n="viewDetails">İncele</span>
+                    <i class="ph ph-arrow-right group-hover:translate-x-1 text-gothic-gold transition-transform"></i>
+                </div>
+            </div>
+
+            <div onclick="openModal(2)" class="cursor-pointer group relative p-5 rounded-2xl bg-white/80 dark:bg-gothic-cardDark/80 border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark hover:border-gothic-gold transition-all flex flex-col justify-between h-60 shadow-md hover:shadow-xl">
+                <div class="flex items-center justify-between font-mono">
+                    <span class="text-xs text-gothic-gold font-bold">[02]</span>
+                    <i class="ph ph-cpu text-2xl text-gray-400 dark:text-gothic-mutedDark group-hover:text-gothic-gold transition-colors"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm text-gray-900 dark:text-gothic-goldLight mb-1 group-hover:text-gothic-gold transition-colors" data-i18n="st2Title">MODEL SEÇİMİ</h3>
+                    <p class="text-xs text-gray-500 dark:text-gothic-mutedDark font-mono" data-i18n="st2Sub">GPT-6 • Gemini 4 • Grok 4.7</p>
+                </div>
+                <div class="pt-3 border-t border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex justify-between items-center text-xs font-mono text-gray-500 dark:text-gothic-mutedDark group-hover:text-black dark:group-hover:text-gothic-goldLight">
+                    <span data-i18n="viewDetails">İncele</span>
+                    <i class="ph ph-arrow-right group-hover:translate-x-1 text-gothic-gold transition-transform"></i>
+                </div>
+            </div>
+
+            <div onclick="openModal(3)" class="cursor-pointer group relative p-5 rounded-2xl bg-white/80 dark:bg-gothic-cardDark/80 border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark hover:border-gothic-gold transition-all flex flex-col justify-between h-60 shadow-md hover:shadow-xl">
+                <div class="flex items-center justify-between font-mono">
+                    <span class="text-xs text-gothic-gold font-bold">[03]</span>
+                    <i class="ph ph-arrows-clockwise text-2xl text-gray-400 dark:text-gothic-mutedDark group-hover:text-gothic-gold transition-colors"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm text-gray-900 dark:text-gothic-goldLight mb-1 group-hover:text-gothic-gold transition-colors" data-i18n="st3Title">UYGULAMA MATRİSİ</h3>
+                    <p class="text-xs text-gray-500 dark:text-gothic-mutedDark font-mono" data-i18n="st3Sub">8 Sahne Rotasyonu</p>
+                </div>
+                <div class="pt-3 border-t border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex justify-between items-center text-xs font-mono text-gray-500 dark:text-gothic-mutedDark group-hover:text-black dark:group-hover:text-gothic-goldLight">
+                    <span data-i18n="viewDetails">İncele</span>
+                    <i class="ph ph-arrow-right group-hover:translate-x-1 text-gothic-gold transition-transform"></i>
+                </div>
+            </div>
+
+            <div onclick="openModal(4)" class="cursor-pointer group relative p-5 rounded-2xl bg-white/80 dark:bg-gothic-cardDark/80 border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark hover:border-gothic-gold transition-all flex flex-col justify-between h-60 shadow-md hover:shadow-xl">
+                <div class="flex items-center justify-between font-mono">
+                    <span class="text-xs text-gothic-gold font-bold">[04]</span>
+                    <i class="ph ph-shield-check text-2xl text-gray-400 dark:text-gothic-mutedDark group-hover:text-gothic-gold transition-colors"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm text-gray-900 dark:text-gothic-goldLight mb-1 group-hover:text-gothic-gold transition-colors" data-i18n="st4Title">BİLGİ SINIRLARI</h3>
+                    <p class="text-xs text-gray-500 dark:text-gothic-mutedDark font-mono" data-i18n="st4Sub">Ankronizm Kontrolü</p>
+                </div>
+                <div class="pt-3 border-t border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex justify-between items-center text-xs font-mono text-gray-500 dark:text-gothic-mutedDark group-hover:text-black dark:group-hover:text-gothic-goldLight">
+                    <span data-i18n="viewDetails">İncele</span>
+                    <i class="ph ph-arrow-right group-hover:translate-x-1 text-gothic-gold transition-transform"></i>
+                </div>
+            </div>
+
+            <div onclick="openModal(5)" class="cursor-pointer group relative p-5 rounded-2xl bg-white/80 dark:bg-gothic-cardDark/80 border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark hover:border-gothic-gold transition-all flex flex-col justify-between h-60 shadow-md hover:shadow-xl">
+                <div class="flex items-center justify-between font-mono">
+                    <span class="text-xs text-gothic-gold font-bold">[05]</span>
+                    <i class="ph ph-scales text-2xl text-gray-400 dark:text-gothic-mutedDark group-hover:text-gothic-gold transition-colors"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm text-gray-900 dark:text-gothic-goldLight mb-1 group-hover:text-gothic-gold transition-colors" data-i18n="st5Title">ÇİFT KÖR ANALİZ</h3>
+                    <p class="text-xs text-gray-500 dark:text-gothic-mutedDark font-mono" data-i18n="st5Sub">Uzlaşı Tabanlı Kodlama</p>
+                </div>
+                <div class="pt-3 border-t border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex justify-between items-center text-xs font-mono text-gray-500 dark:text-gothic-mutedDark group-hover:text-black dark:group-hover:text-gothic-goldLight">
+                    <span data-i18n="viewDetails">İncele</span>
+                    <i class="ph ph-arrow-right group-hover:translate-x-1 text-gothic-gold transition-transform"></i>
+                </div>
+            </div>
+
+            <div onclick="openModal(6)" class="cursor-pointer group relative p-5 rounded-2xl bg-white/80 dark:bg-gothic-cardDark/80 border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark hover:border-gothic-gold transition-all flex flex-col justify-between h-60 shadow-md hover:shadow-xl">
+                <div class="flex items-center justify-between font-mono">
+                    <span class="text-xs text-gothic-gold font-bold">[06]</span>
+                    <i class="ph ph-planet text-2xl text-gray-400 dark:text-gothic-mutedDark group-hover:text-gothic-gold transition-colors"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm text-gray-900 dark:text-gothic-goldLight mb-1 group-hover:text-gothic-gold transition-colors" data-i18n="st6Title">YAYGIN ETKİ</h3>
+                    <p class="text-xs text-gray-500 dark:text-gothic-mutedDark font-mono" data-i18n="st6Sub">Akademik & Sosyal Değer</p>
+                </div>
+                <div class="pt-3 border-t border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex justify-between items-center text-xs font-mono text-gray-500 dark:text-gothic-mutedDark group-hover:text-black dark:group-hover:text-gothic-goldLight">
+                    <span data-i18n="viewDetails">İncele</span>
+                    <i class="ph ph-arrow-right group-hover:translate-x-1 text-gothic-gold transition-transform"></i>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SİMÜLATÖRÜ (8 SAHNELİ) -->
+        <section class="border-2 border-gothic-gold rounded-3xl bg-white/80 dark:bg-gothic-cardDark/80 p-6 sm:p-8 space-y-6 relative overflow-hidden shadow-2xl transition-colors">
+            <div class="absolute top-0 right-0 px-4 py-1.5 rounded-bl-2xl font-mono text-[10px] text-white dark:text-gothic-bgDark bg-gothic-gold font-bold tracking-widest" data-i18n="liveSimulationBadge">
+                CANLI SİMÜLASYON MODÜLÜ
+            </div>
+
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark pb-4">
+                <div>
+                    <span class="px-3 py-1 rounded-lg bg-gothic-gold/10 border border-gothic-gold text-gothic-gold font-mono text-xs font-bold tracking-wider" data-i18n="demoBadge">
+                        ETKİLEŞİM DEMOSU
+                    </span>
+                    <h2 class="font-serif text-lg sm:text-xl text-gray-900 dark:text-gothic-goldLight tracking-wider mt-2" data-i18n="demoHeaderTitle">Yapay Zeka Rol Yapma Etkileşim Simülatörü</h2>
+                    <p class="text-xs sm:text-sm text-gray-600 dark:text-gothic-mutedDark font-mono" data-i18n="demoHeaderDesc">Araştırmadaki 8 sahneye ait etkileşimler aşağıda listelenmiştir (Sahne 1 aktif demo, 2-8 taslak aşamasındadır).</p>
+                </div>
+
+                <!-- 8 Sahne Seçim Butonları -->
+                <div class="flex flex-wrap items-center gap-1.5 font-mono text-[11px]" id="runButtonsContainer">
+                    <button onclick="switchDemoRun(1)" id="runBtn1" class="px-3 py-1 rounded-lg bg-gothic-gold text-white dark:text-gothic-bgDark font-bold transition-all border border-gothic-gold shadow-sm">S1 (Demo)</button>
+                    <button onclick="switchDemoRun(2)" id="runBtn2" class="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gothic-bgDark text-gray-600 dark:text-gothic-mutedDark hover:text-black dark:hover:text-gothic-gold transition-all border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark">S2</button>
+                    <button onclick="switchDemoRun(3)" id="runBtn3" class="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gothic-bgDark text-gray-600 dark:text-gothic-mutedDark hover:text-black dark:hover:text-gothic-gold transition-all border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark">S3</button>
+                    <button onclick="switchDemoRun(4)" id="runBtn4" class="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gothic-bgDark text-gray-600 dark:text-gothic-mutedDark hover:text-black dark:hover:text-gothic-gold transition-all border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark">S4</button>
+                    <button onclick="switchDemoRun(5)" id="runBtn5" class="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gothic-bgDark text-gray-600 dark:text-gothic-mutedDark hover:text-black dark:hover:text-gothic-gold transition-all border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark">S5</button>
+                    <button onclick="switchDemoRun(6)" id="runBtn6" class="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gothic-bgDark text-gray-600 dark:text-gothic-mutedDark hover:text-black dark:hover:text-gothic-gold transition-all border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark">S6</button>
+                    <button onclick="switchDemoRun(7)" id="runBtn7" class="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gothic-bgDark text-gray-600 dark:text-gothic-mutedDark hover:text-black dark:hover:text-gothic-gold transition-all border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark">S7</button>
+                    <button onclick="switchDemoRun(8)" id="runBtn8" class="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gothic-bgDark text-gray-600 dark:text-gothic-mutedDark hover:text-black dark:hover:text-gothic-gold transition-all border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark">S8</button>
+                </div>
+            </div>
+
+            <div id="demoContentBox" class="transition-all duration-300">
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ALT BİLGİ -->
+    <footer class="border-t border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark bg-white/80 dark:bg-gothic-cardDark/80 py-6 px-4 font-mono text-xs text-center relative z-10 transition-colors select-text">
+        <div class="max-w-7xl mx-auto flex items-center justify-center gap-2 text-gray-600 dark:text-gothic-mutedDark">
+            <i class="ph ph-envelope text-gothic-gold text-base"></i>
+            <span data-i18n="team">İletişim: fatsa@duck.com</span>
+        </div>
+    </footer>
+
+    <!-- MODAL PENCERE -->
+    <div id="modalOverlay" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div id="modalBox" class="bg-white dark:bg-gothic-cardDark border-2 border-gothic-gold rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl relative transition-all duration-300 overflow-hidden">
+            
+            <div class="p-5 border-b border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex items-center justify-between font-mono">
+                <div class="flex items-center gap-3">
+                    <span id="modalBadge" class="text-xs font-bold text-gothic-gold"></span>
+                    <h2 id="modalTitle" class="text-sm font-bold text-gray-900 dark:text-gothic-goldLight">STAGE_TITLE</h2>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="navigateModal(-1)" class="w-8 h-8 rounded-lg border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex items-center justify-center text-gray-600 dark:text-gothic-mutedDark hover:text-gothic-gold transition-all cursor-pointer" title="Önceki">
+                        <i class="ph ph-arrow-left"></i>
+                    </button>
+                    <button onclick="navigateModal(1)" class="w-8 h-8 rounded-lg border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex items-center justify-center text-gray-600 dark:text-gothic-mutedDark hover:text-gothic-gold transition-all cursor-pointer" title="Sonraki">
+                        <i class="ph ph-arrow-right"></i>
+                    </button>
+                    <button onclick="closeModal()" class="w-8 h-8 rounded-lg border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex items-center justify-center text-gray-600 dark:text-gothic-mutedDark hover:text-gothic-gold transition-colors cursor-pointer ml-2">
+                        <i class="ph ph-x text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="modalBody" class="p-6 overflow-y-auto custom-scrollbar flex-1 text-gray-700 dark:text-gothic-mutedDark text-xs sm:text-sm leading-relaxed font-sans space-y-4 select-text">
+            </div>
+
+            <div class="p-4 border-t border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex justify-between items-center font-mono text-xs text-gray-500 dark:text-gothic-mutedDark">
+                <span data-i18n="navHint">[← / →] Klavyeyle Gezin</span>
+                <button id="modalCloseBtn" onclick="closeModal()" class="px-5 py-2 rounded-xl text-white dark:text-gothic-bgDark font-bold tracking-wider transition-colors cursor-pointer bg-gothic-gold hover:bg-gothic-goldLight" data-i18n="closeBtn">
+                    KAPAT [ESC]
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SİMÜLASYON TAM EKRAN HUD PENCERESİ -->
+    <div id="simModalOverlay" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div id="simModalBox" class="bg-white dark:bg-gothic-cardDark border-2 border-gothic-gold rounded-3xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl relative animate-hud overflow-hidden">
+            
+            <div class="p-5 border-b border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex items-center justify-between font-mono">
+                <div class="flex items-center gap-3">
+                    <span id="simModalBadge" class="text-xs font-bold text-gothic-gold">[SIMULATION_VIEW]</span>
+                    <h2 id="simModalTitle" class="text-sm font-bold text-gray-900 dark:text-gothic-goldLight">MODEL_OUTPUT</h2>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="navigateSimModal(-1)" class="w-8 h-8 rounded-lg border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex items-center justify-center text-gray-600 dark:text-gothic-mutedDark hover:text-gothic-gold transition-all cursor-pointer">
+                        <i class="ph ph-arrow-left"></i>
+                    </button>
+                    <button onclick="navigateSimModal(1)" class="w-8 h-8 rounded-lg border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex items-center justify-center text-gray-600 dark:text-gothic-mutedDark hover:text-gothic-gold transition-all cursor-pointer">
+                        <i class="ph ph-arrow-right"></i>
+                    </button>
+                    <button onclick="closeSimModal()" class="w-8 h-8 rounded-lg border border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex items-center justify-center text-gray-600 dark:text-gothic-mutedDark hover:text-gothic-gold transition-colors cursor-pointer ml-2">
+                        <i class="ph ph-x text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="simModalBody" class="p-8 overflow-y-auto custom-scrollbar flex-1 text-slate-800 dark:text-slate-200 text-sm sm:text-base leading-relaxed font-mono space-y-6 select-text">
+            </div>
+
+            <div class="p-4 border-t border-gothic-borderSubtleLight dark:border-gothic-borderSubtleDark flex justify-between items-center font-mono text-xs text-gray-500 dark:text-gothic-mutedDark">
+                <span data-i18n="simKeyboardHint">[← / →] Modeller Arası Gezin</span>
+                <button onclick="closeSimModal()" class="px-5 py-2 rounded-xl bg-gothic-gold text-white dark:text-gothic-bgDark font-bold tracking-wider hover:bg-gothic-goldLight transition-colors cursor-pointer" data-i18n="closeBtn">
+                    KAPAT [ESC]
+                </button>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
