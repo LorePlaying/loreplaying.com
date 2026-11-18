@@ -4,20 +4,19 @@ description: "The development roadmap for Lore Playing."
 ---
 
 ## 🥰 Active
-- Tabletop Rore-Playing Games (TTRPG):
-	- [x]**İyeler** (Turkic mytology).
-	- [ ]**Frankenstein** (English literature).
+- [x] **İyeler** (Turkic mytology).
+- [ ] **W.oW.** (MMORPG) in Fall term in 2026.
+- [ ] **Frankenstein** (Gothic novel) in Fall term in 2026.
 
 ## 🤔 Planned
 - Standalone pages for each book in the [library](/library/) page.
-- [Fate like](https://en.wikipedia.org/wiki/Fate/Stay_Night) TTRPG (English literature).
+- [Fate like](https://en.wikipedia.org/wiki/Fate/Stay_Night) TTRPG in Spring term in 2027.
 - Zine series.
 - Chapbook series.
 
 ### 🤞 Kind of Hail Mary Projects
-
-- [x]Project application submitted for TÜBİTAK 2209-A.
-- [ ]Presentation for the upcoming KTUDELL Conference in Trabzon.
+- [x] Project application submitted for [TÜBİTAK 2209-A](https://loreplaying.com/2209-A/).
+- [ ] Presentation for the upcoming KTUDELL Conference in Trabzon.
 <p align="right">fingers crossed, guys! 🙂‍↕️</p>
 
 
