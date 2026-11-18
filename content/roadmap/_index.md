@@ -16,7 +16,7 @@ description: "The development roadmap for Lore Playing."
 
 ### 🤞 Kind of Hail Mary Projects
 
-- Project aplication for the upcoming TÜBİTAK 2209-A.
+- [x]- Project application submitted for TÜBİTAK 2209-A.
 - Presentation for the upcoming KTUDELL Conference in Trabzon.
 <p align="right">fingers crossed, guys! 🙂‍↕️</p>
 
