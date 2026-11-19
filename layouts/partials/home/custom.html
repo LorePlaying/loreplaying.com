@@ -1,38 +1,232 @@
-<link rel="stylesheet" href="{{ "lore-playing.css" | relURL }}">
-{{ $jsHome := resources.Get "js/home.js" | resources.Minify | resources.Fingerprint (.Site.Params.fingerprintAlgorithm | default "sha512") }}
+{{ $jsHome := resources.Get "js/homepage.js" | resources.Minify | resources.Fingerprint (.Site.Params.fingerprintAlgorithm | default "sha512") }}
 
 <link rel="stylesheet" href="{{ "github-contributions.css" | relURL }}">
+<link rel="stylesheet" href="{{ "homepage.css" | relURL }}">
 
-<div id="background">
-  {{ partial "home/background.html" . }}
+<div class="lp-home" id="lp-home">
+  <nav class="lp-nav" aria-label="Homepage sections">
+    <a class="lp-wordmark" href="{{ "/" | relLangURL }}" aria-label="Lore Playing home">LORE<span>//</span>PLAYING</a>
+    <div class="lp-nav-links">
+      <a href="#lp-field" data-scramble="01 / THE FIELD">01 / THE FIELD</a>
+      <a href="#lp-cases" data-scramble="02 / CASE FILES">02 / CASE FILES</a>
+      <a href="#lp-signal" data-scramble="03 / LAST CONTRIBUTIONS">03 / LAST CONTRIBUTIONS</a>
+    </div>
+    <a class="lp-nav-github" href="https://github.com/LorePlaying/loreplaying.com" target="_blank" rel="noopener noreferrer">
+      SOURCE <span aria-hidden="true">↗</span>
+    </a>
+  </nav>
+
+  <section class="lp-field" id="lp-field" aria-labelledby="lp-title">
+    <div class="lp-field-info">
+      <span>FICTION / SYSTEMS / PLAY</span>
+      <span class="lp-live-readout" data-live-readout aria-hidden="true">INPUT: IDLE</span>
+      <span>CANON IS A SUGGESTION <b aria-hidden="true">●</b></span>
+    </div>
+
+    <div class="lp-field-main">
+      <div class="lp-field-copy">
+        <p class="lp-kicker" data-hero-intro><span aria-hidden="true">[ 00 ]</span> The story is not set in stone</p>
+        <h1 class="lp-title" id="lp-title" aria-label="Role/Lore-play">
+          <span class="lp-title-line"><span>ROLE</span><span class="lp-title-slash" aria-hidden="true">/</span><span class="lp-title-lore">LORE</span></span>
+          <span class="lp-title-play">-PLAY<span class="lp-title-dot">.</span></span>
+        </h1>
+        <p class="lp-field-subtitle" data-hero-intro>on the <span data-canon-subtitle>canonical stories</span><span class="lp-title-dot">.</span></p>
+        <p class="lp-field-description" data-hero-intro data-canon-description>
+          The classics are only the first draft. Step into the story, take a role, and find out what happens when you get a say.
+        </p>
+        <div class="lp-field-actions" data-hero-intro>
+          <a class="lp-button" href="{{ "/library/" | relLangURL }}">
+            ENTER THE LIBRARY <span aria-hidden="true">↘</span>
+          </a>
+          <button class="lp-canon-switch" type="button" aria-pressed="false" data-canon-switch>
+            <span class="lp-canon-state" data-canon-state aria-live="polite">CANON: UNTOUCHED</span>
+            <span class="lp-canon-prompt">
+              <span data-canon-action>REWRITE THE CANON</span>
+              <span data-canon-symbol aria-hidden="true">[+]</span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <div class="lp-ascii-stage" aria-hidden="true">
+        <div class="lp-ascii-label">[ FIG. 01 — THE PLOT THICKENS ]</div>
+        <pre class="lp-ascii lp-ascii-blue">
+             .------.
+          .-'  .--.  '-.
+        .'   .' 20 '.   '.
+       /   .'  .--.  '.   \
+      /   /  .'    '.  \   \
+     |   |  /  D20   \  |   |
+     |   |  \        /  |   |
+      \   \  '.____.'  /   /
+       \   '.        .'   /
+        '.   '------'   .'
+          '-.________.-'
+              /  ||  \
+          .--'   ||   '--.
+        _/_______||_______\_
+        </pre>
+        <pre class="lp-ascii lp-ascii-red">
+             .------.
+          .-'  .--.  '-.
+        .'   .' 20 '.   '.
+       /   .'  .--.  '.   \
+      /   /  .'    '.  \   \
+     |   |  /  D20   \  |   |
+     |   |  \        /  |   |
+      \   \  '.____.'  /   /
+       \   '.        .'   /
+        '.   '------'   .'
+          '-.________.-'
+              /  ||  \
+          .--'   ||   '--.
+        _/_______||_______\_
+        </pre>
+        <span class="lp-ascii-cross lp-ascii-cross-one">+</span>
+        <span class="lp-ascii-cross lp-ascii-cross-two">*</span>
+        <span class="lp-ascii-index">D20 / 001</span>
+        <span class="lp-ascii-note" data-scramble="ROLL FOR THE UNWRITTEN">ROLL FOR THE UNWRITTEN</span>
+      </div>
+    </div>
+
+    <div class="lp-field-bottom">
+      <span>SCROLL TO BREAK THE FOURTH WALL <span aria-hidden="true">↓</span></span>
+      <span>AN OPEN-ENDED ROLEPLAY EXPERIMENT</span>
+      <span>ENDINGS NOT GUARANTEED <b aria-hidden="true">✳</b></span>
+    </div>
+  </section>
+
+  <div class="lp-marquee" aria-hidden="true">
+    <div class="lp-marquee-track">
+      <span>THE CANON ISN’T FIXED</span><b>✳</b>
+      <span>THE PLAYER IS IN THE STORY</span><b>✳</b>
+      <span>YOUR CHOICE BECOMES LORE</span><b>✳</b>
+      <span>ROLL FOR ANOTHER ENDING</span><b>✳</b>
+      <span>READ THE PAST. WRITE WHAT’S NEXT.</span><b>✳</b>
+      <span>THE CANON ISN’T FIXED</span><b>✳</b>
+      <span>THE PLAYER IS IN THE STORY</span><b>✳</b>
+      <span>YOUR CHOICE BECOMES LORE</span><b>✳</b>
+      <span>ROLL FOR ANOTHER ENDING</span><b>✳</b>
+      <span>READ THE PAST. WRITE WHAT’S NEXT.</span><b>✳</b>
+    </div>
+  </div>
+
+  <section class="lp-cases" id="lp-cases" aria-labelledby="lp-cases-title">
+    <div class="lp-section-topline">
+      <span>[ 01 ] / SELECT YOUR OWN ADVENTURE</span>
+      <span>DRAG THE RAIL <span aria-hidden="true">↔</span></span>
+    </div>
+    <div class="lp-cases-heading">
+      <h2 class="lp-section-title" id="lp-cases-title">CASE FILES<span class="lp-title-dot">.</span></h2>
+      <p>Four doors into the same question:<br><span>what if the story went differently?</span></p>
+    </div>
+
+    <div class="lp-slider-window" data-slider-window>
+      <div class="lp-slider-track" data-slider-track>
+        <a class="lp-case lp-case-creature" href="{{ "/works/frankenstein/" | relLangURL }}">
+          <span class="lp-case-topline"><span>FILE 001</span><span>1818 / GOTHIC</span></span>
+          <span class="lp-case-art" aria-hidden="true">
+            <span class="lp-creature-mark">THE<br>CREATURE</span>
+            <span class="lp-case-art-caption">WHO GETS TO BE CALLED A MONSTER?</span>
+            <span class="lp-case-glyph">✳</span>
+          </span>
+          <span class="lp-case-bottom">
+            <span class="lp-case-name" data-scramble="FRANKENSTEIN">FRANKENSTEIN</span>
+            <span class="lp-case-type">ENTER THE STORY <b aria-hidden="true">↗</b></span>
+          </span>
+        </a>
+
+        <a class="lp-case lp-case-library" href="{{ "/library/" | relLangURL }}">
+          <span class="lp-case-topline"><span>FILE 002</span><span>OPEN ARCHIVE</span></span>
+          <span class="lp-case-art" aria-hidden="true">
+            <span class="lp-library-ring lp-library-ring-a"></span>
+            <span class="lp-library-ring lp-library-ring-b"></span>
+            <span class="lp-library-mark">PICK<br>A WORLD</span>
+            <span class="lp-library-label">ALL STORIES ARE PLAYABLE</span>
+          </span>
+          <span class="lp-case-bottom">
+            <span class="lp-case-name" data-scramble="THE LIBRARY">THE LIBRARY</span>
+            <span class="lp-case-type">BROWSE THE ARCHIVE <b aria-hidden="true">↗</b></span>
+          </span>
+        </a>
+
+        <a class="lp-case lp-case-dice" href="{{ "/d20/" | relLangURL }}">
+          <span class="lp-case-topline"><span>FILE 003</span><span>RNG / FATE</span></span>
+          <span class="lp-case-art" aria-hidden="true">
+            <span class="lp-die-mark">D<span>20</span></span>
+            <span class="lp-dice-caption">ROLL FOR<br>CONSEQUENCES</span>
+            <span class="lp-dice-static">20<br>01<br>17</span>
+          </span>
+          <span class="lp-case-bottom">
+            <span class="lp-case-name" data-scramble="THE DICE">THE DICE</span>
+            <span class="lp-case-type">LET FATE INTERVENE <b aria-hidden="true">↗</b></span>
+          </span>
+        </a>
+
+        <a class="lp-case lp-case-session" href="{{ "/workflow/" | relLangURL }}">
+          <span class="lp-case-topline"><span>FILE 004</span><span>GROUP PLAY</span></span>
+          <span class="lp-case-art" aria-hidden="true">
+            <span class="lp-session-title">YOU.<br>THEM.<br>THE PLOT.</span>
+            <span class="lp-session-stamp">MAKE<br>A SCENE</span>
+            <span class="lp-session-lines">PLAY / LISTEN / REPEAT /</span>
+          </span>
+          <span class="lp-case-bottom">
+            <span class="lp-case-name" data-scramble="HOW TO PLAY">HOW TO PLAY</span>
+            <span class="lp-case-type">START A SESSION <b aria-hidden="true">↗</b></span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <div class="lp-slider-controls">
+      <span>SWIPE / DRAG / LET GO</span>
+      <div>
+        <button type="button" aria-label="Previous case file" data-slider-step="-1" disabled>←</button>
+        <button type="button" aria-label="Next case file" data-slider-step="1" disabled>→</button>
+      </div>
+      <span>INERTIA: ENABLED</span>
+    </div>
+  </section>
+
+  <section class="lp-signal" id="lp-signal" aria-labelledby="lp-signal-title">
+    <div class="lp-section-topline">
+      <span>[ 02 ] / MADE IN THE OPEN</span>
+      <a href="https://github.com/LorePlaying/loreplaying.com" target="_blank" rel="noopener noreferrer">SOURCE CODE ↗</a>
+    </div>
+    <div class="lp-signal-heading">
+      <h2 class="lp-section-title" id="lp-signal-title">LAST<br>CONTRIBUTIONS<span class="lp-title-dot">.</span></h2>
+      <div>
+        <p>Not a finished product.<br><span>A world that’s still being built.</span></p>
+        <a class="lp-signal-link" href="https://github.com/LorePlaying/loreplaying.com" target="_blank" rel="noopener noreferrer">
+          CONTRIBUTE TO THE CHAOS <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="lp-contribution-frame">
+      <div class="lp-contribution-label"><span>LIVE FROM GITHUB</span><span>REPOSITORY COMMITS / LAST 12 MONTHS</span></div>
+      {{ partial "github-contributions.html" . }}
+      {{ with index hugo.Data "loreplaying-sponsors" }}
+        <div class="lp-sponsors">{{ partial "sponsors.html" $ }}</div>
+      {{ end }}
+    </div>
+  </section>
+
+  <footer class="lp-footer">
+    <span>LORE PLAYING / STORIES BELONG TO EVERYONE</span>
+    <span>END OF FILE <span aria-hidden="true">///</span> BEGIN AGAIN</span>
+    <a href="#lp-field">BACK TO THE BEGINNING ↑</a>
+  </footer>
 </div>
 
-<div id="hero" style="display:none">
-  {{ partial "home/hero.html" . }}
-</div>
-
-<div id="profile" style="display:none">
-  {{ partial "home/profile.html" . }}
-</div>
-
-<div id="card" style="display:none">
-  {{ partial "home/card.html" . }}
-</div>
-
-<div id="page" style="display:none">
-  {{ partial "home/page.html" . }}
-</div>
-
-<section class="max-w-7xl mx-auto px-4">
-  {{ partial "sponsors.html" . }}
-</section>
-
-<section class="max-w-7xl mx-auto px-4">
-  {{ partial "github-contributions.html" . }}
-</section>
-
-<script
-  defer
-  type="text/javascript"
-  src="{{ $jsHome.RelPermalink }}"
-  integrity="{{ $jsHome.Data.Integrity }}"></script>
+<!-- Core and plugins are pinned together; keep defer order so the local initializer can register them. -->
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" integrity="sha384-HOvlOYPIs/zjoIkWUGXkVmXsjr8GuZLV+Q+rcPwmJOVZVpvTSXQChiN4t9Euv9Vc" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" integrity="sha384-P8VzCVnT9NBUkMrpcIZrJbA7EBjJvh/fJS6PmP+4nLIM284DtsImIv8D0fFjIkeh" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" integrity="sha384-xb96EMJeax+NLXMC88ZBa1xAeAW+kn+horHh/zFlbMLG2UPWhMJJSlv7fi57hS+Q" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/TextPlugin.min.js" integrity="sha384-bzddi9oeuml21NABLxxBFrn0W5d6HYD4d1Wf1NEWGemrxUl5NpR4U07Db/SCsJpU" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Draggable.min.js" integrity="sha384-IJ0us7IOIdtwqJI237hVYv2U3Qt2IL5AkFeroJOnvSYXbNLBxkQ9xQ2sdidcbzTr" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/InertiaPlugin.min.js" integrity="sha384-hyQEhO+HeN2EhyXzCsnqdqptUcD/Mw8xhmmTdECpYOUUNLvSfImrkF05wdz+ncnh" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Observer.min.js" integrity="sha384-KeRvMDjbVCiHOnTtiH71iO/kgJyOwgIrQXhyLo4qgVGDnw5aFdogZh34WVfj/D1q" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrambleTextPlugin.min.js" integrity="sha384-QsPhgdP78a1erQNT34dj/oyh7uPCXUnT/FkptUa/56LnSGsbTBmdiAOfB7j+8K4A" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollToPlugin.min.js" integrity="sha384-dUEYjN2xd8Wk4WIZYrCpK7Ww7+r/LVtVebVp8skuwm9bKGoVo2bZrWuA79w8TI+v" crossorigin="anonymous"></script>
+<script defer src="{{ $jsHome.RelPermalink }}" integrity="{{ $jsHome.Data.Integrity }}"></script>

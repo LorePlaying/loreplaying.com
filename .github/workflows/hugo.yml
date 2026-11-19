@@ -45,7 +45,7 @@ jobs:
         run: |
           mkdir -p data
 
-          git log --all --date=short --pretty=format:%ad |
+          git log origin/main --date=short --pretty=format:%ad |
             sort |
             uniq -c |
             awk '
