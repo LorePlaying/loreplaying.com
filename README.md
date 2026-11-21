@@ -62,7 +62,7 @@ Each project can explore a different story, author, mythology, literary work, or
 The website is built with:
 
 * [Hugo](https://gohugo.io/)
-* [Blowfish](https://blowfish.page/)
+* [Blowfish](https://blowfish.page/) with a heavily customized homepage and section layouts
 * Hugo Modules
 * GitHub Pages
 * GitHub Actions
