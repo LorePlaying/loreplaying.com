@@ -1,0 +1,5 @@
+{{ if .IsHome }}
+  {{ $fingerprintAlgorithm := .Site.Params.fingerprintAlgorithm | default "sha512" }}
+  {{ $homepageCSS := resources.Get "css/homepage.css" | resources.Minify | resources.Fingerprint $fingerprintAlgorithm }}
+  <link rel="stylesheet" href="{{ $homepageCSS.RelPermalink }}" integrity="{{ $homepageCSS.Data.Integrity }}">
+{{ end }}
