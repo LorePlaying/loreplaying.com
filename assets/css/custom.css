@@ -410,13 +410,16 @@ body:not(:has(.lp-home)) #main-content h3 {
 
 .prose a {
   color: var(--site-accent-link);
+  font-weight: 700;
   text-decoration-color: currentColor;
-  text-decoration-thickness: 1px;
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
   text-underline-offset: 0.2em;
 }
 
 .prose a:hover {
   color: var(--site-red);
+  text-decoration-thickness: 3px;
 }
 
 .prose blockquote {
@@ -546,6 +549,48 @@ body #main-content .lp-workflow :is(.lp-workflow-role-icon, .lp-workflow-step, .
 
 body #main-content .lp-workflow .lp-workflow-step {
   border-left: 4px solid var(--site-accent);
+}
+
+body #main-content .lp-workflow .lp-workflow-step-link {
+  border: 2px solid var(--site-accent-link);
+  color: var(--site-fg);
+  text-decoration: none;
+}
+
+body #main-content .lp-workflow .lp-workflow-step-link h3 {
+  color: var(--site-accent-link) !important;
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+
+body #main-content .lp-workflow .lp-workflow-step-link .lp-workflow-number,
+body #main-content .lp-workflow .lp-workflow-step-link .lp-workflow-icon {
+  color: var(--site-accent-link);
+}
+
+body #main-content .lp-workflow .lp-workflow-step-link:hover,
+body #main-content .lp-workflow .lp-workflow-step-link:focus-visible {
+  border-color: var(--site-fg);
+  background: var(--site-accent);
+  color: var(--site-accent-ink);
+  text-decoration: none;
+}
+
+body #main-content .lp-workflow .lp-workflow-step-link:hover h3,
+body #main-content .lp-workflow .lp-workflow-step-link:focus-visible h3,
+body #main-content .lp-workflow .lp-workflow-step-link:hover p,
+body #main-content .lp-workflow .lp-workflow-step-link:focus-visible p,
+body #main-content .lp-workflow .lp-workflow-step-link:hover .lp-workflow-number,
+body #main-content .lp-workflow .lp-workflow-step-link:focus-visible .lp-workflow-number {
+  color: var(--site-accent-ink) !important;
+}
+
+body #main-content .lp-workflow .lp-workflow-step-link:hover .lp-workflow-icon,
+body #main-content .lp-workflow .lp-workflow-step-link:focus-visible .lp-workflow-icon {
+  border-color: var(--site-accent-ink);
+  color: var(--site-accent-ink);
 }
 
 body #main-content .lp-workflow .lp-workflow-icon {
