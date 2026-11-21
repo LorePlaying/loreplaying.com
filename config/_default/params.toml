@@ -45,7 +45,7 @@ fingerprintAlgorithm = "sha512" # Valid values are "sha512" (default), "sha384",
 [footer]
   showMenu = true
   showCopyright = true
-  showThemeAttribution = false
+  showThemeAttribution = true
   showAppearanceSwitcher = true
   showScrollToTop = true
 

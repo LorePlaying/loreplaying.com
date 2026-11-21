@@ -101,7 +101,20 @@ See the project's contributor information on the website or get in touch through
 
 ## License
 
-The licensing of individual projects and materials may vary. Please check the relevant project or resource before reusing its content or code.
+The Lore Playing website source code is available under the [MIT License](LICENSE).
+
+This license covers the Hugo templates, custom stylesheets, custom JavaScript,
+build configuration, and website build tooling. It does not cover the Lore
+Playing logo or brand assets, editorial and research content, data files,
+printable materials, project-specific subprojects, or TÜBİTAK 2209-A research
+details. Those materials remain subject to their own copyright or permissions.
+
+Project-specific WIP or demonstration products, including GOOF, QED, LIT,
+Frankenstein, and future Lore Playing subprojects, are excluded unless their
+own license or repository notice explicitly says otherwise.
+
+Blowfish is a third-party dependency and retains its own license and copyright.
+See [Third-party notices](THIRD_PARTY_NOTICES.md).
 
 ---
 

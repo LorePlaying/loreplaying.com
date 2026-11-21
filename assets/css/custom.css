@@ -61,6 +61,12 @@ body.text-lg {
   line-height: 1.6;
 }
 
+#site-footer a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
 #menu-blur {
   opacity: 1 !important;
   background: var(--site-header-glass) !important;
@@ -277,12 +283,37 @@ header .mobile-header-row > label {
   color: var(--site-muted);
 }
 
-#site-footer > div > p:first-child {
+#site-footer .lp-footer-credit {
+  width: 100%;
+  margin: 0.75rem auto 0;
+  color: var(--site-muted);
   font-family: var(--site-font-mono);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.035em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1.75;
+  text-align: center;
+  text-transform: none;
+}
+
+#site-footer .lp-footer-credit a {
+  color: var(--site-fg);
+  font-family: var(--site-font-mono);
+  font-weight: 700;
+  letter-spacing: inherit;
+  text-transform: none;
+}
+
+#site-footer .lp-footer-credit a:hover {
+  color: var(--site-accent-link);
+}
+
+@media (max-width: 480px) {
+  #site-footer .lp-footer-credit {
+    max-width: 22rem;
+    font-size: 0.68rem;
+    line-height: 1.9;
+  }
 }
 
 body:not(:has(.lp-home)) #site-footer {

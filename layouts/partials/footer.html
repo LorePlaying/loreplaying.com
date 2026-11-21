@@ -34,43 +34,16 @@
     {{ end }}
   {{ end }}
 
-  <div class="flex items-center justify-between">
-    {{/* Copyright */}}
-    {{ if .Site.Params.footer.showCopyright | default true }}
-      <p class="text-sm text-neutral-500 dark:text-neutral-400">
-        {{- with replace .Site.Params.copyright "{ year }" now.Year }}
-          {{ . | markdownify }}
-        {{- else }}
-          &copy;
-          {{ now.Format "2006" }}
-          {{ .Site.Params.Author.name | markdownify }}
-        {{- end }}
-        <span class="mx-1">·</span>
-        Compiled by
-        <a
-          class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
-          href="https://fatsa.xyz/"
-          target="_blank"
-          rel="noopener noreferrer">
-          Kamil
-        </a>
-        🐈‍⬛
-      </p>
-    {{ end }}
-
-    {{/* Theme attribution */}}
-    {{ if .Site.Params.footer.showThemeAttribution | default true }}
-      <p class="text-xs text-neutral-500 dark:text-neutral-400">
-        {{ $hugo := printf `<a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
-          href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a>`
-        }}
-        {{ $blowfish := printf `<a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
-          href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a>`
-        }}
-        {{ i18n "footer.powered_by" (dict "Hugo" $hugo "Theme" $blowfish) | safeHTML }}
-      </p>
-    {{ end }}
-  </div>
+  <p class="lp-footer-credit">
+    © {{ now.Format "2006" }} · Compiled by
+    <a href="https://fatsa.xyz/" target="_blank" rel="noopener noreferrer">Kamil</a>
+    🐈‍⬛
+    <span aria-hidden="true">·</span>
+    Powered by
+    <a href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a>
+    &amp;
+    <a href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a>
+  </p>
 
   {{/* Extend footer - eg. for extra scripts, etc. */}}
   {{ if templates.Exists "partials/extend-footer.html" }}

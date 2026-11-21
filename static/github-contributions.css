@@ -207,14 +207,15 @@
 
 @media (max-width: 1150px) {
   .github-calendar {
-    --github-cell-size: 12px;
+    --github-cell-size: 24px;
+    --github-cell-gap: 3px;
   }
 }
 
 @media (max-width: 700px) {
   .github-calendar {
-    --github-cell-size: 11px;
-    --github-cell-gap: 2px;
+    --github-cell-size: 24px;
+    --github-cell-gap: 3px;
   }
 
   .github-calendar-chart {

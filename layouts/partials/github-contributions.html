@@ -18,7 +18,9 @@
 
           <img
             class="github-contributor-avatar"
-            src="{{ .avatar_url }}"
+            src="{{ .avatar_url }}&s=128"
+            srcset="{{ .avatar_url }}&s=64 64w, {{ .avatar_url }}&s=128 128w"
+            sizes="59px"
             alt="{{ .username }}"
             loading="lazy"
             data-no-lightbox
