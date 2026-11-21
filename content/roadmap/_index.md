@@ -9,11 +9,11 @@ description: "The development roadmap for Lore Playing."
 - [ ] **Frankenstein** (Gothic novel) in Fall term in 2026 (may delay to Spring term in 2027)
 
 ## 🤔 Planned
-- [Fate like](https://en.wikipedia.org/wiki/Fate/Stay_Night) TTRPG in Spring term in 2027.
-- [Zine](https://en.wikipedia.org/wiki/Zine) and [Chapbook](https://en.wikipedia.org/wiki/Chapbook) series.
+- [ ][Fate like](https://en.wikipedia.org/wiki/Fate/Stay_Night) TTRPG in Spring term in 2027.
+- [ ][Zine](https://en.wikipedia.org/wiki/Zine) and [Chapbook](https://en.wikipedia.org/wiki/Chapbook) series.
 
 ## 😎 Launched
-- Project website is launched on [GitHub](https://github.com/LorePlaying/loreplaying.com) as an open source repository.
+- [x]Project website is launched on [GitHub](https://github.com/LorePlaying/loreplaying.com) as an open source repository.
 
 ## 👎 Project Hail Mary
 Projects that kind of "[Hail Mary](https://youtu.be/rj6rJzs029A?si)" for us:
