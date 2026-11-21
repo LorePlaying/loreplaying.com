@@ -38,11 +38,13 @@
     © {{ now.Format "2006" }} · Compiled by
     <a href="https://fatsa.xyz/" target="_blank" rel="noopener noreferrer">Kamil</a>
     🐈‍⬛
-    <span aria-hidden="true">·</span>
-    Powered by
-    <a href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a>
-    &amp;
-    <a href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a>
+    <span class="lp-footer-credit-line" aria-hidden="true"></span>
+    <span class="lp-footer-powered">
+      Powered by
+      <a href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a>
+      &amp;
+      <a href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a>
+    </span>
   </p>
 
   {{/* Extend footer - eg. for extra scripts, etc. */}}
@@ -50,3 +52,8 @@
     {{ partialCached "extend-footer.html" . }}
   {{ end }}
 </footer>
+
+{{ $accessibilityJS := resources.Get "js/accessibility.js" | resources.Minify | resources.Fingerprint (.Site.Params.fingerprintAlgorithm | default "sha512") }}
+<script defer src="{{ $accessibilityJS.RelPermalink }}" integrity="{{ $accessibilityJS.Data.Integrity }}"></script>
+{{ $headerJS := resources.Get "js/header.js" | resources.Minify | resources.Fingerprint (.Site.Params.fingerprintAlgorithm | default "sha512") }}
+<script defer src="{{ $headerJS.RelPermalink }}" integrity="{{ $headerJS.Data.Integrity }}"></script>
