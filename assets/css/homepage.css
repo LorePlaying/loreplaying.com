@@ -819,6 +819,7 @@ body:has(.lp-home) {
   background: transparent;
   color: var(--lp-paper);
   cursor: pointer;
+  transition: none;
 }
 
 .lp-slider-controls button:disabled {

@@ -1,9 +1,12 @@
 {{ $jsHome := resources.Get "js/homepage.js" | resources.Minify | resources.Fingerprint (.Site.Params.fingerprintAlgorithm | default "sha512") }}
+{{ $fingerprintAlgorithm := .Site.Params.fingerprintAlgorithm | default "sha512" }}
+{{ $contributionsCSS := resources.Get "css/github-contributions.css" | resources.Minify | resources.Fingerprint $fingerprintAlgorithm }}
+{{ $homepageCSS := resources.Get "css/homepage.css" | resources.Minify | resources.Fingerprint $fingerprintAlgorithm }}
 
-<link rel="preload" href="{{ "github-contributions.css" | relURL }}" as="style">
-<link rel="preload" href="{{ "homepage.css" | relURL }}" as="style">
-<link rel="stylesheet" href="{{ "github-contributions.css" | relURL }}">
-<link rel="stylesheet" href="{{ "homepage.css" | relURL }}">
+<link rel="preload" href="{{ $contributionsCSS.RelPermalink }}" as="style" integrity="{{ $contributionsCSS.Data.Integrity }}" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ $contributionsCSS.RelPermalink }}" integrity="{{ $contributionsCSS.Data.Integrity }}"></noscript>
+<link rel="preload" href="{{ $homepageCSS.RelPermalink }}" as="style" integrity="{{ $homepageCSS.Data.Integrity }}" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ $homepageCSS.RelPermalink }}" integrity="{{ $homepageCSS.Data.Integrity }}"></noscript>
 
 <div class="lp-home" id="lp-home">
   <nav class="lp-nav" aria-label="Homepage sections">

@@ -4,10 +4,18 @@
 
   const calendar = root.querySelector(".github-calendar");
   if (calendar) {
-    calendar.scrollLeft = calendar.scrollWidth;
+    window.addEventListener(
+      "load",
+      () => {
+        calendar.scrollLeft = calendar.scrollWidth;
+      },
+      { once: true },
+    );
   }
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let canonGlitchFrame = 0;
+  let canonGlitchTimer;
 
   const canonSwitch = root.querySelector("[data-canon-switch]");
   if (canonSwitch) {
@@ -29,10 +37,18 @@
         : "The classics are only the first draft. Step into the story, take a role, and find out what happens when you get a say.";
 
       if (!reduceMotion) {
+        window.cancelAnimationFrame(canonGlitchFrame);
+        window.clearTimeout(canonGlitchTimer);
         root.classList.remove("is-canon-glitching");
-        void root.offsetWidth;
-        root.classList.add("is-canon-glitching");
-        window.setTimeout(() => root.classList.remove("is-canon-glitching"), 480);
+        canonGlitchFrame = window.requestAnimationFrame(() => {
+          canonGlitchFrame = window.requestAnimationFrame(() => {
+            root.classList.add("is-canon-glitching");
+            canonGlitchTimer = window.setTimeout(
+              () => root.classList.remove("is-canon-glitching"),
+              480,
+            );
+          });
+        });
       }
     });
   }
@@ -47,8 +63,40 @@
     });
   });
 
+  const scrambleChars = "01!<>/[]{}*+";
   root.querySelectorAll("[data-scramble]").forEach((element) => {
     const text = element.dataset.scramble;
+    if (element.closest(".lp-nav-links")) {
+      element.setAttribute("aria-label", text);
+      let frame = 0;
+
+      const scramble = () => {
+        if (reduceMotion) return;
+        window.cancelAnimationFrame(frame);
+        const start = performance.now();
+        const animate = (now) => {
+          const progress = Math.min((now - start) / 450, 1);
+          const revealed = Math.floor(progress * text.length);
+          element.textContent = Array.from(text, (character, index) => {
+            if (character === " " || index < revealed) return character;
+            return scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+          }).join("");
+
+          if (progress < 1) {
+            frame = window.requestAnimationFrame(animate);
+          } else {
+            element.textContent = text;
+            frame = 0;
+          }
+        };
+        frame = window.requestAnimationFrame(animate);
+      };
+
+      element.addEventListener("mouseenter", scramble);
+      element.addEventListener("focus", scramble);
+      return;
+    }
+
     element.addEventListener("mouseenter", () => {
       if (!reduceMotion) element.textContent = text;
     });
@@ -76,16 +124,28 @@
     viewport.classList.add("is-enhanced");
 
     const updateControls = () => {
+      const scrollLeft = viewport.scrollLeft;
+      const maxScroll = viewport.scrollWidth - viewport.clientWidth - 1;
       controls.forEach((button) => {
         const direction = Number(button.dataset.sliderStep);
-        button.disabled = direction < 0
-          ? viewport.scrollLeft <= 1
-          : viewport.scrollLeft >= viewport.scrollWidth - viewport.clientWidth - 1;
+        const disabled = direction < 0
+          ? scrollLeft <= 1
+          : scrollLeft >= maxScroll;
+        if (button.disabled !== disabled) button.disabled = disabled;
+      });
+    };
+
+    let controlsUpdatePending = false;
+    const scheduleControlsUpdate = () => {
+      if (controlsUpdatePending) return;
+      controlsUpdatePending = true;
+      window.requestAnimationFrame(() => {
+        controlsUpdatePending = false;
+        updateControls();
       });
     };
 
     controls.forEach((button) => {
-      button.disabled = false;
       button.addEventListener("click", () => {
         const direction = Number(button.dataset.sliderStep);
         viewport.scrollBy({
@@ -95,8 +155,8 @@
       });
     });
 
-    viewport.addEventListener("scroll", updateControls, { passive: true });
-    window.addEventListener("resize", updateControls);
-    updateControls();
+    viewport.addEventListener("scroll", scheduleControlsUpdate, { passive: true });
+    window.addEventListener("resize", scheduleControlsUpdate);
+    scheduleControlsUpdate();
   }
 })();

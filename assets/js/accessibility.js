@@ -16,6 +16,9 @@
       openButton.setAttribute("aria-expanded", String(checkbox.checked));
     }
   };
+  const focusOpenButton = () => {
+    document.querySelector('[data-mobile-menu-button="open"]')?.focus();
+  };
 
   document
     .querySelectorAll('label[for="mobile-menu-toggle"][role="button"]')
@@ -33,30 +36,53 @@
       button.innerHTML = label.innerHTML;
       label.replaceWith(button);
 
-      button.addEventListener("click", () => {
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
         checkbox.checked = button.dataset.mobileMenuButton === "open"
           ? !checkbox.checked
           : false;
         checkbox.dispatchEvent(new Event("change", { bubbles: true }));
         updateState();
         if (!checkbox.checked) {
-          document
-            .querySelector('[data-mobile-menu-button="open"]')
-            ?.focus();
+          focusOpenButton();
         } else {
-          dialog.querySelector('[data-mobile-menu-button="close"]')?.focus();
+          window.setTimeout(() => {
+            if (checkbox.checked) {
+              dialog.querySelector('[data-mobile-menu-button="close"]')?.focus();
+            }
+          }, 120);
         }
       });
     });
 
   checkbox.addEventListener("change", updateState);
-  dialog.addEventListener("keydown", (event) => {
+  document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
+    if (!checkbox.checked) return;
+    event.preventDefault();
     checkbox.checked = false;
     checkbox.dispatchEvent(new Event("change", { bubbles: true }));
     updateState();
-    document.querySelector('[data-mobile-menu-button="open"]')?.focus();
-  });
+    focusOpenButton();
+  }, true);
+
+  document.addEventListener("click", (event) => {
+    if (!checkbox.checked || !(event.target instanceof Element)) return;
+    const target = event.target;
+    if (
+      dialog.contains(target) ||
+      target.closest("[data-mobile-menu-button]")
+    ) {
+      return;
+    }
+
+    checkbox.checked = false;
+    checkbox.dispatchEvent(new Event("change", { bubbles: true }));
+    updateState();
+    if (!target.closest("a, button, input, select, textarea, [tabindex]")) {
+      focusOpenButton();
+    }
+  }, true);
 
   updateState();
 })();
