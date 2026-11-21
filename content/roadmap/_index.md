@@ -14,10 +14,11 @@ description: "The development roadmap for Lore Playing."
 - Zine series.
 - Chapbook series.
 
-### 🤞 Hail Mary
+### 👎 Project Hail Mary
+Projects that kind of "[Hail Mary](https://youtu.be/rj6rJzs029A?si)" for us:
 - [x] Project application submitted for [TÜBİTAK 2209-A](https://loreplaying.com/2209-A/).
 - [ ] Presentation for the upcoming KTUDELL Conference in Trabzon.
-<p align="right">fingers crossed, guys! 🙂‍↕️</p>
+<p align="right">fingers crossed, guys! 🤞</p>
 
 
 ## 😎 Launched
