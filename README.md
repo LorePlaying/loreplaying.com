@@ -6,6 +6,15 @@
 
 The project explores what happens when a known story becomes something that can be **played**, rather than simply read or watched.
 
+## Latest updates
+
+- The homepage has been redesigned with a bolder, interactive presentation and direct links to the main experiences.
+- Printable materials are available for both Players and Lore Masters:
+  - [Player Character Sheet](https://loreplaying.com/print-out/)
+  - [Lore Master Guide](https://loreplaying.com/print-out/)
+- The [Lore Play workflow](https://loreplaying.com/workflow/) now explains the preparation and play steps for both roles.
+- The [project roadmap](https://loreplaying.com/roadmap/) has been refreshed with the active, planned, launched, and project-hail-mary work.
+
 ## About
 
 Lore Playing is the central home for projects created with the Lore Play Workflow.
@@ -34,9 +43,13 @@ The [Lore Playing website](https://loreplaying.com/) serves as the central hub f
 It currently includes:
 
 * **Library** — a collection of books and literary resources related to the project.
-* **🎲 Dice** — a simple D20 tool for role-playing.
+* **Dice** — an interactive D20 tool for role-playing.
+* **Print Out** — printable Player Character Sheets and Lore Master Guides.
+* **How to Play** — a step-by-step Lore Play workflow for Players and Lore Masters.
+* **Roadmap** — active, planned, and launched project work.
 * **Contributors** — people who contribute to Lore Playing and its projects.
 * **Multilingual support** — available in English and Turkish.
+* **Open repository activity** — recent GitHub contributions displayed on the homepage.
 
 ## Projects
 
@@ -55,6 +68,26 @@ The website is built with:
 * GitHub Actions
 
 The website source is maintained in this repository.
+
+## Local development
+
+The site is a Hugo project with a Go module dependency for the Blowfish theme.
+
+Install [Hugo Extended](https://gohugo.io/installation/) and run:
+
+```bash
+hugo server
+```
+
+To build the production site locally:
+
+```bash
+hugo --minify
+```
+
+The generated site is written to `public/`.
+
+Printable sheet sources are maintained as Typst files in `typst/print-outs/`, while the published PDFs are stored in `static/print-outs/`.
 
 ## Contributing
 
