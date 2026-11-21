@@ -955,7 +955,7 @@ body:has(.lp-home) {
 }
 
 .lp-contribution-frame .github-contribution-day.level-4 {
-  background: var(--lp-contribution-ink);
+  background: #274005;
 }
 
 .lp-contribution-frame .github-calendar-link a {

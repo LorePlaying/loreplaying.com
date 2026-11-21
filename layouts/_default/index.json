@@ -20,11 +20,7 @@
 
     {{- $summary := .Summary | plainify | htmlUnescape -}}
     {{- if eq .Type "library" -}}
-      {{- if eq .Lang "tr" -}}
-        {{- $summary = "Lore Playing kütüphanesindeki İngilizce dili ve edebiyatı kitaplarının koleksiyonu." -}}
-      {{- else -}}
-        {{- $summary = "A collection of English Language and Literary books." -}}
-      {{- end -}}
+      {{- $summary = "A collection of English Language and Literary books." -}}
     {{- end -}}
 
     {{- if .Date -}}

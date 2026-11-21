@@ -48,7 +48,7 @@ It currently includes:
 * **How to Play** — a step-by-step Lore Play workflow for Players and Lore Masters.
 * **Roadmap** — active, planned, and launched project work.
 * **Contributors** — people who contribute to Lore Playing and its projects.
-* **Multilingual support** — available in English and Turkish.
+* **Language** — English only.
 * **Open repository activity** — recent GitHub contributions displayed on the homepage.
 
 ## Projects

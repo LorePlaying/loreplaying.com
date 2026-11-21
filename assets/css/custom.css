@@ -256,7 +256,9 @@ html:not(.dark) header .main-menu .logo::after {
 #mobile-menu-dialog > label,
 #mobile-menu-dialog > button,
 header .mobile-header-row > button,
-header .mobile-header-row > label {
+header .mobile-header-row > label,
+header .main-menu nav:not(#main-menu) > a[href^="https://github.com/LorePlaying/loreplaying.com"],
+header .main-menu nav:not(#main-menu) > a[href^="https://www.instagram.com/loreplaying/"] {
   border: 1px solid var(--site-border);
   border-radius: 0;
   color: var(--site-fg);
@@ -272,7 +274,9 @@ header .mobile-header-row > label {
 #search-button,
 #search-button-mobile,
 header .mobile-header-row > button,
-header .mobile-header-row > label {
+header .mobile-header-row > label,
+header .main-menu nav:not(#main-menu) > a[href^="https://github.com/LorePlaying/loreplaying.com"],
+header .main-menu nav:not(#main-menu) > a[href^="https://www.instagram.com/loreplaying/"] {
   display: inline-flex;
   width: 3rem;
   height: 3rem;
@@ -293,6 +297,16 @@ header .mobile-header-row > label {
   -webkit-tap-highlight-color: transparent;
 }
 
+header .main-menu nav:not(#main-menu) > a[href^="https://github.com/LorePlaying/loreplaying.com"] > span:first-child,
+header .main-menu nav:not(#main-menu) > a[href^="https://www.instagram.com/loreplaying/"] > span:first-child {
+  margin-right: 0;
+}
+
+header .main-menu nav:not(#main-menu) > a[href^="https://github.com/LorePlaying/loreplaying.com"] > span:last-child,
+header .main-menu nav:not(#main-menu) > a[href^="https://www.instagram.com/loreplaying/"] > span:last-child {
+  display: none;
+}
+
 #search-button {
   border-radius: 0;
 }
@@ -306,7 +320,9 @@ header .mobile-header-row > label {
 #search-button .icon,
 #search-button-mobile .icon,
 header .mobile-header-row > button .icon,
-header .mobile-header-row > label .icon {
+header .mobile-header-row > label .icon,
+header .main-menu nav:not(#main-menu) > a[href^="https://github.com/LorePlaying/loreplaying.com"] .icon,
+header .main-menu nav:not(#main-menu) > a[href^="https://www.instagram.com/loreplaying/"] .icon {
   width: 1.35rem;
   height: 1.35rem;
   font-size: 1.35rem;
@@ -317,7 +333,9 @@ header .mobile-header-row > label .icon {
 #search-button svg,
 #search-button-mobile svg,
 header .mobile-header-row > button svg,
-header .mobile-header-row > label svg {
+header .mobile-header-row > label svg,
+header .main-menu nav:not(#main-menu) > a[href^="https://github.com/LorePlaying/loreplaying.com"] svg,
+header .main-menu nav:not(#main-menu) > a[href^="https://www.instagram.com/loreplaying/"] svg {
   width: 1.35rem;
   height: 1.35rem;
 }
@@ -328,12 +346,16 @@ header .mobile-header-row > label svg {
 #search-button-mobile:hover,
 header .mobile-header-row > button:hover,
 header .mobile-header-row > label:hover,
+header .main-menu nav:not(#main-menu) > a[href^="https://github.com/LorePlaying/loreplaying.com"]:hover,
+header .main-menu nav:not(#main-menu) > a[href^="https://www.instagram.com/loreplaying/"]:hover,
 #appearance-switcher:active,
 #appearance-switcher-mobile:active,
 #search-button:active,
 #search-button-mobile:active,
 header .mobile-header-row > button:active,
-header .mobile-header-row > label:active {
+header .mobile-header-row > label:active,
+header .main-menu nav:not(#main-menu) > a[href^="https://github.com/LorePlaying/loreplaying.com"]:active,
+header .main-menu nav:not(#main-menu) > a[href^="https://www.instagram.com/loreplaying/"]:active {
   border-color: #ff4d37;
   background: var(--site-surface);
   color: #ff4d37;
@@ -345,7 +367,9 @@ header .mobile-header-row > label:active {
 #search-button:focus-visible,
 #search-button-mobile:focus-visible,
 header .mobile-header-row > button:focus-visible,
-header .mobile-header-row > label:focus-visible {
+header .mobile-header-row > label:focus-visible,
+header .main-menu nav:not(#main-menu) > a[href^="https://github.com/LorePlaying/loreplaying.com"]:focus-visible,
+header .main-menu nav:not(#main-menu) > a[href^="https://www.instagram.com/loreplaying/"]:focus-visible {
   outline: 2px solid #ff4d37;
   outline-offset: 3px;
 }

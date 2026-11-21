@@ -28,3 +28,9 @@
   name = "GitHub"
   url = "https://github.com/LorePlaying/loreplaying.com"
   weight = 40
+
+[[main]]
+  pre = "instagram"
+  name = "Instagram"
+  url = "https://www.instagram.com/loreplaying/"
+  weight = 45
