@@ -8,6 +8,16 @@ when redistributing or modifying the theme.
 - Blowfish website: https://blowfish.page/
 - Copyright: Nunocoracao and Blowfish contributors
 
+The literary map is rendered with Leaflet. Street and satellite tiles are
+provided by Esri; topographic tiles are provided by OpenTopoMap and use
+OpenStreetMap data. Keep the applicable map attribution available in the map's
+attribution panel.
+
+- Leaflet: https://leafletjs.com/
+- Esri: https://www.esri.com/
+- OpenTopoMap: https://opentopomap.org/
+- OpenStreetMap: https://www.openstreetmap.org/copyright
+
 This repository's MIT license applies only to Lore Playing source code under
 the scope described in `LICENSE`. It does not replace the licenses of Hugo,
 Blowfish, npm or CDN dependencies, GitHub-provided assets, fonts, or any other

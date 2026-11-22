@@ -822,6 +822,50 @@
   coordinateSource: https://www.openstreetmap.org/?mlat=39.68864&mlon=-91.33153#map=16/39.68864/-91.33153
   locationNote: Traditional identification
 
+- id: wuthering-heights
+  name: Wuthering Heights
+  country: United Kingdom
+  coordinates:
+    lat: 53.8
+    lon: -2
+  works:
+    - wuthering-heights
+  description: "A fictional farmhouse placed schematically in the novel's Yorkshire moorland, not at a verified site."
+  locationNote: Schematic fictional setting; not a verified location
+
+- id: thrushcross-grange
+  name: Thrushcross Grange
+  country: United Kingdom
+  coordinates:
+    lat: 53.79
+    lon: -1.95
+  works:
+    - wuthering-heights
+  description: "A fictional Linton home placed schematically within the novel's Yorkshire setting."
+  locationNote: Schematic fictional setting; not a verified location
+
+- id: penistone-crags
+  name: Penistone Crags
+  country: United Kingdom
+  coordinates:
+    lat: 53.82
+    lon: -2.03
+  works:
+    - wuthering-heights
+  description: "Fictional moorland crags placed schematically for the literary route."
+  locationNote: Schematic fictional setting; not a verified location
+
+- id: gimmerton
+  name: Gimmerton
+  country: United Kingdom
+  coordinates:
+    lat: 53.81
+    lon: -1.93
+  works:
+    - wuthering-heights
+  description: "A fictional village placed schematically within the novel's Yorkshire setting."
+  locationNote: Schematic fictional setting; not a verified location
+
 - id: north-atlantic-ground
   name: The North Atlantic Ground
   country: Regional waters

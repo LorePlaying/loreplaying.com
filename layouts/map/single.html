@@ -107,8 +107,8 @@
   {{ end }}
 {{ end }}
 
-<div class="lp-map-app" id="lp-map-app" data-map-style="aquarelle">
-  {{ $logo := resources.Get "img/lp-logo.svg" }}
+<div class="lp-map-app" id="lp-map-app">
+  {{ $logo := resources.Get "img/lp-logo.svg" | resources.Minify | resources.Fingerprint }}
   <aside class="lp-map-sidebar" id="lp-map-sidebar" aria-label="Literary atlas catalogue">
     <header class="lp-map-sidebar-header">
       <a class="lp-map-brand" href="{{ "/" | relURL }}" aria-label="LorePlaying home">
@@ -196,17 +196,12 @@
     </button>
 
     <div id="literary-map" class="lp-map-canvas" role="region" aria-label="Interactive literary map"></div>
-
     <div class="lp-map-controls" id="lp-map-controls">
       <div class="lp-map-style-control" id="lp-map-style-control" role="group" aria-label="Map style">
-        <button type="button" data-map-style-button="aquarelle" aria-pressed="true">AQUARELLE</button>
+        <button type="button" data-map-style-button="street" aria-pressed="true">STREET</button>
         <button type="button" data-map-style-button="topo" aria-pressed="false">TOPO</button>
         <button type="button" data-map-style-button="satellite" aria-pressed="false">SATELLITE</button>
         <button type="button" data-map-style-button="dark" aria-pressed="false">DARK</button>
-      </div>
-      <div class="lp-map-attribution-control">
-        <button type="button" class="lp-map-attribution-toggle" id="lp-map-attribution-toggle" aria-label="Show map attribution" aria-expanded="false" aria-controls="lp-map-attribution-content">i</button>
-        <div class="lp-map-attribution-content" id="lp-map-attribution-content" hidden></div>
       </div>
     </div>
 
@@ -217,8 +212,7 @@
           <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3 6 5 5 5-5"></path></svg>
         </button>
         <button type="button" class="lp-map-icon-button lp-map-journey-lock" id="lp-map-journey-lock" aria-label="Unlock the journey panel position" aria-pressed="true" title="Unlock the panel to move it">
-          <svg class="lp-map-lock-closed" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
-          <svg class="lp-map-lock-open" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 7.5-2"></path></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m16 3 5 5-4 1-3 3 1 4-2 2-4-4-4-4 2-2 4 1 3-3 2-2Z"></path><path d="m2 22 7-7"></path></svg>
         </button>
         <button type="button" class="lp-map-icon-button lp-map-journey-drag-handle" id="lp-map-journey-drag-handle" aria-label="Move the journey panel; use arrow keys when unlocked" aria-disabled="true" title="Unlock the panel to move it">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h.01M16 5h.01M8 12h.01M16 12h.01M8 19h.01M16 19h.01"></path></svg>

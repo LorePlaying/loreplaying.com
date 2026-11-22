@@ -72,8 +72,7 @@ The website source is maintained in this repository.
 ## Local development
 
 The site is a Hugo project with a Go module dependency for the Blowfish theme.
-
-Install [Hugo Extended](https://gohugo.io/installation/) and run:
+Install [Hugo Extended](https://gohugo.io/installation/) to run or build the site:
 
 ```bash
 hugo server
@@ -86,6 +85,12 @@ hugo --minify
 ```
 
 The generated site is written to `public/`.
+
+## Literary map
+
+The map defaults to STREET and also includes TOPO, SATELLITE, and DARK. DARK
+uses the Street tiles with a Leaflet filter; provider credits remain visible on
+the map. The page uses the existing Leaflet assets and needs no map API key.
 
 Printable sheet sources are maintained as Typst files in `typst/print-outs/`, while the published PDFs are stored in `static/print-outs/`.
 

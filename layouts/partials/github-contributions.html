@@ -1,6 +1,7 @@
 
 <div class="github-contributions-section">
   {{ $contributions := index hugo.Data "github-contributions" | default dict }}
+  {{ $contributionMessages := index hugo.Data "github-contribution-messages" | default dict }}
   {{ $today := now }}
   {{ $weekday := int $today.Weekday }}
   {{ $currentWeekStart := $today.AddDate 0 0 (sub 0 $weekday) }}
@@ -9,19 +10,21 @@
   <div class="github-contributors">
     {{ with index hugo.Data "loreplaying-contributors" }}
       {{ range . }}
+        {{ $contributorName := .name | default .username }}
         <a
           class="github-contributor"
           href="{{ .profile_url }}"
           target="_blank"
           rel="noopener noreferrer"
-          title="View {{ .username }} on GitHub">
+          data-contributor-name="{{ $contributorName }}"
+          title="View {{ $contributorName }} on GitHub">
 
           <img
             class="github-contributor-avatar"
             src="{{ .avatar_url }}&s=96"
             srcset="{{ .avatar_url }}&s=64 64w, {{ .avatar_url }}&s=96 96w"
             sizes="36px"
-            alt="{{ .username }}"
+            alt="{{ $contributorName }}"
             width="36"
             height="36"
             loading="lazy"
@@ -33,7 +36,11 @@
     {{ end }}
   </div>
 
-  <div class="github-calendar">
+  <div
+    class="github-calendar"
+    role="region"
+    aria-label="Repository contributions for the last 12 months; scroll horizontally to explore all weeks"
+    tabindex="0">
     <div class="github-calendar-chart">
 
       <div class="github-calendar-days">
@@ -52,14 +59,10 @@
             {{ $weekStart := $start.AddDate 0 0 (mul $week 7) }}
             {{ $label := "" }}
 
-            {{ if eq $week 0 }}
-              {{ $label = $weekStart.Format "Jan" }}
-            {{ else }}
-              {{ range $day := seq 0 6 }}
-                {{ $date := $weekStart.AddDate 0 0 $day }}
-                {{ if eq (int $date.Day) 1 }}
-                  {{ $label = $date.Format "Jan" }}
-                {{ end }}
+            {{ range $day := seq 0 6 }}
+              {{ $date := $weekStart.AddDate 0 0 $day }}
+              {{ if eq (int $date.Day) 1 }}
+                {{ $label = $date.Format "Jan" }}
               {{ end }}
             {{ end }}
 
@@ -76,6 +79,7 @@
                 {{ $date := $weekStart.AddDate 0 0 $day }}
                 {{ $key := $date.Format "2006-01-02" }}
                 {{ $count := index $contributions $key | default 0 }}
+                {{ $messages := index $contributionMessages $key | default slice }}
                 {{ $level := 0 }}
 
                 {{ if ge $count 1 }}
@@ -92,15 +96,22 @@
                 {{ end }}
 
                 {{ if $date.After $today }}
-                  <span class="github-contribution-day future"></span>
+                  <span class="github-contribution-day level-0 future" aria-hidden="true"></span>
+                {{ else if lt $count 1 }}
+                  <span class="github-contribution-day level-0" role="img" aria-label="{{ $date.Format "Jan 2, 2006" }}: 0 contributions"></span>
                 {{ else }}
-                  <a
+                  <button
+                    type="button"
                     class="github-contribution-day level-{{ $level }}"
-                    href="https://github.com/LorePlaying/loreplaying.com/commits/main/?since={{ $key }}&amp;until={{ $key }}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="{{ $date.Format "Jan 2, 2006" }}: {{ $count }} contribution{{ if ne $count 1 }}s{{ end }}">
-                  </a>
+                    data-contribution-trigger
+                    data-contribution-date="{{ $date.Format "Jan 2, 2006" }}"
+                    data-contribution-count="{{ $count }}"
+                    {{ if $messages }}data-contribution-messages="{{ $messages | jsonify }}"{{ end }}
+                    aria-haspopup="dialog"
+                    aria-expanded="false"
+                    aria-describedby="github-contribution-tooltip"
+                    aria-label="{{ $date.Format "Jan 2, 2006" }}: {{ $count }} contribution{{ if ne $count 1 }}s{{ end }}">
+                  </button>
                 {{ end }}
               {{ end }}
             </div>
@@ -118,6 +129,23 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="github-contribution-tooltip" id="github-contribution-tooltip" role="dialog" aria-label="Contribution details" aria-hidden="true">
+    <div class="github-contribution-tooltip-header">
+      <span class="github-contribution-tooltip-date" data-tooltip-date></span>
+      <button
+        class="github-contribution-tooltip-pin"
+        type="button"
+        data-tooltip-pin
+        aria-label="Pin contribution pop-up"
+        aria-pressed="false"
+        title="Pin contribution pop-up">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m16 3 5 5-4 1-3 3 1 4-2 2-4-4-4-4 2-2 4 1 3-3 2-2Z"></path><path d="m2 22 7-7"></path></svg>
+      </button>
+    </div>
+    <p class="github-contribution-tooltip-count" data-tooltip-count></p>
+    <ul class="github-contribution-tooltip-commit" data-tooltip-commit hidden></ul>
   </div>
 
   <div class="github-calendar-link">

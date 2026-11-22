@@ -31,8 +31,6 @@
   const speedInput = document.getElementById("lp-journey-speed");
   const speedValue = document.getElementById("lp-journey-speed-value");
   const interactiveJourneyInput = document.getElementById("lp-journey-interactive");
-  const attributionButton = document.getElementById("lp-map-attribution-toggle");
-  const attributionContent = document.getElementById("lp-map-attribution-content");
   const mapControlsElement = document.getElementById("lp-map-controls");
   const dataElement = document.getElementById("literary-map-data");
 
@@ -94,9 +92,12 @@
     activePlacePopup = null;
   };
   const openPlacePopup = (marker) => {
-    markersByPlaceId.forEach((openMarker) => {
-      if (openMarker !== marker) openMarker.closePopup();
+    markersByPlaceId.forEach((otherMarker) => {
+      if (otherMarker === marker) return;
+      otherMarker.closePopup();
+      otherMarker.setZIndexOffset(0);
     });
+    marker.setZIndexOffset(1000);
     activePlacePopup = marker;
     marker.openPopup();
   };
@@ -119,21 +120,20 @@
     return modes[mode] || { icon: "🧭", label: "Mode not specified" };
   };
 
+  const streetTileStyle = {
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+    attribution:
+      "Sources: Esri, HERE, Garmin, USGS, Intermap, INCREMENT P, NRCan, Esri Japan, METI, Esri China (Hong Kong), Esri Korea, Esri (Thailand), NGCC, &copy; OpenStreetMap contributors, and the GIS User Community",
+    options: { maxZoom: 19 },
+  };
   const tileStyles = {
-    aquarelle: {
-      url: "https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg",
-      options: {
-        attribution:
-          '&copy; <a href="https://stadiamaps.com/" target="_blank" rel="noopener noreferrer">Stadia Maps</a>, <a href="https://stamen.com/" target="_blank" rel="noopener noreferrer">Stamen Design</a>, &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
-        maxNativeZoom: 16,
-        maxZoom: 19,
-      },
-    },
+    street: streetTileStyle,
+    dark: streetTileStyle,
     topo: {
       url: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors, <a href="https://opentopomap.org/" target="_blank" rel="noopener noreferrer">OpenTopoMap</a> (CC-BY-SA)',
       options: {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors, <a href="https://opentopomap.org/" target="_blank" rel="noopener noreferrer">OpenTopoMap</a> (CC-BY-SA)',
         maxNativeZoom: 17,
         maxZoom: 19,
         subdomains: ["a", "b", "c"],
@@ -141,25 +141,16 @@
     },
     satellite: {
       url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-      options: {
-        attribution:
-          "Tiles &copy; Esri, Vantor, Earthstar Geographics, and the GIS User Community",
-        maxZoom: 19,
-      },
-    },
-    dark: {
-      url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      options: {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
-        maxZoom: 19,
-        subdomains: ["a", "b", "c"],
-      },
+      attribution:
+        "Tiles &copy; Esri, Vantor, Earthstar Geographics, and the GIS User Community",
+      options: { maxZoom: 19 },
     },
   };
 
   const map = window.L.map(mapElement, {
-    attributionControl: false,
+    attributionControl: true,
+    closePopupOnClick: true,
+    fadeAnimation: false,
     zoomControl: false,
     worldCopyJump: true,
     minZoom: 2,
@@ -167,8 +158,33 @@
     scrollWheelZoom: true,
     preferCanvas: true,
   }).setView([32, 12], 2);
+  map.attributionControl.setPrefix(false);
+  map.attributionControl.setPosition("topright");
+  map.attributionControl
+    .getContainer()
+    .setAttribute(
+      "aria-label",
+      "Map credits; hover or focus to view full provider attributions",
+    );
+  map.attributionControl.getContainer().setAttribute("role", "group");
+  map.attributionControl.getContainer().setAttribute("tabindex", "0");
+
+  let mapResizeTimeout = null;
+  const scheduleMapSizeUpdate = () => {
+    window.clearTimeout(mapResizeTimeout);
+    mapResizeTimeout = window.setTimeout(() => {
+      mapResizeTimeout = null;
+      map.invalidateSize({ pan: false });
+    }, 250);
+  };
+  if (typeof window.ResizeObserver === "function") {
+    new window.ResizeObserver(scheduleMapSizeUpdate).observe(mapElement);
+  }
 
   const zoomControl = window.L.control.zoom({ position: "bottomright" }).addTo(map);
+  window.L.control
+    .scale({ position: "bottomleft", imperial: false, metric: true })
+    .addTo(map);
   mapControlsElement.classList.add("leaflet-control");
   const mapStyleControl = window.L.control({ position: "bottomright" });
   mapStyleControl.onAdd = () => mapControlsElement;
@@ -194,22 +210,7 @@
   let currentStopIndex = -1;
   let journeySpeed = Number(speedInput.value);
   let selectedStopIndex = -1;
-  let currentStyle = "aquarelle";
-
-  attributionButton.addEventListener("click", () => {
-    const expanded = attributionButton.getAttribute("aria-expanded") === "true";
-    attributionButton.setAttribute("aria-expanded", String(!expanded));
-    attributionButton.setAttribute(
-      "aria-label",
-      expanded ? "Show map attribution" : "Hide map attribution",
-    );
-    attributionContent.hidden = expanded;
-  });
-
-  const updateMapAttribution = () => {
-    if (!attributionContent) return;
-    attributionContent.innerHTML = `${tileStyles[currentStyle].options.attribution} <span>Map library: <a href="https://leafletjs.com/" target="_blank" rel="noopener noreferrer">Leaflet</a></span>`;
-  };
+  let currentStyle = "street";
 
   const setJourneyStatus = (message) => {
     if (journeyStatus) journeyStatus.textContent = message;
@@ -217,11 +218,14 @@
 
   const setMapStyle = (styleName) => {
     const style = tileStyles[styleName];
-    if (!style) return;
+    if (!style || (styleName === currentStyle && activeTileLayer)) return;
     if (activeTileLayer) map.removeLayer(activeTileLayer);
-    activeTileLayer = window.L.tileLayer(style.url, style.options).addTo(map);
+    activeTileLayer = window.L.tileLayer(style.url, {
+      ...style.options,
+      attribution: style.attribution,
+      keepBuffer: 1,
+    }).addTo(map);
     currentStyle = styleName;
-    updateMapAttribution();
     appElement.dataset.mapStyle = styleName;
     document.querySelectorAll("[data-map-style-button]").forEach((button) => {
       button.setAttribute(
@@ -229,22 +233,26 @@
         String(button.dataset.mapStyleButton === styleName),
       );
     });
+    const clearStyleError = () => {
+      if (currentStyle === styleName && !selectedWork) setJourneyStatus("");
+    };
+
     activeTileLayer.on("tileerror", () => {
+      if (currentStyle !== styleName) return;
       setJourneyStatus(
         `${styleName.toUpperCase()} map tiles could not be loaded. Check your connection or choose another map style.`,
       );
     });
-    activeTileLayer.once("load", () => {
-      if (currentStyle === styleName && !selectedWork) setJourneyStatus("");
-    });
+    activeTileLayer.once("load", clearStyleError);
   };
 
   document.querySelectorAll("[data-map-style-button]").forEach((button) => {
-    button.addEventListener("click", () =>
-      setMapStyle(button.dataset.mapStyleButton),
-    );
+    button.addEventListener("click", () => {
+      if (activePlacePopup) closeActivePlacePopup();
+      setMapStyle(button.dataset.mapStyleButton);
+    });
   });
-  setMapStyle("aquarelle");
+  setMapStyle("street");
 
   const showSidebar = (show) => {
     appElement.classList.toggle("is-sidebar-collapsed", !show);
@@ -256,7 +264,7 @@
     } else {
       openSidebarButton.focus();
     }
-    map.invalidateSize({ pan: false });
+    scheduleMapSizeUpdate();
   };
 
   openSidebarButton.addEventListener("click", () => showSidebar(true));
@@ -292,14 +300,15 @@
       .filter((stop) => stop.place && stop.place.id === place.id)
       .map((stop) => stop.index + 1);
 
-  const markerIcon = (place, visitNumbers = [], delay = 0, active = false) => {
+  const markerIcon = (visitNumbers = [], delay = 0, active = false) => {
     const label = visitNumbers.length ? visitNumbers.join("·") : "•";
     const activeClass = active ? " is-current" : "";
+    const width = Math.max(32, Math.ceil(label.length * 5.5 + 12));
     return window.L.divIcon({
       className: "lp-map-stop-marker-wrapper",
       html: `<span class="lp-map-stop-marker${activeClass}" style="--marker-delay:${delay}ms" aria-hidden="true">${escapeHTML(label)}</span>`,
-      iconSize: [32, 32],
-      iconAnchor: [16, 16],
+      iconSize: [width, 32],
+      iconAnchor: [width / 2, 16],
       popupAnchor: [0, -14],
     });
   };
@@ -367,7 +376,6 @@
       const visits = visitsByPlaceId.get(place.id) || [];
       marker.setIcon(
         markerIcon(
-          place,
           visits,
           reducedMotion ? 0 : (index % 12) * 35,
           selectedWork && visits.includes(selectedStopIndex + 1),
@@ -387,12 +395,16 @@
       return;
     }
     const marker = window.L.marker(coordinatesOf(place), {
-      icon: markerIcon(place, [], reducedMotion ? 0 : (index % 12) * 35),
+      icon: markerIcon([], reducedMotion ? 0 : (index % 12) * 35),
       title: place.name,
       alt: place.name,
       riseOnHover: true,
     });
-    marker.bindPopup(popupContentForPlace(place), { maxWidth: 280 });
+    marker.bindPopup(popupContentForPlace(place), {
+      maxWidth: 280,
+      autoPan: true,
+      keepInView: true,
+    });
     marker.on("click", () => {
       if (!selectedWork) return;
       const numbers = getStopsForPlace(selectedWork, place);
@@ -400,10 +412,15 @@
       currentStopIndex = selectedStopIndex;
       updateCurrentStopLabel();
       updateMarkers();
+      map.setView(coordinatesOf(place), Math.max(map.getZoom(), 6), {
+        animate: !reducedMotion,
+      });
       openPlacePopup(marker);
     });
     marker.on("popupclose", () => {
-      if (activePlacePopup === marker) activePlacePopup = null;
+      if (activePlacePopup !== marker) return;
+      activePlacePopup = null;
+      marker.setZIndexOffset(0);
     });
     markersByPlaceId.set(place.id, marker);
   });
@@ -492,7 +509,7 @@
 
   const movingMarkerIcon = window.L.divIcon({
     className: "lp-map-moving-marker-wrapper",
-    html: '<span class="lp-map-stop-marker is-current" aria-hidden="true">→</span>',
+    html: '<span class="lp-map-stop-marker is-current" aria-hidden="true"><svg class="lp-map-loop-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m15.7 8.3-2.2 5.2-5.2 2.2 2.2-5.2z"></path><circle cx="12" cy="12" r="1"></circle></svg></span>',
     iconSize: [24, 24],
     iconAnchor: [12, 12],
   });
@@ -819,6 +836,7 @@
     );
   });
   window.addEventListener("resize", () => {
+    scheduleMapSizeUpdate();
     if (!journeyPanel.style.left) return;
     setJourneyPanelPosition(
       Number.parseFloat(journeyPanel.style.left),
@@ -960,7 +978,12 @@
       const bounds = window.L.latLngBounds(
         matchedPlaces.map((place) => coordinatesOf(place)),
       );
-      map.fitBounds(bounds, { padding: [55, 55], maxZoom: 6 });
+      const localRoute =
+        bounds.getNorthEast().distanceTo(bounds.getSouthWest()) < 25000;
+      map.fitBounds(bounds, {
+        padding: [55, 55],
+        maxZoom: localRoute ? 11 : 6,
+      });
     } else {
       places.forEach((place) => {
         const marker = markersByPlaceId.get(place.id);

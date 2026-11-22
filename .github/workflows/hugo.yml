@@ -59,12 +59,54 @@ jobs:
               END { print "\n}" }
             ' > data/github-contributions.json
 
+          python3 - <<'PY'
+          import json
+          import subprocess
+
+          commit = subprocess.check_output(
+              ["git", "log", "origin/main", "-1", "--format=%H"],
+              text=True,
+          ).strip()
+          latest = {
+              "date": subprocess.check_output(
+                  ["git", "show", "-s", "--format=%cs", commit],
+                  text=True,
+              ).strip(),
+              "message": subprocess.check_output(
+                  ["git", "show", "-s", "--format=%s", commit],
+                  text=True,
+              ).strip(),
+          }
+          with open("data/latest-commit.json", "w", encoding="utf-8") as output:
+              json.dump(latest, output, ensure_ascii=False)
+              output.write("\n")
+
+          messages = {}
+          entries = subprocess.check_output(
+              [
+                  "git",
+                  "log",
+                  "origin/main",
+                  "--date=short",
+                  "--format=%ad%x09%H%x09%s",
+              ],
+              text=True,
+          )
+          for entry in entries.splitlines():
+              date, sha, message = entry.split("\t", 2)
+              messages.setdefault(date, []).append(
+                  {"sha": sha, "message": message}
+              )
+          with open(
+              "data/github-contribution-messages.json", "w", encoding="utf-8"
+          ) as output:
+              json.dump(messages, output, ensure_ascii=False)
+              output.write("\n")
+          PY
+
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
-
-      - name: Install Node.js dependencies
-        run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
 
       - name: Build with Hugo
         env:

@@ -909,7 +909,7 @@ body:has(.lp-home) {
 }
 
 .lp-contribution-frame .github-contributors {
-  justify-content: flex-start;
+  justify-content: center;
   margin: 0.8rem 0;
   padding: 0;
 }
@@ -964,6 +964,11 @@ body:has(.lp-home) {
   font-size: 0.64rem;
   font-weight: 700;
   text-transform: uppercase;
+}
+
+.lp-contribution-frame .github-contribution-tooltip {
+  --lp-ink: var(--lp-contribution-bg);
+  --lp-paper: var(--lp-contribution-ink);
 }
 
 .lp-sponsors .sponsors-section {

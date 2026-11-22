@@ -13,6 +13,275 @@
     );
   }
 
+  const contributionsGrid = root.querySelector(".github-contributions-grid");
+  const contributionPopup = root.querySelector("#github-contribution-tooltip");
+  if (contributionsGrid && contributionPopup) {
+    const popupDate = contributionPopup.querySelector("[data-tooltip-date]");
+    const popupCount = contributionPopup.querySelector("[data-tooltip-count]");
+    const popupCommit = contributionPopup.querySelector("[data-tooltip-commit]");
+    const popupPin = contributionPopup.querySelector("[data-tooltip-pin]");
+    const popupHeader = contributionPopup.querySelector(
+      ".github-contribution-tooltip-header",
+    );
+    let activeContribution = null;
+    let popupPinned = false;
+    let popupSelected = false;
+    let popupMoved = false;
+    let hidePopupTimer = 0;
+    let popupDrag = null;
+
+    const cancelHidePopup = () => {
+      window.clearTimeout(hidePopupTimer);
+      hidePopupTimer = 0;
+    };
+
+    const hideContributionPopup = () => {
+      if (popupPinned || popupSelected) return;
+      if (activeContribution) {
+        activeContribution.setAttribute("aria-expanded", "false");
+      }
+      activeContribution = null;
+      popupMoved = false;
+      contributionPopup.classList.remove("is-visible");
+      contributionPopup.setAttribute("aria-hidden", "true");
+    };
+
+    const scheduleHidePopup = () => {
+      cancelHidePopup();
+      hidePopupTimer = window.setTimeout(() => {
+        hidePopupTimer = 0;
+        const triggerHoveredOrFocused =
+          activeContribution &&
+          (activeContribution.matches(":hover") ||
+            activeContribution === document.activeElement);
+        const popupHoveredOrFocused =
+          contributionPopup.matches(":hover") ||
+          contributionPopup.contains(document.activeElement);
+        if (popupPinned || triggerHoveredOrFocused || popupHoveredOrFocused) return;
+        hideContributionPopup();
+      }, 180);
+    };
+
+    const positionContributionPopup = () => {
+      if (!contributionPopup.classList.contains("is-visible") || !activeContribution) return;
+      const triggerRect = activeContribution.getBoundingClientRect();
+      const frame = root.querySelector(".lp-contribution-frame");
+      const frameRect = frame ? frame.getBoundingClientRect() : {
+        left: 0,
+        right: window.innerWidth,
+        width: window.innerWidth,
+      };
+      const margin = 12;
+      contributionPopup.style.maxWidth = `${Math.max(0, frameRect.width - margin * 2)}px`;
+      const popupRect = contributionPopup.getBoundingClientRect();
+      if (popupMoved) {
+        const left = Number.parseFloat(contributionPopup.style.left);
+        const top = Number.parseFloat(contributionPopup.style.top);
+        const maxLeft = Math.max(margin, window.innerWidth - popupRect.width - margin);
+        const maxTop = Math.max(margin, window.innerHeight - popupRect.height - margin);
+        contributionPopup.style.left = `${Math.max(
+          margin,
+          Math.min(Number.isFinite(left) ? left : popupRect.left, maxLeft),
+        )}px`;
+        contributionPopup.style.top = `${Math.max(
+          margin,
+          Math.min(Number.isFinite(top) ? top : popupRect.top, maxTop),
+        )}px`;
+        return;
+      }
+      const minLeft = Math.max(margin, frameRect.left + margin);
+      const maxLeft = Math.max(
+        minLeft,
+        Math.min(
+          window.innerWidth - popupRect.width - margin,
+          frameRect.right - popupRect.width - margin,
+        ),
+      );
+      const left = Math.max(
+        minLeft,
+        Math.min(
+          maxLeft,
+          triggerRect.left + triggerRect.width / 2 - popupRect.width / 2,
+        ),
+      );
+      const above = triggerRect.top - popupRect.height - margin;
+      const below = triggerRect.bottom + margin;
+      const top = above >= margin
+        ? above
+        : Math.min(below, window.innerHeight - popupRect.height - margin);
+      contributionPopup.style.left = `${left}px`;
+      contributionPopup.style.top = `${Math.max(margin, top)}px`;
+    };
+
+    const showContributionPopup = (trigger, fromClick = false) => {
+      if (popupPinned && activeContribution !== trigger) return;
+      if (popupSelected && activeContribution !== trigger && !fromClick) return;
+      const count = Number(trigger.dataset.contributionCount);
+      if (count < 1) {
+        hideContributionPopup();
+        return;
+      }
+
+      cancelHidePopup();
+      if (activeContribution !== trigger) {
+        if (activeContribution) {
+          activeContribution.setAttribute("aria-expanded", "false");
+        }
+        popupMoved = false;
+        activeContribution = trigger;
+      }
+      trigger.setAttribute("aria-expanded", "true");
+      popupDate.textContent = trigger.dataset.contributionDate;
+      popupCount.textContent = `${count} contribution${count === 1 ? "" : "s"}`;
+      const contributionMessages = JSON.parse(
+        trigger.dataset.contributionMessages || "[]",
+      );
+      popupCommit.replaceChildren();
+      contributionMessages.forEach((commit) => {
+        const item = document.createElement("li");
+        const link = document.createElement("a");
+        link.href =
+          `https://github.com/LorePlaying/loreplaying.com/commit/${encodeURIComponent(commit.sha)}`;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = commit.message;
+        item.append(link);
+        popupCommit.append(item);
+      });
+      popupCommit.hidden = contributionMessages.length === 0;
+      if (fromClick) popupSelected = true;
+      contributionPopup.classList.add("is-visible");
+      contributionPopup.setAttribute("aria-hidden", "false");
+      positionContributionPopup();
+    };
+
+    const findContribution = (target) => {
+      if (!(target instanceof Element)) return null;
+      const trigger = target.closest("[data-contribution-trigger]");
+      return trigger && contributionsGrid.contains(trigger) ? trigger : null;
+    };
+
+    contributionsGrid.addEventListener("pointerover", (event) => {
+      const trigger = findContribution(event.target);
+      if (trigger) showContributionPopup(trigger);
+    });
+    contributionsGrid.addEventListener("pointerout", (event) => {
+      const trigger = findContribution(event.target);
+      if (
+        trigger &&
+        !trigger.contains(event.relatedTarget) &&
+        !contributionPopup.contains(event.relatedTarget)
+      ) {
+        scheduleHidePopup();
+      }
+    });
+    contributionsGrid.addEventListener("focusin", (event) => {
+      const trigger = findContribution(event.target);
+      if (trigger) showContributionPopup(trigger);
+    });
+    contributionsGrid.addEventListener("focusout", (event) => {
+      const trigger = findContribution(event.target);
+      if (trigger && !contributionPopup.contains(event.relatedTarget)) {
+        scheduleHidePopup();
+      }
+    });
+    contributionsGrid.addEventListener("click", (event) => {
+      const trigger = findContribution(event.target);
+      if (!trigger) {
+        if (popupSelected && !popupPinned) {
+          popupSelected = false;
+          hideContributionPopup();
+        }
+        return;
+      }
+      if (popupPinned && activeContribution !== trigger) return;
+      if (popupSelected && activeContribution === trigger) {
+        popupSelected = false;
+        hideContributionPopup();
+        return;
+      }
+      showContributionPopup(trigger, true);
+    });
+    contributionPopup.addEventListener("pointerenter", cancelHidePopup);
+    contributionPopup.addEventListener("pointerleave", scheduleHidePopup);
+    contributionPopup.addEventListener("focusin", cancelHidePopup);
+    contributionPopup.addEventListener("focusout", scheduleHidePopup);
+    document.addEventListener("pointerdown", (event) => {
+      if (!popupSelected || popupPinned) return;
+      if (
+        contributionPopup.contains(event.target) ||
+        contributionsGrid.contains(event.target)
+      ) {
+        return;
+      }
+      popupSelected = false;
+      hideContributionPopup();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || !popupSelected || popupPinned) return;
+      popupSelected = false;
+      hideContributionPopup();
+    });
+    popupPin.addEventListener("click", () => {
+      popupPinned = !popupPinned;
+      popupPin.setAttribute("aria-pressed", String(popupPinned));
+      popupPin.setAttribute(
+        "aria-label",
+        popupPinned ? "Unpin contribution pop-up" : "Pin contribution pop-up",
+      );
+      popupPin.title = popupPinned
+        ? "Unpin contribution pop-up"
+        : "Pin contribution pop-up";
+      contributionPopup.classList.toggle("is-pinned", popupPinned);
+      popupSelected = false;
+      if (popupPinned) cancelHidePopup();
+      else scheduleHidePopup();
+    });
+    popupHeader.addEventListener("pointerdown", (event) => {
+      if (
+        !event.isPrimary ||
+        event.button !== 0 ||
+        event.target.closest("button, a")
+      ) {
+        return;
+      }
+      const rect = contributionPopup.getBoundingClientRect();
+      popupDrag = {
+        pointerId: event.pointerId,
+        offsetX: event.clientX - rect.left,
+        offsetY: event.clientY - rect.top,
+      };
+      popupHeader.setPointerCapture(event.pointerId);
+      contributionPopup.classList.add("is-dragging");
+      event.preventDefault();
+    });
+    popupHeader.addEventListener("pointermove", (event) => {
+      if (!popupDrag || event.pointerId !== popupDrag.pointerId) return;
+      const rect = contributionPopup.getBoundingClientRect();
+      const margin = 12;
+      const maxLeft = Math.max(margin, window.innerWidth - rect.width - margin);
+      const maxTop = Math.max(margin, window.innerHeight - rect.height - margin);
+      contributionPopup.style.left = `${Math.max(
+        margin,
+        Math.min(event.clientX - popupDrag.offsetX, maxLeft),
+      )}px`;
+      contributionPopup.style.top = `${Math.max(
+        margin,
+        Math.min(event.clientY - popupDrag.offsetY, maxTop),
+      )}px`;
+      popupMoved = true;
+    });
+    const stopPopupDrag = (event) => {
+      if (!popupDrag || event.pointerId !== popupDrag.pointerId) return;
+      popupDrag = null;
+      contributionPopup.classList.remove("is-dragging");
+    };
+    popupHeader.addEventListener("pointerup", stopPopupDrag);
+    popupHeader.addEventListener("pointercancel", stopPopupDrag);
+    window.addEventListener("resize", positionContributionPopup);
+    window.addEventListener("scroll", positionContributionPopup, true);
+  }
+
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let canonGlitchFrame = 0;
   let canonGlitchTimer;
