@@ -1,0 +1,500 @@
+- id: frankenstein
+  title: Frankenstein
+  author: Mary Shelley
+  mediaType: book
+  genre: Gothic novel
+  period: Romantic
+  tradition: British literature
+  year: 1818
+  type: Novel
+  summary: "A Gothic novel about creation, isolation, and the responsibilities a creator owes to the life he brings into being."
+  article: /works/frankenstein/
+  characters:
+    - Victor Frankenstein
+    - The Creature
+  journeyType: overland
+  journeyModes:
+    - land
+    - land
+    - land
+    - land
+    - land
+    - river
+    - sea
+    - land
+    - land
+    - sea
+    - sea
+    - land
+    - land
+    - land
+    - sea
+  stops:
+    - Geneva
+    - Ingolstadt
+    - Geneva
+    - Chamonix
+    - Geneva
+    - Strasbourg
+    - Rotterdam
+    - London
+    - Perth
+    - Orkney Islands
+    - Ireland
+    - Paris
+    - Geneva
+    - Evian
+    - The Black Sea
+    - Arctic Ocean
+  stopDetails:
+    - "Victor's family home and the starting point of a story that repeatedly draws him back through grief and guilt."
+    - "At the university, Victor studies natural philosophy and secretly brings the Creature to life."
+    - "Victor returns after William's murder; Justine's trial and execution deepen the consequences of his silence."
+    - "In the Alpine valley, Victor meets the Creature on the Mer de Glace and hears his account of life alone."
+    - "Back in Geneva, Victor agrees to make a companion, then destroys the unfinished work."
+    - "Victor and Henry travel east toward England, following the Rhine through Strasbourg."
+    - "The route turns from the Rhine toward the sea crossing to Britain."
+    - "In London, Victor gathers materials for his experiment and continues to resist the Creature's demand."
+    - "Victor travels north through Britain and leaves Henry behind before continuing alone."
+    - "On a remote island, Victor begins a second creation, then destroys it before completion."
+    - "The novel places Victor ashore in Ireland, where he is arrested after Henry's murder; the coast is not precisely named."
+    - "Victor's father joins him in Paris, and they travel back toward Geneva."
+    - "Victor returns for his marriage, still misreading the Creature's threat."
+    - "At the lakeside inn, the Creature kills Elizabeth and Victor commits himself to pursuit."
+    - "The route depicts the Creature's eastward pursuit as a broad Black Sea region, not a precise itinerary."
+    - "The pursuit ends in the Arctic ice, where Walton's ship finds Victor and the Creature comes aboard."
+
+- id: gilgamesh
+  title: The Epic of Gilgamesh
+  author: Anonymous
+  mediaType: book
+  period: Ancient
+  tradition: Mesopotamian literature
+  type: Epic
+  summary: "An ancient Mesopotamian epic following a king whose friendship and grief lead him to confront mortality."
+  article: /works/gilgamesh/
+  journeyType: global
+  journeyModes:
+    - march
+    - walk
+    - ferry
+    - raft
+  stops:
+    - Uruk
+    - The Cedar Forest
+    - Mount Mashu
+    - Dilmun
+    - Uruk
+  stopDetails:
+    - "Gilgamesh rules the walled city until the gods send Enkidu; their contest becomes a lasting friendship."
+    - "Seeking fame, Gilgamesh and Enkidu enter the Cedar Forest and challenge its guardian Humbaba; its geography is uncertain."
+    - "After Enkidu's death, Gilgamesh crosses the mountain of Mashu in search of a way to escape mortality."
+    - "In the epic, Dilmun is the far-off home of Utnapishtim, reached across the Waters of Death; its map position is a traditional regional identification."
+    - "Gilgamesh returns to Uruk without immortality and sees the city's walls as a lasting human achievement."
+
+- id: iliad
+  title: The Iliad
+  author: Homer
+  mediaType: book
+  period: Ancient
+  tradition: Ancient Greek literature
+  year: 750 BCE
+  type: Epic
+  summary: "An ancient Greek epic focused on Achilles' anger and the final phase of the Trojan War."
+  article: /works/iliad/
+  journeyType: mediterranean
+  journeyModes:
+    - land
+    - land
+    - sea
+  stops:
+    - Sparta
+    - Mycenae
+    - Aulis
+    - Troy
+  stopDetails:
+    - "Paris's visit to Sparta and his departure with Helen set the conflict in motion in the wider Trojan War story."
+    - "At Mycenae, Agamemnon gathers Greek leaders and their forces under his command."
+    - "The fleet assembles at Aulis, where the weather delays its departure and the traditions of sacrifice surface."
+    - "Before Troy, the poem's tenth-year conflict turns on Achilles' anger, the deaths of heroes, and the fate of Hector."
+
+- id: odyssey
+  title: The Odyssey
+  author: Homer
+  mediaType: book
+  period: Ancient
+  tradition: Ancient Greek literature
+  year: 700 BCE
+  type: Epic
+  summary: "An ancient Greek epic recounting Odysseus' long, perilous return from Troy to Ithaca."
+  article: /works/odyssey/
+  journeyType: mediterranean
+  journeyModes:
+    - ship
+    - ship
+    - ship
+    - ship
+    - ship
+    - ship
+    - ship
+    - ship
+    - ship
+    - ship
+    - ship
+    - ship
+  stops:
+    - Troy
+    - Ismaros (Maroneia)
+    - Lotus-Eaters (Djerba)
+    - Cyclops (Sicily)
+    - Aeolia (Lipari)
+    - Laestrygonians (Sardinia)
+    - Circe - Aeaea (Cape Circeo)
+    - Sirens (Sorrento)
+    - Scylla & Charybdis (Messina)
+    - Thrinacia (Sicily)
+    - Calypso (Gozo)
+    - Scheria (Corfu)
+    - Ithaca
+  stopDetails:
+    - "After Troy falls, Odysseus sets out with his ships for home, but the return becomes a long sequence of diversions."
+    - "At Ismaros, the Cicones' counterattack costs Odysseus men after the Greeks raid the town."
+    - "The Lotus-Eaters' food threatens to erase the crew's desire for home; Odysseus brings his scouts back by force."
+    - "On the traditional Sicily identification, Odysseus blinds Polyphemus and escapes beneath the sheep, but reveals his name."
+    - "Aeolus gives Odysseus a bag of winds; his crew opens it when Ithaca is already near."
+    - "The Laestrygonians destroy all but Odysseus's ship; Sardinia is a traditional, uncertain regional identification."
+    - "Circe changes the landing party into swine, then restores them; Odysseus remains on her island for a year."
+    - "Odysseus sails past the Sirens with his crew's ears stopped and himself bound to the mast."
+    - "The passage between Scylla and Charybdis costs six sailors; the Strait of Messina is a traditional identification."
+    - "On Thrinacia, the starving crew kill Helios's cattle, bringing Zeus's punishment; Sicily is an uncertain traditional identification."
+    - "On Ogygia, Calypso keeps Odysseus for years before the gods compel his release; Gozo is one traditional identification."
+    - "The Phaeacians welcome Odysseus on Scheria and carry him home; Corfu is a traditional identification."
+    - "Odysseus reaches Ithaca in disguise and reclaims his household after twenty years away."
+
+- id: aeneid
+  title: The Aeneid
+  author: Virgil
+  mediaType: book
+  period: Ancient
+  tradition: Ancient Roman literature
+  year: 19 BCE
+  type: Epic
+  summary: "Virgil's Latin epic follows Aeneas from the fall of Troy toward his fated settlement in Italy."
+  article: /works/aeneid/
+  journeyType: sea
+  journeyModes:
+    - land
+    - sea
+    - sea
+    - sea
+    - sea
+    - sea
+    - sea
+    - sea
+    - sea
+  stops:
+    - Troy
+    - Antandros
+    - Ainos
+    - Delos
+    - Crete
+    - Buthrotum
+    - Drepanum
+    - Carthage
+    - Cumae
+    - The Tiber
+  stopDetails:
+    - "As Troy burns, Aeneas escapes with Anchises, Ascanius, and the household gods."
+    - "At Antandros, the exiles gather timber and begin building ships for their uncertain voyage."
+    - "Aeneas makes an early settlement at Ainos in Thrace, but an ominous sign sends the Trojans onward."
+    - "At Delos, Apollo's oracle directs the exiles toward the ancient homeland of their people."
+    - "Aeneas mistakenly settles in Crete; illness and a message from the household gods force another departure."
+    - "In Buthrotum, Trojan survivors give Aeneas news and Helenus forecasts dangers still ahead."
+    - "At Drepanum in Sicily, Anchises dies, adding personal grief to the exiles' journey."
+    - "A storm brings the Trojans to Carthage, where Dido and Aeneas form a bond before duty calls him away."
+    - "At Cumae, the Sibyl guides Aeneas into the underworld to meet his father's shade and glimpse Rome's future."
+    - "The Tiber marks Aeneas's arrival in Latium and the beginning of the settlement that leads to Rome."
+
+- id: beowulf
+  title: Beowulf
+  author: Anonymous
+  mediaType: book
+  period: Medieval
+  tradition: Old English literature
+  year: c. 1000
+  type: Epic
+  summary: "An Old English heroic poem following Beowulf from the Geats' land in southern Sweden to Hrothgar's hall in Zealand and back, ending with a dragon fight after fifty years as king."
+  metadataNote: "The Geatland, Danish Shore, and Heorot markers are regional approximations. The Dragons Barrow marker follows Reading Maps' schematic placement and is not a verified historical site; route lines are schematic."
+  article: /works/beowulf/
+  journeyType: sea
+  journeyModes:
+    - ship
+    - walk
+    - walk
+    - ship
+    - walk
+  stops:
+    - Geatland
+    - The Danish Shore
+    - Heorot
+    - The Danish Shore
+    - Geatland
+    - The Dragons Barrow
+  stopDetails:
+    - "In Geatland, the young Beowulf hears that Hrothgar's Danes are threatened and sails across the sea with his men."
+    - "The Geats land on the Danish coast, where a shore-guard questions their arrival before they continue inland."
+    - "At Heorot, Beowulf defeats Grendel and later tracks Grendel's mother to a lair beneath a haunted mere."
+    - "After the fighting, Beowulf and his company return to the Danish shore and their waiting ship."
+    - "Beowulf sails home with honour and treasure, later ruling the Geats for fifty years."
+    - "In old age, Beowulf faces a dragon guarding its hoard and receives a fatal wound; the barrow is only schematically placed."
+
+- id: canterbury-tales
+  title: The Canterbury Tales
+  author: Geoffrey Chaucer
+  mediaType: book
+  period: Medieval
+  tradition: Middle English literature
+  year: c. 1392
+  type: Poetry
+  summary: "Chaucer's Middle English frame narrative follows a company of pilgrims who tell stories on the road to Canterbury."
+  article: /works/canterbury-tales/
+  journeyType: overland
+  journeyModes:
+    - horseback
+    - horseback
+    - horseback
+    - horseback
+    - horseback
+    - horseback
+  stops:
+    - Southwark (Tabard Inn)
+    - Greenwich
+    - Dartford
+    - Rochester
+    - Sittingbourne
+    - Boughton-under-Blean
+    - Canterbury
+  stopDetails:
+    - "The pilgrims assemble at the Tabard Inn in Southwark before setting out for Canterbury."
+    - "As the company travels through Greenwich, the storytelling contest gives the journey its frame."
+    - "Dartford is one of the Kent stops along the road, as the pilgrims continue exchanging tales."
+    - "The company passes through Rochester on its eastward journey."
+    - "At Sittingbourne, the route continues through Kent while the pilgrims' stories and rivalries unfold."
+    - "Near Boughton-under-Blean, the Canon and his Yeoman join the travelling company."
+    - "Canterbury and the shrine of Thomas Becket are the pilgrims' destination; the tale-telling contest remains unfinished."
+
+- id: hamlet
+  title: Hamlet
+  author: William Shakespeare
+  mediaType: book
+  period: Renaissance
+  tradition: English Renaissance drama
+  year: 1601
+  type: Play
+  summary: "Shakespeare's tragedy follows the Danish prince Hamlet as he investigates his father's death and confronts revenge."
+  article: /works/hamlet/
+  journeyType: sea
+  journeyModes:
+    - road
+    - ship
+    - ship
+    - ship
+  stops:
+    - Wittenberg
+    - Lubeck
+    - Elsinore
+    - The North Sea
+    - Elsinore
+  stopDetails:
+    - "Hamlet and Horatio are associated with study at Wittenberg before the prince is recalled to Denmark."
+    - "The route source places a departure point at Lübeck before Hamlet's sea passage to Denmark."
+    - "At Elsinore, the ghost reveals the murder, and Hamlet tests the accusation through the play-within-the-play."
+    - "Hamlet is sent toward England with a secret death warrant; pirates attack his ship and he returns."
+    - "Back at Elsinore, the graveyard, fencing match, and poisoned court bring the tragedy to its close."
+
+- id: macbeth
+  title: Macbeth
+  author: William Shakespeare
+  mediaType: book
+  period: Renaissance
+  tradition: English Renaissance drama
+  year: 1606
+  type: Play
+  summary: "Shakespeare's tragedy traces Macbeth's rise to power and the violence and fear that follow his ambition."
+  article: /works/macbeth/
+  journeyType: overland
+  journeyModes:
+    - land
+    - land
+    - land
+    - land
+    - land
+    - land
+  stops:
+    - Forres
+    - Inverness
+    - Scone
+    - Fife
+    - England
+    - Birnam Wood
+    - Dunsinane
+  stopDetails:
+    - "Near Forres, the witches greet Macbeth with a prophecy that plants the possibility of kingship."
+    - "At Inverness, Macbeth murders Duncan and takes the crown, urged on by Lady Macbeth."
+    - "Macbeth is crowned at Scone, but his rule becomes increasingly defined by fear and violence."
+    - "In Fife, Macbeth's men kill Macduff's family while Macduff is away."
+    - "The play places Malcolm and the exiled Macduff in England as they gather support to challenge Macbeth."
+    - "The advancing army uses branches from Birnam Wood, fulfilling the prophecy of a moving forest."
+    - "At Dunsinane, the prophecies turn against Macbeth and Macduff kills him."
+
+- id: wuthering-heights
+  title: Wuthering Heights
+  author: Emily Brontë
+  mediaType: book
+  period: Victorian
+  tradition: British literature
+  year: 1847
+  type: Novel
+  summary: "A Victorian novel of two families whose histories unfold across the Yorkshire moors."
+  article: /works/wuthering-heights/
+  journeyType: exile
+  journeyModes:
+    - walk
+    - walk
+    - walk
+  stops:
+    - Wuthering Heights
+    - Thrushcross Grange
+    - Penistone Crags
+    - Gimmerton
+  stopDetails:
+    - "The exposed farmhouse is the Earnshaw home where Heathcliff arrives and the families' long conflict begins; it is fictional."
+    - "The sheltered Linton home contrasts with the Heights and changes Cathy's life after her childhood visit; it is fictional."
+    - "The crags belong to the novel's imagined moorland landscape, where Catherine and Heathcliff's bond takes shape."
+    - "Gimmerton's village and churchyard frame the families' losses and the novel's final image of the graves."
+
+- id: tale-of-two-cities
+  title: A Tale of Two Cities
+  author: Charles Dickens
+  mediaType: book
+  period: Victorian
+  tradition: British literature
+  year: 1859
+  type: Novel
+  summary: "Dickens's historical novel follows intertwined lives in London and Paris during the French Revolution."
+  article: /works/tale-of-two-cities/
+  journeyType: exile
+  journeyModes:
+    - road
+    - ship
+    - road
+    - road
+  stops:
+    - London
+    - Dover
+    - Calais
+    - Saint Antoine
+    - Place de la Revolution
+  stopDetails:
+    - "In London, Jarvis Lorry's message sets the Manettes' story in motion and begins the movement between the two cities."
+    - "Dover is the English Channel crossing point for the novel's travel between London and France."
+    - "Calais is the French landing point as the story enters a country transformed by revolution."
+    - "In the Saint-Antoine district, the Defarges' wine shop and Madame Defarge's knitting become part of revolutionary resistance."
+    - "At the square once called Place de la Revolution, Sydney Carton makes his final sacrifice."
+
+- id: tom-sawyer
+  title: The Adventures of Tom Sawyer
+  author: Mark Twain
+  mediaType: book
+  period: Nineteenth century
+  tradition: American literature
+  year: 1876
+  type: Novel
+  summary: "Twain's novel follows Tom Sawyer's boyhood adventures in a fictional Mississippi River town."
+  article: /works/tom-sawyer/
+  journeyType: river
+  journeyModes:
+    - river
+    - walk
+  stops:
+    - St. Petersburg
+    - Jackson's Island
+    - McDougal's Cave
+  stopDetails:
+    - "St. Petersburg is fictional, with Hannibal, Missouri, serving as its principal real-world model."
+    - "Tom, Huck, and Joe play at being pirates on Jackson's Island; the story's island is not assigned a verified real-world site."
+    - "Tom and Becky become lost in the cave, traditionally identified with Mark Twain Cave near Hannibal."
+
+- id: moby-dick
+  title: Moby-Dick
+  author: Herman Melville
+  mediaType: book
+  period: Nineteenth century
+  tradition: American literature
+  year: 1851
+  type: Novel
+  summary: "Melville's novel follows the Pequod's whaling voyage and Captain Ahab's pursuit of Moby Dick."
+  article: /works/moby-dick/
+  journeyType: sea
+  journeyModes:
+    - ship
+    - ship
+    - ship
+    - ship
+    - ship
+    - ship
+    - ship
+    - ship
+    - ship
+    - ship
+    - ship
+  stops:
+    - Nantucket
+    - The North Atlantic Ground
+    - The Azores Ground
+    - The Cape Verde Ground
+    - Rio de la Plata
+    - The Carrol Ground
+    - Cape of Good Hope
+    - The Crozet Grounds
+    - Straits of Sunda
+    - Formosa and the Bashee Isles
+    - The Japan Grounds
+    - The Line
+  stopDetails:
+    - "Ishmael signs aboard the Pequod at Nantucket, where the whaling voyage begins."
+    - "The Pequod reaches a North Atlantic whaling ground northeast of Bermuda, one of the first named hunting regions."
+    - "The ship works the grounds near the Azores before continuing south."
+    - "The Cape Verde grounds mark the Pequod's southward progress along the Atlantic."
+    - "The ship crosses toward the Rio de la Plata, then turns back east across the South Atlantic."
+    - "Near the Carrol Ground, Ahab's crew sees the spectral spirit-spout."
+    - "The Pequod rounds the Cape of Good Hope and enters the Indian Ocean."
+    - "The ship hunts in the remote Crozet grounds in the southern Indian Ocean."
+    - "Passing the Sunda Strait, the Pequod encounters the vast whale gathering."
+    - "The voyage passes Taiwan and the Bashee Isles into the western Pacific."
+    - "On the Japan grounds, a typhoon raises tension as the pursuit nears its end."
+    - "Near the Pacific equator, the final three-day chase ends with the Pequod's destruction."
+
+- id: old-man-and-the-sea
+  title: The Old Man and the Sea
+  author: Ernest Hemingway
+  mediaType: book
+  period: Modern
+  tradition: American literature
+  year: 1952
+  type: Novella
+  summary: "Hemingway's novella follows Cuban fisherman Santiago on a solitary voyage into the Gulf Stream."
+  article: /works/old-man-and-the-sea/
+  journeyType: sea
+  journeyModes:
+    - rowboat
+    - rowboat
+  stops:
+    - Cojímar
+    - The Gulf Stream
+    - Cojímar
+  stopDetails:
+    - "Santiago leaves his home village of Cojímar before dawn for another solitary fishing trip."
+    - "Far offshore in the Gulf Stream, he hooks the marlin and is towed for days; the exact fishing position is not specified."
+    - "Santiago rows back to Cojímar with the marlin's skeleton after sharks strip the catch."
+

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="{{ .Site.Language.Lang }}" class="lp-map-document">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <meta name="description" content="{{ .Description }}">
+    <title>{{ .Title }} · {{ .Site.Title }}</title>
+    <link rel="stylesheet" href="{{ "lib/leaflet/leaflet.css" | relURL }}">
+    {{ $mapCSS := resources.Get "css/literary-map.css" | resources.Minify | resources.Fingerprint (.Site.Params.fingerprintAlgorithm | default "sha512") }}
+    <link rel="stylesheet" href="{{ $mapCSS.RelPermalink }}" integrity="{{ $mapCSS.Data.Integrity }}">
+  </head>
+  <body class="lp-map-body">
+    {{ block "main" . }}{{ end }}
+    <script defer src="{{ "lib/leaflet/leaflet.js" | relURL }}"></script>
+    {{ $mapJS := resources.Get "js/literary-map.js" | resources.Minify | resources.Fingerprint (.Site.Params.fingerprintAlgorithm | default "sha512") }}
+    <script defer src="{{ $mapJS.RelPermalink }}" integrity="{{ $mapJS.Data.Integrity }}"></script>
+  </body>
+</html>

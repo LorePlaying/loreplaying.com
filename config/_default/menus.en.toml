@@ -14,6 +14,11 @@
   weight = 25
 
 [[main]]
+  name = "Literary Atlas"
+  pageRef = "map"
+  weight = 27
+
+[[main]]
   name = "How to Play"
   url = "/workflow/"
   weight = 30

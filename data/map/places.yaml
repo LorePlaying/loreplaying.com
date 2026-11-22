@@ -1,0 +1,961 @@
+- id: geneva
+  name: Geneva
+  country: Switzerland
+  coordinates:
+    lat: 46.2044
+    lon: 6.1432
+  works:
+    - frankenstein
+  description: "Victor Frankenstein's family home and the place to which much of his early and tragic history returns."
+
+- id: ingolstadt
+  name: Ingolstadt
+  country: Germany
+  coordinates:
+    lat: 48.7651
+    lon: 11.4237
+  works:
+    - frankenstein
+  description: "The university city where Victor studies natural philosophy and creates the Creature."
+
+- id: london
+  name: London
+  country: United Kingdom
+  coordinates:
+    lat: 51.5072
+    lon: -0.1276
+  works:
+    - frankenstein
+    - tale-of-two-cities
+  description: "A significant setting in A Tale of Two Cities and one of the major stops in Victor Frankenstein's British journey."
+
+- id: uruk
+  name: Uruk
+  country: Iraq
+  coordinates:
+    lat: 31.32
+    lon: 45.64
+  works:
+    - gilgamesh
+  description: "The ancient city associated with Gilgamesh; the coordinate marks the archaeological site at Warka."
+  coordinateSource: https://en.wikipedia.org/wiki/Uruk
+
+- id: sparta
+  name: Sparta
+  country: Greece
+  coordinates:
+    lat: 37.07
+    lon: 22.43
+  works:
+    - iliad
+  description: "A historical Greek city in the Iliad's sequence of places."
+  coordinateSource: https://en.wikipedia.org/wiki/Sparta
+
+- id: mycenae
+  name: Mycenae
+  country: Greece
+  coordinates:
+    lat: 37.73
+    lon: 22.75
+  works:
+    - iliad
+  description: "The archaeological site of Mycenae, associated with Agamemnon in Greek epic tradition."
+  coordinateSource: https://en.wikipedia.org/wiki/Mycenae
+
+- id: troy
+  name: Troy
+  country: Türkiye
+  coordinates:
+    lat: 39.9575
+    lon: 26.2389
+  works:
+    - iliad
+    - odyssey
+    - aeneid
+  description: "The archaeological site identified with ancient Troy at Hisarlik; literary identifications and events remain traditional."
+  coordinateSource: https://en.wikipedia.org/wiki/Troy
+
+- id: maroneia
+  name: Ismaros (Maroneia)
+  country: Greece
+  aliases:
+    - Ismaros (Maroneia)
+  coordinates:
+    lat: 40.87
+    lon: 25.52
+  works:
+    - odyssey
+  description: "A traditional identification for the Odyssey's Ismaros, represented by the real place of Maroneia."
+  locationNote: Traditional identification
+
+- id: djerba
+  name: Lotus-Eaters (Djerba)
+  country: Tunisia
+  coordinates:
+    lat: 33.81
+    lon: 10.85
+  works:
+    - odyssey
+  description: "Djerba is one traditional identification for the Lotus-Eaters episode; the identification is not certain."
+  locationNote: Traditional identification
+
+- id: sicily
+  name: Sicily
+  country: Italy
+  aliases:
+    - Cyclops (Sicily)
+  coordinates:
+    lat: 37.5
+    lon: 15
+  works:
+    - odyssey
+  description: "A regional marker for the traditional Sicily identification of the Cyclops episode; the cave and episode site are uncertain."
+  locationNote: Traditional episode identification; exact site uncertain
+
+- id: thrinacia-sicily
+  name: Thrinacia (Sicily)
+  country: Italy
+  coordinates:
+    lat: 37.2
+    lon: 15.23
+  works:
+    - odyssey
+  description: "A separate regional marker for the traditional Sicily identification of Thrinacia; the island and episode site are uncertain."
+  locationNote: Traditional episode identification; exact site uncertain
+
+- id: lipari
+  name: Aeolia (Lipari)
+  country: Italy
+  coordinates:
+    lat: 38.48
+    lon: 14.95
+  works:
+    - odyssey
+  description: "Lipari is a traditional identification for Aeolia in the Odyssey."
+  locationNote: Traditional identification
+
+- id: sardinia
+  name: Laestrygonians (Sardinia)
+  country: Italy
+  coordinates:
+    lat: 40.58
+    lon: 9.76
+  works:
+    - odyssey
+  description: "Island-level traditional identification for the Laestrygonian episode; no exact location is claimed."
+  locationNote: Island-level approximation
+
+- id: messina
+  name: Scylla & Charybdis (Messina)
+  country: Italy
+  coordinates:
+    lat: 38.25
+    lon: 15.63
+  works:
+    - odyssey
+  description: "The Strait of Messina is the traditional geographical setting for the Scylla and Charybdis episode."
+  locationNote: Traditional identification
+
+- id: gozo
+  name: Calypso (Gozo)
+  country: Malta
+  coordinates:
+    lat: 36.04
+    lon: 14.26
+  works:
+    - odyssey
+  description: "Gozo is traditionally associated with Ogygia, Calypso's island in the Odyssey."
+  locationNote: Traditional identification
+
+- id: corfu
+  name: Scheria (Corfu)
+  country: Greece
+  coordinates:
+    lat: 39.62
+    lon: 19.92
+  works:
+    - odyssey
+  description: "Corfu is a traditional identification for Scheria, the Phaeacians' island."
+  locationNote: Traditional identification
+
+- id: delos
+  name: Delos
+  country: Greece
+  coordinates:
+    lat: 37.39
+    lon: 25.27
+  works:
+    - aeneid
+  description: "The Aegean island and sanctuary associated with Aeneas's visit to Apollo's oracle."
+  coordinateSource: https://en.wikipedia.org/wiki/Delos
+
+- id: crete
+  name: Crete
+  country: Greece
+  coordinates:
+    lat: 35.31
+    lon: 25.14
+  works:
+    - aeneid
+  description: "The island where Aeneas makes a temporary settlement before continuing his voyage."
+  locationNote: Island-level point
+
+- id: butrint
+  name: Buthrotum (Butrint)
+  country: Albania
+  aliases:
+    - Buthrotum
+  coordinates:
+    lat: 39.75
+    lon: 20.03
+  works:
+    - aeneid
+  description: "The archaeological site of Butrint, known in antiquity as Buthrotum."
+  coordinateSource: https://en.wikipedia.org/wiki/Butrint
+
+- id: trapani
+  name: Drepanum (Trapani)
+  country: Italy
+  aliases:
+    - Drepanum
+  coordinates:
+    lat: 38.02
+    lon: 12.5
+  works:
+    - aeneid
+  description: "Trapani, the modern city associated with the ancient port of Drepanum in the Aeneid."
+  coordinateSource: https://en.wikipedia.org/wiki/Trapani
+
+- id: carthage
+  name: Carthage
+  country: Tunisia
+  coordinates:
+    lat: 36.85
+    lon: 10.32
+  works:
+    - aeneid
+  description: "The archaeological site of ancient Carthage, where Aeneas meets Dido in the Aeneid."
+  coordinateSource: https://en.wikipedia.org/wiki/Carthage
+
+- id: cumae
+  name: Cumae
+  country: Italy
+  coordinates:
+    lat: 40.83
+    lon: 14.05
+  works:
+    - aeneid
+  description: "The ancient settlement near Naples associated with the Sibyl and Aeneas's descent to the underworld."
+  coordinateSource: https://en.wikipedia.org/wiki/Cumae
+
+- id: tiber
+  name: The Tiber
+  country: Italy
+  coordinates:
+    lat: 41.7405
+    lon: 12.28
+  works:
+    - aeneid
+  description: "A regional marker at the Tiber's mouth; the Aeneid's arrival in Latium is not a single exact point."
+  locationNote: River-mouth approximation
+
+- id: southwark
+  name: Southwark (Tabard Inn)
+  country: United Kingdom
+  coordinates:
+    lat: 51.5012
+    lon: -0.0905
+  works:
+    - canterbury-tales
+  description: "Southwark, the pilgrims' gathering point; the marker represents the district rather than a verified inn building."
+  coordinateSource: https://en.wikipedia.org/wiki/Southwark
+  locationNote: District-level point
+
+- id: greenwich
+  name: Greenwich
+  country: United Kingdom
+  coordinates:
+    lat: 51.481
+    lon: 0.0098
+  works:
+    - canterbury-tales
+  description: "A historical stop on the pilgrims' route out of London."
+  coordinateSource: https://en.wikipedia.org/wiki/Greenwich
+
+- id: dartford
+  name: Dartford
+  country: United Kingdom
+  coordinates:
+    lat: 51.4464
+    lon: 0.217
+  works:
+    - canterbury-tales
+  description: "The Kent town on the pilgrims' route toward Canterbury."
+  coordinateSource: https://en.wikipedia.org/wiki/Dartford
+
+- id: sittingbourne
+  name: Sittingbourne
+  country: United Kingdom
+  coordinates:
+    lat: 51.34
+    lon: 0.7333
+  works:
+    - canterbury-tales
+  description: "A town on the route east through Kent."
+  coordinateSource: https://en.wikipedia.org/wiki/Sittingbourne
+
+- id: canterbury
+  name: Canterbury
+  country: United Kingdom
+  coordinates:
+    lat: 51.2802
+    lon: 1.083
+  works:
+    - canterbury-tales
+  description: "The pilgrims' destination and the site of Thomas Becket's shrine."
+  coordinateSource: https://en.wikipedia.org/wiki/Canterbury
+
+- id: wittenberg
+  name: Wittenberg
+  country: Germany
+  coordinates:
+    lat: 51.87
+    lon: 12.65
+  works:
+    - hamlet
+  description: "The university town where Hamlet and Horatio are said to study."
+  coordinateSource: https://en.wikipedia.org/wiki/Wittenberg
+
+- id: lubeck
+  name: Lübeck
+  country: Germany
+  coordinates:
+    lat: 53.87
+    lon: 10.69
+  works:
+    - hamlet
+  description: "A Baltic port used in the Reading Maps route's interpretation of Hamlet's passage toward Denmark."
+  coordinateSource: https://en.wikipedia.org/wiki/L%C3%BCbeck
+
+- id: helsingor
+  name: Elsinore (Helsingør)
+  country: Denmark
+  aliases:
+    - Elsinore
+  coordinates:
+    lat: 56.04
+    lon: 12.62
+  works:
+    - hamlet
+  description: "Helsingør and Kronborg Castle are the real-world setting conventionally associated with Elsinore."
+  coordinateSource: https://en.wikipedia.org/wiki/Helsing%C3%B8r
+  locationNote: Literary identification
+
+- id: forres
+  name: Forres
+  country: United Kingdom
+  coordinates:
+    lat: 57.608
+    lon: -3.62
+  works:
+    - macbeth
+  description: "A town in Moray associated with the heath scene in Macbeth."
+  coordinateSource: https://en.wikipedia.org/wiki/Forres
+
+- id: inverness
+  name: Inverness
+  country: United Kingdom
+  coordinates:
+    lat: 57.4778
+    lon: -4.2247
+  works:
+    - macbeth
+  description: "The town associated with Macbeth's castle in Shakespeare's play."
+  coordinateSource: https://en.wikipedia.org/wiki/Inverness
+
+- id: fife
+  name: Fife
+  country: United Kingdom
+  coordinates:
+    lat: 56.25
+    lon: -3.2
+  works:
+    - macbeth
+  description: "Regional marker for Fife, the setting associated with Macduff's castle."
+  coordinateSource: https://en.wikipedia.org/wiki/Fife
+  locationNote: Region-level point
+
+- id: dover
+  name: Dover
+  country: United Kingdom
+  coordinates:
+    lat: 51.1295
+    lon: 1.3089
+  works:
+    - tale-of-two-cities
+  description: "The English Channel port on the route between London and France."
+  coordinateSource: https://en.wikipedia.org/wiki/Dover
+
+- id: calais
+  name: Calais
+  country: France
+  coordinates:
+    lat: 50.9481
+    lon: 1.8564
+  works:
+    - tale-of-two-cities
+  description: "The French Channel port in the novel's cross-Channel journey."
+  coordinateSource: https://en.wikipedia.org/wiki/Calais
+
+- id: place-de-la-concorde
+  name: Place de la Revolution (Place de la Concorde)
+  country: France
+  aliases:
+    - Place de la Revolution
+  coordinates:
+    lat: 48.8656
+    lon: 2.3212
+  works:
+    - tale-of-two-cities
+  description: "The historic Paris square formerly called Place de la Révolution."
+  coordinateSource: https://en.wikipedia.org/wiki/Place_de_la_Concorde
+
+- id: nantucket
+  name: Nantucket
+  country: United States
+  coordinates:
+    lat: 41.2828
+    lon: -70.0994
+  works:
+    - moby-dick
+  description: "The whaling port from which Ishmael joins the Pequod."
+  coordinateSource: https://en.wikipedia.org/wiki/Nantucket
+
+- id: cojimar
+  name: Cojímar
+  country: Cuba
+  coordinates:
+    lat: 23.135
+    lon: -82.394
+  works:
+    - old-man-and-the-sea
+  description: "The fishing village east of Havana associated with Santiago's home."
+  coordinateSource: https://en.wikipedia.org/wiki/Coj%C3%ADmar
+
+- id: chamonix
+  name: Chamonix
+  country: France
+  coordinates:
+    lat: 45.9231
+    lon: 6.8697
+  works:
+    - frankenstein
+  description: "The Alpine town near the Mer de Glace, where Victor encounters the Creature."
+  coordinateSource: https://en.wikipedia.org/wiki/Chamonix
+
+- id: strasbourg
+  name: Strasbourg
+  country: France
+  coordinates:
+    lat: 48.5833
+    lon: 7.7458
+  works:
+    - frankenstein
+  description: "A stop in Victor's journey through continental Europe."
+  coordinateSource: https://en.wikipedia.org/wiki/Strasbourg
+
+- id: rotterdam
+  name: Rotterdam
+  country: Netherlands
+  coordinates:
+    lat: 51.92
+    lon: 4.48
+  works:
+    - frankenstein
+  description: "A port in Victor's route onward to Britain."
+  coordinateSource: https://en.wikipedia.org/wiki/Rotterdam
+
+- id: perth
+  name: Perth
+  country: United Kingdom
+  coordinates:
+    lat: 56.3958
+    lon: -3.4333
+  works:
+    - frankenstein
+  description: "A Scottish stop in Victor's journey."
+  coordinateSource: https://en.wikipedia.org/wiki/Perth,_Scotland
+
+- id: orkney-islands
+  name: Orkney Islands
+  country: United Kingdom
+  coordinates:
+    lat: 59
+    lon: -3
+  works:
+    - frankenstein
+  description: "An archipelago-level marker for the novel's Orkney setting."
+  coordinateSource: https://en.wikipedia.org/wiki/Orkney
+  locationNote: Archipelago-level approximation
+
+- id: ireland
+  name: Ireland
+  country: Ireland
+  coordinates:
+    lat: 53.4
+    lon: -9.5
+  works:
+    - frankenstein
+  description: "A regional marker for the unnamed Irish coast where Victor comes ashore."
+  locationNote: Schematic coastal point; the exact landing place is not named
+
+- id: paris
+  name: Paris
+  country: France
+  coordinates:
+    lat: 48.8567
+    lon: 2.3522
+  works:
+    - frankenstein
+  description: "A stop in Victor's journey across Europe."
+  coordinateSource: https://en.wikipedia.org/wiki/Paris
+
+- id: evian
+  name: Évian-les-Bains
+  country: France
+  aliases:
+    - Evian
+  coordinates:
+    lat: 46.3833
+    lon: 6.5833
+  works:
+    - frankenstein
+  description: "A lakeside town represented in the novel's later travel sequence."
+  coordinateSource: https://en.wikipedia.org/wiki/%C3%89vian-les-Bains
+
+- id: black-sea
+  name: The Black Sea
+  country: Regional waters
+  aliases:
+    - Black Sea
+  coordinates:
+    lat: 44.17
+    lon: 28.65
+  works:
+    - frankenstein
+  description: "A regional marker for the sea named in the Creature's eastward pursuit."
+  locationNote: Schematic sea-region approximation
+
+- id: arctic-ocean
+  name: Arctic Ocean
+  country: Regional waters
+  coordinates:
+    lat: 80
+    lon: 60
+  works:
+    - frankenstein
+  description: "A regional marker for the novel's Arctic setting; no exact point is specified."
+  locationNote: Sea-region approximation
+
+- id: dilmun
+  name: Dilmun (Bahrain region)
+  country: Bahrain
+  aliases:
+    - Dilmun
+  coordinates:
+    lat: 26.07
+    lon: 50.55
+  works:
+    - gilgamesh
+  description: "A regional marker near Bahrain, a traditional core of ancient Dilmun; its historical extent varied."
+  coordinateSource: https://en.wikipedia.org/wiki/Bahrain
+  locationNote: Traditional regional identification
+
+- id: aulis
+  name: Aulis (Avlida)
+  country: Greece
+  aliases:
+    - Aulis
+  coordinates:
+    lat: 38.4
+    lon: 23.6
+  works:
+    - iliad
+  description: "The ancient Aulis setting is represented by the Avlida area in central Greece."
+  coordinateSource: https://en.wikipedia.org/wiki/Avlida
+  locationNote: Regional approximation
+
+- id: cape-circeo
+  name: Cape Circeo
+  country: Italy
+  aliases:
+    - Circe - Aeaea (Cape Circeo)
+  coordinates:
+    lat: 41.24
+    lon: 13.09
+  works:
+    - odyssey
+  description: "Cape Circeo is a traditional, uncertain identification for Circe's island of Aeaea."
+  locationNote: Traditional identification
+
+- id: sorrento
+  name: Sorrento
+  country: Italy
+  aliases:
+    - Sirens (Sorrento)
+  coordinates:
+    lat: 40.6249
+    lon: 14.3748
+  works:
+    - odyssey
+  description: "A traditional regional identification for the Sirens episode, not a confirmed site."
+  coordinateSource: https://www.openstreetmap.org/relation/40620
+  locationNote: Traditional regional identification
+
+- id: ithaca
+  name: Ithaca
+  country: Greece
+  coordinates:
+    lat: 38.4
+    lon: 20.67
+  works:
+    - odyssey
+  description: "Island-level marker for Odysseus's traditional homeland."
+  locationNote: Island-level point
+
+- id: antandros
+  name: Antandros
+  country: Türkiye
+  coordinates:
+    lat: 39.5758
+    lon: 26.7906
+  works:
+    - aeneid
+  description: "The archaeological site associated with the ancient city from which Aeneas departs."
+  coordinateSource: https://en.wikipedia.org/wiki/Antandrus
+
+- id: ainos
+  name: Ainos (Enez)
+  country: Türkiye
+  aliases:
+    - Ainos
+  coordinates:
+    lat: 40.7772
+    lon: 26.0785
+  works:
+    - aeneid
+  description: "The modern town of Enez at the site associated with ancient Ainos."
+
+- id: geatland
+  name: Geatland (Götaland region)
+  country: Sweden
+  aliases:
+    - Geatland
+  coordinates:
+    lat: 57.68
+    lon: 12
+  works:
+    - beowulf
+  description: "A broad regional marker for the Geats' traditional association with southern Sweden; the precise location is not known."
+  locationNote: Schematic regional marker; not an exact historical settlement
+
+- id: danish-shore
+  name: The Danish Shore
+  country: Denmark
+  coordinates:
+    lat: 55.96
+    lon: 11.98
+  works:
+    - beowulf
+  description: "An approximate point for Beowulf's landing on Zealand; the poem does not identify a precise landing site."
+  locationNote: Coastal approximation
+
+- id: heorot
+  name: Heorot (Zealand region)
+  country: Denmark
+  aliases:
+    - Heorot
+  coordinates:
+    lat: 55.6
+    lon: 11.95
+  works:
+    - beowulf
+  description: "A regional marker on Zealand, the setting given by the route source; no archaeological site is claimed as the hall."
+  locationNote: Island-level approximation; exact site uncertain
+
+- id: dragons-barrow
+  name: The Dragons Barrow
+  country: Sweden
+  coordinates:
+    lat: 58.2
+    lon: 13.5
+  works:
+    - beowulf
+  description: "A schematic placement of Beowulf's final battle in the Geats' land; the poem does not identify a real-world barrow."
+  locationNote: Schematic placement; no verified historical site
+
+- id: rochester
+  name: Rochester
+  country: United Kingdom
+  coordinates:
+    lat: 51.389
+    lon: 0.5046
+  works:
+    - canterbury-tales
+  description: "A town on the pilgrims' route through Kent."
+  coordinateSource: https://en.wikipedia.org/wiki/Rochester,_Kent
+
+- id: boughton-under-blean
+  name: Boughton-under-Blean
+  country: United Kingdom
+  coordinates:
+    lat: 51.292
+    lon: 0.974
+  works:
+    - canterbury-tales
+  description: "A village on the pilgrims' route east through Kent."
+  coordinateSource: https://en.wikipedia.org/wiki/Boughton-under-Blean
+
+- id: north-sea
+  name: The North Sea
+  country: Regional waters
+  aliases:
+    - North Sea
+  coordinates:
+    lat: 56.5
+    lon: 4
+  works:
+    - hamlet
+  description: "A schematic regional point for Hamlet's sea passage in the Reading Maps route; the play does not specify a precise position."
+  locationNote: Sea-region approximation
+
+- id: scone
+  name: Scone
+  country: United Kingdom
+  coordinates:
+    lat: 56.418
+    lon: -3.44
+  works:
+    - macbeth
+  description: "The historic site associated with Macbeth's coronation."
+  coordinateSource: https://en.wikipedia.org/wiki/Scone,_Scotland
+
+- id: england
+  name: England
+  country: United Kingdom
+  coordinates:
+    lat: 51.51
+    lon: -0.13
+  works:
+    - macbeth
+  description: "The play names England but not the refuge; the route source places a schematic marker near London."
+  locationNote: Schematic regional point; the English refuge is not specified
+
+- id: birnam-wood
+  name: Birnam Wood (Dunkeld area)
+  country: United Kingdom
+  aliases:
+    - Birnam Wood
+  coordinates:
+    lat: 56.56
+    lon: -3.6
+  works:
+    - macbeth
+  description: "A regional marker near Dunkeld for the wood named in Macbeth."
+  coordinateSource: https://en.wikipedia.org/wiki/Dunkeld
+  locationNote: Regional approximation
+
+- id: dunsinane
+  name: Dunsinane Hill
+  country: United Kingdom
+  aliases:
+    - Dunsinane
+  coordinates:
+    lat: 56.47
+    lon: -3.31
+  works:
+    - macbeth
+  description: "The hill traditionally identified with the play's final battle setting."
+  coordinateSource: https://en.wikipedia.org/wiki/Dunsinane_Hill
+  locationNote: Traditional identification
+
+- id: saint-antoine
+  name: Faubourg Saint-Antoine
+  country: France
+  aliases:
+    - Saint Antoine
+  coordinates:
+    lat: 48.8531
+    lon: 2.3692
+  works:
+    - tale-of-two-cities
+  description: "A district-level marker for the Paris neighborhood in the novel."
+  coordinateSource: https://en.wikipedia.org/wiki/Bastille
+  locationNote: District-level approximation
+
+- id: st-petersburg-hannibal
+  name: Hannibal (model for St. Petersburg)
+  country: United States
+  aliases:
+    - St. Petersburg
+    - St. Petersburg (Hannibal)
+  coordinates:
+    lat: 39.7097
+    lon: -91.3939
+  works:
+    - tom-sawyer
+  description: "Hannibal, Missouri, the real-world model for the novel's fictional St. Petersburg."
+  coordinateSource: https://en.wikipedia.org/wiki/Hannibal,_Missouri
+  locationNote: Literary model; fictional town itself is not precisely located
+
+- id: mcdougals-cave
+  name: McDougal's Cave (Mark Twain Cave)
+  country: United States
+  aliases:
+    - McDougal's Cave
+  coordinates:
+    lat: 39.6886
+    lon: -91.3315
+  works:
+    - tom-sawyer
+  description: "The real cave traditionally associated with the cave in the novel."
+  coordinateSource: https://www.openstreetmap.org/?mlat=39.68864&mlon=-91.33153#map=16/39.68864/-91.33153
+  locationNote: Traditional identification
+
+- id: north-atlantic-ground
+  name: The North Atlantic Ground
+  country: Regional waters
+  coordinates:
+    lat: 36
+    lon: -58
+  works:
+    - moby-dick
+  description: "A broad whaling-ground marker northeast of Bermuda, as described in the route source."
+  locationNote: Regional approximation
+
+- id: azores-ground
+  name: The Azores Ground
+  country: Regional waters
+  coordinates:
+    lat: 38
+    lon: -28
+  works:
+    - moby-dick
+  description: "A regional marker for whaling grounds around the Azores."
+  locationNote: Regional approximation
+
+- id: cape-verde-ground
+  name: The Cape Verde Ground
+  country: Regional waters
+  coordinates:
+    lat: 15.5
+    lon: -26
+  works:
+    - moby-dick
+  description: "A regional marker for whaling grounds around Cape Verde."
+  locationNote: Regional approximation
+
+- id: rio-de-la-plata
+  name: Río de la Plata
+  country: Regional waters
+  aliases:
+    - Rio de la Plata
+  coordinates:
+    lat: -36
+    lon: -52
+  works:
+    - moby-dick
+  description: "The estuary between Argentina and Uruguay, represented by a regional point."
+  locationNote: Estuary-region point
+
+- id: carrol-ground
+  name: The Carrol Ground
+  country: Regional waters
+  coordinates:
+    lat: -27
+    lon: -5.5
+  works:
+    - moby-dick
+  description: "A broad regional marker south of Saint Helena; the route source does not identify a precise point."
+  locationNote: Regional approximation
+
+- id: cape-of-good-hope
+  name: Cape of Good Hope
+  country: South Africa
+  coordinates:
+    lat: -34.3581
+    lon: 18.4756
+  works:
+    - moby-dick
+  description: "The cape rounded by the Pequod on its eastward voyage."
+  coordinateSource: https://en.wikipedia.org/wiki/Cape_of_Good_Hope
+
+- id: crozet-grounds
+  name: The Crozet Grounds
+  country: Regional waters
+  coordinates:
+    lat: -46
+    lon: 51
+  works:
+    - moby-dick
+  description: "A regional marker for whaling grounds around the Crozet Islands."
+  locationNote: Regional approximation
+
+- id: straits-of-sunda
+  name: Straits of Sunda
+  country: Indonesia
+  coordinates:
+    lat: -6
+    lon: 105.4
+  works:
+    - moby-dick
+  description: "The strait between Java and Sumatra on the Pequod's route."
+
+- id: formosa-bashee-isles
+  name: Formosa and the Bashee Isles
+  country: Regional waters
+  coordinates:
+    lat: 21.5
+    lon: 121.5
+  works:
+    - moby-dick
+  description: "A regional marker for the waters near Taiwan and the Bashi Channel."
+  coordinateSource: https://en.wikipedia.org/wiki/Bashi_Channel
+  locationNote: Regional approximation
+
+- id: japan-grounds
+  name: The Japan Grounds
+  country: Regional waters
+  coordinates:
+    lat: 34
+    lon: 150
+  works:
+    - moby-dick
+  description: "A broad regional marker for the whaling grounds near Japan."
+  locationNote: Regional approximation
+
+- id: the-line
+  name: The Line (Pacific Equator)
+  country: Regional waters
+  aliases:
+    - The Line
+  coordinates:
+    lat: 0
+    lon: 168
+  works:
+    - moby-dick
+  description: "A regional marker for the Pequod's final Pacific hunting grounds near the equator."
+  locationNote: Regional approximation
+
+- id: gulf-stream
+  name: The Gulf Stream
+  country: Regional waters
+  aliases:
+    - Gulf Stream
+  coordinates:
+    lat: 23.6
+    lon: -83.5
+  works:
+    - old-man-and-the-sea
+  description: "A representative point in the Gulf Stream region; Santiago's exact fishing location is not specified."
+  locationNote: Current-region approximation

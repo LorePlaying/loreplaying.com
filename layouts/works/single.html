@@ -3,6 +3,7 @@
 
 {{ $style := .Params.workStyle | default "default" }}
 
+{{ if eq $style "frankenstein" }}
 <link rel="stylesheet" href="{{ printf "works/%s.css" $style | relURL }}">
 
 <article class="lp-work lp-work--{{ $style }}">
@@ -93,5 +94,59 @@
   </footer>
 
 </article>
+{{ else }}
+  {{ $matchingWorks := where hugo.Data.map.works "id" .Params.workId }}
+  {{ if ne (len $matchingWorks) 1 }}
+    {{ errorf "Work article %q must reference exactly one literary map work" .RelPermalink }}
+  {{ end }}
+  {{ $work := index $matchingWorks 0 }}
+
+<link rel="stylesheet" href="{{ "works/atlas.css" | relURL }}">
+
+<article class="lp-atlas-article">
+  <header class="lp-atlas-hero">
+    {{ if ne $work.id "frankenstein" }}
+      <a class="lp-atlas-back" href="{{ "/map/" | relURL }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+        <span>Literary Atlas</span>
+      </a>
+    {{ end }}
+    <p class="lp-atlas-eyebrow">{{ $work.tradition }} · {{ $work.period }}</p>
+    <h1>{{ .Title }}</h1>
+    <p class="lp-atlas-author">
+      {{ $work.author }}{{ with $work.year }} <span aria-hidden="true">·</span> {{ . }}{{ end }}
+    </p>
+    <p class="lp-atlas-intro">{{ $work.summary }}</p>
+  </header>
+
+  <div class="lp-atlas-content">
+    {{ .Content }}
+  </div>
+
+  <section class="lp-atlas-route" aria-labelledby="lp-atlas-route-title">
+    <p class="lp-atlas-section-label">A narrative itinerary</p>
+    <h2 id="lp-atlas-route-title">Places in story order</h2>
+    <ol>
+      {{ range $index, $stop := $work.stops }}
+        <li>
+          <h3>{{ $stop }}</h3>
+          <p>{{ index $work.stopDetails $index }}</p>
+        </li>
+      {{ end }}
+    </ol>
+    <p class="lp-atlas-route-note">
+      Map pins and route lines are interpretive. Regional, fictional, and traditional identifications are described as such rather than presented as exact locations.
+    </p>
+  </section>
+
+  <footer class="lp-atlas-footer">
+    <span aria-hidden="true">✦</span>
+    <p>Continue exploring the places in literature.</p>
+    {{ if ne $work.id "frankenstein" }}
+      <a href="{{ "/map/" | relURL }}">Open the Literary Atlas</a>
+    {{ end }}
+  </footer>
+</article>
+{{ end }}
 
 {{ end }}

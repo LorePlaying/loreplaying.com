@@ -1,0 +1,265 @@
+{{ define "main" }}
+
+{{ range hugo.Data.map.works }}
+  {{ $work := . }}
+  {{ $idCount := 0 }}
+  {{ range hugo.Data.map.works }}
+    {{ if eq .id $work.id }}{{ $idCount = add $idCount 1 }}{{ end }}
+  {{ end }}
+  {{ if ne $idCount 1 }}
+    {{ errorf "Literary map work ID %q is not unique" $work.id }}
+  {{ end }}
+  {{ if ne $work.mediaType "book" }}
+    {{ errorf "Literary map entry %q is not a book" $work.id }}
+  {{ end }}
+  {{ if ne (len $work.stopDetails) (len $work.stops) }}
+    {{ errorf "Literary map work %q has %d stop details for %d stops" $work.id (len $work.stopDetails) (len $work.stops) }}
+  {{ end }}
+  {{ range $index, $detail := $work.stopDetails }}
+    {{ if not $detail }}
+      {{ errorf "Literary map work %q has no detail for stop %d" $work.id (add $index 1) }}
+    {{ end }}
+  {{ end }}
+  {{ with $work.journeyModes }}
+    {{ if ne (len .) (sub (len $work.stops) 1) }}
+      {{ errorf "Literary map work %q has %d journey modes for %d stops" $work.id (len .) (len $work.stops) }}
+    {{ end }}
+    {{ range . }}
+      {{ if and . (not (in (slice "boat" "ferry" "horseback" "land" "march" "overland" "raft" "river" "road" "rowboat" "sea" "ship" "walk") .)) }}
+        {{ errorf "Literary map work %q has unsupported journey mode %q" $work.id . }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ range hugo.Data.map.places }}
+  {{ $place := . }}
+  {{ $idCount := 0 }}
+  {{ range hugo.Data.map.places }}
+    {{ if eq .id $place.id }}{{ $idCount = add $idCount 1 }}{{ end }}
+  {{ end }}
+  {{ if ne $idCount 1 }}
+    {{ errorf "Literary map place ID %q is not unique" $place.id }}
+  {{ end }}
+  {{ with .coordinates }}
+    {{ $latitude := float .lat }}
+    {{ $longitude := float .lon }}
+    {{ if or (lt $latitude -90.0) (gt $latitude 90.0) (lt $longitude -180.0) (gt $longitude 180.0) }}
+      {{ errorf "Literary map place %q has invalid coordinates" $place.id }}
+    {{ end }}
+  {{ end }}
+  {{ range .works }}
+    {{ $workID := . }}
+    {{ $foundWork := false }}
+    {{ range hugo.Data.map.works }}
+      {{ if eq .id $workID }}{{ $foundWork = true }}{{ end }}
+    {{ end }}
+    {{ if not $foundWork }}
+      {{ errorf "Literary map place %q references missing work %q" $place.id $workID }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ range hugo.Data.map.journeys }}
+  {{ $journey := . }}
+  {{ $foundWork := false }}
+  {{ range hugo.Data.map.works }}
+    {{ if eq .id $journey.work }}{{ $foundWork = true }}{{ end }}
+  {{ end }}
+  {{ if not $foundWork }}
+    {{ errorf "Literary journey %q references missing work %q" $journey.id $journey.work }}
+  {{ end }}
+  {{ range $journey.locations }}
+    {{ $locationID := . }}
+    {{ $foundPlace := false }}
+    {{ range hugo.Data.map.places }}
+      {{ if eq .id $locationID }}{{ $foundPlace = true }}{{ end }}
+    {{ end }}
+    {{ if not $foundPlace }}
+      {{ errorf "Literary journey %q references missing place %q" $journey.id $locationID }}
+    {{ end }}
+  {{ end }}
+  {{ with $journey.legs }}
+    {{ $legs := . }}
+    {{ range hugo.Data.map.works }}
+      {{ if eq .id $journey.work }}
+        {{ if ne (len $legs) (sub (len .stops) 1) }}
+          {{ errorf "Literary journey %q has %d route legs for %d stops" $journey.id (len $legs) (len .stops) }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+    {{ range $legIndex, $leg := $legs }}
+      {{ if lt (len $leg) 2 }}
+        {{ errorf "Literary journey %q leg %d has fewer than two points" $journey.id (add $legIndex 1) }}
+      {{ end }}
+      {{ range $leg }}
+        {{ if ne (len .) 2 }}
+          {{ errorf "Literary journey %q leg %d contains a point without longitude and latitude" $journey.id (add $legIndex 1) }}
+        {{ else }}
+          {{ $longitude := float (index . 0) }}
+          {{ $latitude := float (index . 1) }}
+          {{ if or (lt $latitude -90.0) (gt $latitude 90.0) (lt $longitude -180.0) (gt $longitude 180.0) }}
+            {{ errorf "Literary journey %q leg %d contains invalid coordinates" $journey.id (add $legIndex 1) }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+<div class="lp-map-app" id="lp-map-app" data-map-style="aquarelle">
+  {{ $logo := resources.Get "img/lp-logo.svg" }}
+  <aside class="lp-map-sidebar" id="lp-map-sidebar" aria-label="Literary atlas catalogue">
+    <header class="lp-map-sidebar-header">
+      <a class="lp-map-brand" href="{{ "/" | relURL }}" aria-label="LorePlaying home">
+        <img src="{{ $logo.RelPermalink }}" alt="{{ .Site.Title }}">
+      </a>
+      <div>
+        <p class="lp-map-brand-label">LorePlaying</p>
+        <h1><a href="{{ .RelPermalink }}" aria-current="page">{{ .Title }}</a></h1>
+      </div>
+      <button type="button" class="lp-map-icon-button lp-map-close-sidebar" id="lp-map-close-sidebar" aria-label="Collapse" title="Collapse" aria-expanded="true" aria-controls="lp-map-sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="1"></rect><path d="M9 4v16M16 9l-3 3 3 3"></path></svg>
+        <span>Collapse</span>
+      </button>
+    </header>
+
+    <div class="lp-map-sidebar-tools">
+      <label class="lp-map-search">
+        <span class="lp-map-visually-hidden">Search titles, authors, periods, and places</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+        <input id="lp-map-search" type="search" autocomplete="off" placeholder="Search books, authors, periods, and places...">
+        <button type="button" id="lp-map-clear-search" aria-label="Clear search" hidden>&times;</button>
+      </label>
+
+      <div class="lp-map-filter-row">
+        <label>
+          <span class="lp-map-visually-hidden">Filter by literary period</span>
+          <select id="lp-map-period-filter">
+            <option value="all">All periods</option>
+            {{ range (slice "Ancient" "Medieval" "Renaissance" "Romantic" "Victorian" "Nineteenth century" "Modern") }}
+              <option value="{{ . }}">{{ . }}</option>
+            {{ end }}
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <section class="lp-map-catalogue-view" id="lp-map-catalogue-view" aria-labelledby="lp-map-catalogue-title">
+      <div class="lp-map-list-heading">
+        <div>
+          <p class="lp-map-kicker">Explore the catalogue</p>
+          <h2 id="lp-map-catalogue-title">All Books</h2>
+        </div>
+        <span id="lp-map-result-count" class="lp-map-count">{{ len hugo.Data.map.works }}</span>
+      </div>
+      <ol class="lp-map-work-list" id="lp-map-work-list">
+        {{ range sort hugo.Data.map.works "title" "asc" }}
+          <li data-work-item data-work-id="{{ .id }}" data-period="{{ .period }}">
+            <button type="button" class="lp-map-work-button" data-work-id="{{ .id }}">
+              <span class="lp-map-work-title">{{ .title }}</span>
+              <span class="lp-map-work-author">{{ .author | default "Author not listed" }}</span>
+            </button>
+          </li>
+        {{ end }}
+      </ol>
+      <p class="lp-map-no-results" id="lp-map-no-results" hidden>No titles match those filters.</p>
+      <details class="lp-map-place-directory">
+        <summary>Mapped locations ({{ len hugo.Data.map.places }})</summary>
+        <ul>
+          {{ range sort hugo.Data.map.places "name" "asc" }}
+            <li>
+              <button type="button" data-place-id="{{ .id }}">
+                <span>{{ .name }}</span>
+                <small>{{ .country }}</small>
+              </button>
+            </li>
+          {{ end }}
+        </ul>
+      </details>
+    </section>
+
+    <section class="lp-map-work-view" id="lp-map-work-view" aria-live="polite" hidden>
+      <button type="button" id="lp-map-back-to-catalogue" class="lp-map-back-button" aria-label="Back to all books">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+        <span>All Books</span>
+      </button>
+      <div id="lp-map-work-details"></div>
+    </section>
+
+  </aside>
+
+  <main class="lp-map-main" id="lp-map-main">
+    <button type="button" class="lp-map-open-sidebar" id="lp-map-open-sidebar" aria-label="Expand" title="Expand" aria-expanded="true" aria-controls="lp-map-sidebar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="1"></rect><path d="M9 4v16m3-8h6m-3-3 3 3-3 3"></path></svg>
+      <span>Expand</span>
+    </button>
+
+    <div id="literary-map" class="lp-map-canvas" role="region" aria-label="Interactive literary map"></div>
+
+    <div class="lp-map-controls" id="lp-map-controls">
+      <div class="lp-map-style-control" id="lp-map-style-control" role="group" aria-label="Map style">
+        <button type="button" data-map-style-button="aquarelle" aria-pressed="true">AQUARELLE</button>
+        <button type="button" data-map-style-button="topo" aria-pressed="false">TOPO</button>
+        <button type="button" data-map-style-button="satellite" aria-pressed="false">SATELLITE</button>
+        <button type="button" data-map-style-button="dark" aria-pressed="false">DARK</button>
+      </div>
+      <div class="lp-map-attribution-control">
+        <button type="button" class="lp-map-attribution-toggle" id="lp-map-attribution-toggle" aria-label="Show map attribution" aria-expanded="false" aria-controls="lp-map-attribution-content">i</button>
+        <div class="lp-map-attribution-content" id="lp-map-attribution-content" hidden></div>
+      </div>
+    </div>
+
+    <section class="lp-map-journey-panel is-position-locked" id="lp-map-journey-panel" aria-label="Interactive journey">
+      <div class="lp-map-journey-header">
+        <button type="button" class="lp-map-journey-toggle" id="lp-map-journey-toggle" aria-expanded="true" aria-controls="lp-map-journey-body">
+          <span>Interactive journey</span>
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m3 6 5 5 5-5"></path></svg>
+        </button>
+        <button type="button" class="lp-map-icon-button lp-map-journey-lock" id="lp-map-journey-lock" aria-label="Unlock the journey panel position" aria-pressed="true" title="Unlock the panel to move it">
+          <svg class="lp-map-lock-closed" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+          <svg class="lp-map-lock-open" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 7.5-2"></path></svg>
+        </button>
+        <button type="button" class="lp-map-icon-button lp-map-journey-drag-handle" id="lp-map-journey-drag-handle" aria-label="Move the journey panel; use arrow keys when unlocked" aria-disabled="true" title="Unlock the panel to move it">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h.01M16 5h.01M8 12h.01M16 12h.01M8 19h.01M16 19h.01"></path></svg>
+        </button>
+      </div>
+      <div class="lp-map-journey-body" id="lp-map-journey-body">
+        <div class="lp-map-journey-heading">
+          <p id="lp-map-journey-title">Choose a work to explore its journey</p>
+          <p id="lp-map-journey-count">0 stops · 0 legs</p>
+        </div>
+        <div class="lp-map-journey-navigation">
+          <button type="button" id="lp-journey-previous" aria-label="Previous stop" disabled>Previous</button>
+          <p id="lp-map-current-stop">No work selected</p>
+          <button type="button" id="lp-journey-next" aria-label="Next stop" disabled>Next</button>
+        </div>
+        <label class="lp-map-speed-control" for="lp-journey-speed">
+          <span>Traveller speed</span>
+          <output id="lp-journey-speed-value" for="lp-journey-speed">1.00×</output>
+          <input type="range" id="lp-journey-speed" min="0.25" max="3" step="0.25" value="1" disabled>
+        </label>
+        <label class="lp-map-interactive-toggle">
+          <input type="checkbox" id="lp-journey-interactive" disabled>
+          <span>Loop marker continuously</span>
+        </label>
+        <p class="lp-map-journey-hint">The marker follows the route without replacing stop pop-ups.</p>
+        <p id="lp-map-journey-status" class="lp-map-journey-status" aria-live="polite">Select a title to see its stops.</p>
+      </div>
+    </section>
+
+    <noscript>
+      <p class="lp-map-noscript">Enable JavaScript to interact with the map. The book catalogue remains available in the left panel.</p>
+    </noscript>
+  </main>
+
+  <script id="literary-map-data" type="application/json">
+    {
+      "works": {{ hugo.Data.map.works | jsonify | safeJS }},
+      "places": {{ hugo.Data.map.places | jsonify | safeJS }},
+      "journeys": {{ hugo.Data.map.journeys | default slice | jsonify | safeJS }}
+    }
+  </script>
+</div>
+
+{{ end }}
