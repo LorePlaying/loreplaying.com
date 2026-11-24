@@ -13,7 +13,8 @@ description: "The development roadmap for Lore Playing."
 - [ ][Zine](https://en.wikipedia.org/wiki/Zine) and [Chapbook](https://en.wikipedia.org/wiki/Chapbook) series.
 
 ## 😎 Launched
-- [x]Project website is launched on [GitHub](https://github.com/LorePlaying/loreplaying.com) as an open source repository.
+- [x] [Literary Atlas](https://loreplaying.com/map/) with searchable works, mapped locations, and narrative journeys. (Still in develoment)
+- [x] Project website is launched on [GitHub](https://github.com/LorePlaying/loreplaying.com) as an open source repository.
 
 ## 👎 Project Hail Mary
 Projects that kind of "[Hail Mary](https://youtu.be/rj6rJzs029A?si)" for us:
